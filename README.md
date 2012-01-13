@@ -10,8 +10,7 @@ We like simple things.
 pip install salad
 ```
 
-Installing with django
-----------------------
+If you want django integration, 
 
 ```python
 INSTALLED_APPS += ("lettuce.django",)
@@ -49,8 +48,11 @@ from salad.terrains.browser import *
 from salad.terrains.django import *
 ```
 
-and you're done.
+and you're done. The source is pretty friendly, and always accurate. Check it out to see what steps we've got.
 
+
+Salad 101
+=========
 
 Writing your first lettuce feature
 ----------------------------------
@@ -132,6 +134,9 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
 ```
 
 Easy.
+
+Tips and Tricks
+===============
 
 Keeping tests organized
 -----------------------

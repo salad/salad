@@ -48,6 +48,8 @@ from salad.terrains.browser import *
 from salad.terrains.django import *
 ```
 
+and you're done.
+
 
 Writing your first lettuce feature
 ----------------------------------

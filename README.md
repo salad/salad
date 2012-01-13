@@ -1,4 +1,4 @@
-Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to get rid of any excuses you had for not writing acceptance tests.
+Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to make writing acceptance tests downright fun.
 
 
 Installing

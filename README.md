@@ -4,17 +4,18 @@ Salad is a helpful mix of some great BDD packages like lettuce and splinter, sea
 Installing
 ==========
 
-1. Make a virtualenv.
+We like simple things.
 
-1. `pip install salad`
-
-1. There is no step 3. 
-
+```bash
+pip install salad
+```
 
 Installing with django
 ----------------------
 
-Same as above. If you want lettuce-django integration, also add `lettuce.django` to your `INSTALLED_APPS`.
+```python
+INSTALLED_APPS += ("lettuce.django",)
+```
 
 
 Usage

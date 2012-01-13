@@ -1,2 +1,5 @@
 *.pyc
 .DS_Store
+salad.egg-info
+salad.egg-info/*
+dist/*

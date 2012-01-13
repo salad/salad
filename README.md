@@ -33,6 +33,7 @@ To make it even easier to test, salad includes a number of common steps and terr
 For example, if you're writing a django app, you can:
 
 my_app_steps.py
+
 ```python
 from salad.steps.common import *
 from salad.steps.django import *
@@ -41,6 +42,7 @@ from salad.steps.django import *
 and
 
 my_app_terrain.py
+
 ```python
 from salad.terrains.browser import *
 from salad.terrains.django import *
@@ -58,7 +60,9 @@ Writing your first lettuce feature
 
 1. Inside the features directory, create a filename with `.feature` as its extension.
 
-    ```touch our-website-is-up.feature```
+    ```bash
+    touch our-website-is-up.feature
+    ```
 
 1. Write your first feature.
 
@@ -76,7 +80,9 @@ Writing your first lettuce feature
 
 1. Inside the features directory, create a steps file for this feature.
     
-    ```touch our-website-is-up-steps.py```
+    ```bash
+    touch our-website-is-up-steps.py
+    ```
 
 1. In `our-website-is-up-steps.py`, import the `salad` libraries
 
@@ -105,6 +111,7 @@ lettuce
 ```
 
 That should be it - you should see:
+
 ```
 Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-website-is-up.feature:1
   In order to make sure that lettuce works                    # features/our-website-is-up.feature:2

@@ -1,0 +1,2 @@
+include README.md AUTHORS LICENSE
+recursive-include salad/features *

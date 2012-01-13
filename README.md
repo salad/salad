@@ -130,11 +130,12 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
 3 steps (3 passed)
 ```
 
+Easy.
 
 Keeping tests organized
 -----------------------
 
-As you've noticed above, we use the convention of naming the steps file the same as the feature file, with `-steps` appended.  It's worked well so far. For django apps, it's easiest to keep the features for each app within the app structure.
+As you've noticed above, we use the convention of naming the steps file the same as the feature file, with `-steps` appended.  It's worked well so far. For django apps, it's also been easiest to keep the features for each app within the app structure.
 
 We're still early in using lettuce on larger projects, and as better advice comes out, we'll be happy to share it.  If you have advice, type it up in a pull request, or open an issue!
 

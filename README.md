@@ -23,7 +23,7 @@ Usage
 Salad is mostly lettuce.
 ------------------------
 
-Salad is mostly lettuce.  So, you should use [great documentation](http://lettuce.it/) with gusto.  If you're interacting with the browser, you're doing it through [splinter](http://splinter.cobrateam.info/docs/), and their docs are great as well.
+Salad is mostly lettuce.  So, you should use their [great documentation](http://lettuce.it/) with gusto.  If you're interacting with the browser, you're doing it through [splinter](http://splinter.cobrateam.info/docs/), and their docs are great as well.
 
 Salad includes some steps and terrains
 --------------------------------------

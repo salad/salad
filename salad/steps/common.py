@@ -14,6 +14,11 @@ def fill_in(step, field, value):
     world.browser.fill(field, value)
 
 
+@step(r'hit enter in "(.*)"')
+def hit_enter_in(step, field):
+    world.browser.type(field, "\n")
+
+
 @step(r'click on the element named "(.*)"')
 def click_on_by_name(step, name):
     world.browser.find_by_name(name).first.click()

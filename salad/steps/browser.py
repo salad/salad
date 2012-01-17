@@ -68,3 +68,15 @@ def click_the_button_labeled(step, label):
     # btn = world.browser.find_link_by_text(label)
     btn = world.browser.find_by_css(".submit_button")
     btn.click()
+
+
+@step(r'the element with the CSS selector of "(.*)" should be visible')
+def element_visible(step, css):
+    ele = world.browser.find_by_css(css)
+    assert ele.visible == True
+
+
+@step(r'the element with the CSS selector of "(.*)" should not be visible')
+def element_invisible(step, css):
+    ele = world.browser.find_by_css(css)
+    assert ele.visible == True

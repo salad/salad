@@ -79,4 +79,4 @@ def element_visible(step, css):
 @step(r'the element with the CSS selector of "(.*)" should not be visible')
 def element_invisible(step, css):
     ele = world.browser.find_by_css(css)
-    assert ele.visible == True
+    assert ele.visible == False

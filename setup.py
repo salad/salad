@@ -11,7 +11,7 @@ setup(
     author="Steven Skoczen",
     author_email="steven.skoczen@wk.com",
     url="https://github.com/wieden-kennedy/salad",
-    version="0.2.1",
+    version="0.2.2",
     install_requires=["lettuce", "nose", "splinter"],
     packages=find_packages(),
     zip_safe=False,

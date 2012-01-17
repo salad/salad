@@ -1,7 +1,6 @@
 import logging
 from lettuce import before, world, after
 
-from django.db import connection
 from django.core.management import call_command
 from django.conf import settings
 from django.test.simple  import DjangoTestSuiteRunner
@@ -17,6 +16,7 @@ def setup_database():
     logging.info("Setting up a test database ...\n")
 
     if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
+        from django.db import connection
         database_name = settings.DATABASES["default"]["NAME"]
         cursor = connection.cursor()
         cursor.execute("DROP DATABASE %s" % database_name)

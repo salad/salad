@@ -36,7 +36,8 @@ my_app_steps.py
 
 ```python
 from salad.steps.common import *
-from salad.steps.django import *
+from salad.steps.browser import *
+from salad.steps.djangoify import *
 ```
 
 and
@@ -45,10 +46,23 @@ my_app_terrain.py
 
 ```python
 from salad.terrains.browser import *
-from salad.terrains.django import *
+from salad.terrains.djangoify import *
 ```
 
-and you're done. The source is pretty friendly, and always accurate. Check it out to see what steps we've got.
+and you're done. If you don't care about importing too much, there's always
+
+```python
+from salad.steps.everything import *
+```
+
+and
+
+```python
+from salad.terrains.everything import *
+```
+
+
+The source is pretty friendly, and always accurate. Check it out to see what steps and terrains salad's got.
 
 
 Salad 101

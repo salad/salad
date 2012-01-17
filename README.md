@@ -12,6 +12,10 @@ pip install salad
 
 If you want django integration, 
 
+```bash
+pip install django django-extensions
+```
+
 ```python
 INSTALLED_APPS += ("lettuce.django",)
 ```

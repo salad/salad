@@ -4,7 +4,8 @@ Feature: Ensuring that salad works, and Google's website loads
     I open the Google website using lettuce
 
     Scenario: Opening the google website works
-        Given I access the url "http://www.google.com/"
+        Given I am using firefox
+          And I access the url "http://www.google.com/"
         When I look around
-        Then I should see "I feel lucky!"
+        Then I should see "About Google"
 

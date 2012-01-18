@@ -153,6 +153,31 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
 
 Easy.
 
+Salad Built-ins:
+================
+
+Please read the steps and terrain source code for details, but for a high-level look at the built-ins, here's what salad has:
+
+Steps
+-----
+
+* browser - Lots of page-element checking, form-interacting goodness
+* common - A few utility steps, like wait and look around
+* djangoify - Django-focused steps, helping with url reversing and the like.
+* everything - browser, common, and django
+
+Terrains
+--------
+
+* common - Nothing, at the moment.
+* djangoify - Setup/teardown a test database for django, including south migrations if south is installed.
+* browser - Sets up a browser at `world.browser`. Uses firefox.
+* firefox - Same up a firefox browser at `world.firefox`.
+* chrome - Same up a chrome browser at `world.chrome`.
+* zope - Same up a zope browser (no javascript) at `world.zope`.
+
+
+
 Tips and Tricks
 ===============
 
@@ -164,6 +189,44 @@ As you've noticed above, we use the convention of naming the steps file the same
 We're still early in using lettuce on larger projects, and as better advice comes out, we'll be happy to share it.  If you have advice, type it up in a pull request, or open an issue!
 
 
+Using an alternate browser
+--------------------------
+
+Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  Here's an example using zope and chrome, to test differing behaviors when javascript is disabled.
+
+*terrain.py*
+```python
+from salad.terrains.everything import *
+```
+
+*steps.py*
+```python
+from salad.steps.everything import *
+```
+
+*other_browsers_work.feature*
+```gherkin
+Feature: Ensuring that other browsers work
+    In order to make sure that other browsers work
+    As a developer
+    I search for the Wieden+Kennedy website using zope and firefox
+
+    Scenario: Opening the W+K website works
+        Given I am using zope
+         And I access the url "http://www.google.com/"
+        When I I fill in "q" with "Wieden Kennedy"
+          And I wait 1 second
+        Then I should not see "www.wk.com"
+
+    Scenario: Opening the W+K website works
+        Given I am using firefox
+          And I access the url "http://www.google.com/"
+        When I I fill in "q" with "Wieden Kennedy"
+          And I wait 1 second
+        Then I should see "www.wk.com"
+```
+
+
 Django and South
 ----------------
 
@@ -171,11 +234,26 @@ Salad plays nicely with both django and south, but doesn't require them.
 
 Include the django steps and terrains into your steps and terrains, and you're all set. `manage.py harvest` and all of the lettuce goodies should just work. 
 
+Updates and Roadmap
+===================
 
 Roadmap
-=======
+-------
 
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
+
+
+0.3
+---
+
+* Added the ability to choose your browser, using the "Given that I am using ___browser___" step.
+* Added `zope.testbrowser` to the required libs
+* Salad's own lettuce tests now run, and have coverage of the browser loading.
+
+0.2
+---
+* Initial dev
+
 
 
 Credits:

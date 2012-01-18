@@ -110,13 +110,13 @@ Writing your first lettuce feature
 1. In `our-website-is-up-steps.py`, import the `salad` libraries
 
     ```python
-    from salad.steps.common import *
+    from salad.steps.everything import *
     ```
 
-1. Also inside the features directory, create a terrain file, to be used for all features in the folder
+1. Also inside the features directory, create a `terrain.py` file, to be used for all features in the folder
     
     ```python
-    from salad.terrains.common import *
+    from salad.terrains.everything import *
     ```
 
 
@@ -161,20 +161,21 @@ Please read the steps and terrain source code for details, but for a high-level 
 Steps
 -----
 
-* browser - Lots of page-element checking, form-interacting goodness
-* common - A few utility steps, like wait and look around
-* djangoify - Django-focused steps, helping with url reversing and the like.
-* everything - browser, common, and django
+* `browser` - Lots of page-element checking, form-interacting goodness
+* `common` - A few utility steps, like wait and look around.
+* `djangoify` - Django-focused steps, helping with url reversing and the like.
+* `everything` - browser, common, and django.
 
 Terrains
 --------
 
-* common - Nothing, at the moment.
-* djangoify - Setup/teardown a test database for django, including south migrations if south is installed.
-* browser - Sets up a browser at `world.browser`. Uses firefox.
-* firefox - Same up a firefox browser at `world.firefox`.
-* chrome - Same up a chrome browser at `world.chrome`.
-* zope - Same up a zope browser (no javascript) at `world.zope`.
+* `common` - Nothing, at the moment.
+* `djangoify` - Setup/teardown a test database for django, including south migrations if south is installed.
+* `browser` - Sets up a browser at `world.browser`. Uses firefox.
+* `firefox` - Same up a firefox browser at `world.firefox`.
+* `chrome` - Same up a chrome browser at `world.chrome`.
+* `zope` - Same up a zope browser (no javascript) at `world.zope`.
+* `everything` - Includes everything above.
 
 
 
@@ -195,16 +196,19 @@ Using an alternate browser
 Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  Here's an example using zope and chrome, to test differing behaviors when javascript is disabled.
 
 *terrain.py*
+
 ```python
 from salad.terrains.everything import *
 ```
 
 *steps.py*
+
 ```python
 from salad.steps.everything import *
 ```
 
 *other_browsers_work.feature*
+
 ```gherkin
 Feature: Ensuring that other browsers work
     In order to make sure that other browsers work
@@ -233,6 +237,9 @@ Django and South
 Salad plays nicely with both django and south, but doesn't require them.  
 
 Include the django steps and terrains into your steps and terrains, and you're all set. `manage.py harvest` and all of the lettuce goodies should just work. 
+
+*Gotcha alert:*  If you're serving static media with `staticfiles`, you'll want to pass `-d` to harvest, to run in debug mode (and enable static media.)
+
 
 Updates and Roadmap
 ===================

@@ -81,13 +81,7 @@ Writing your first lettuce feature
     mkdir features
     ```
 
-1. Inside the features directory, create a filename with `.feature` as its extension.
-
-    ```bash
-    touch our-website-is-up.feature
-    ```
-
-1. Write your first feature.
+1. Inside the features directory, create a `our-website-is-up.feature` file, with these contents:
 
     ```gherkin
     Feature: Ensuring that Lettuce works, and W+K's website loads
@@ -101,19 +95,13 @@ Writing your first lettuce feature
         Then I should see "Wieden+Kennedy"
     ```
 
-1. Inside the features directory, create a steps file for this feature.
+1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad steps, like:
     
-    ```bash
-    touch our-website-is-up-steps.py
-    ```
-
-1. In `our-website-is-up-steps.py`, import the `salad` libraries
-
     ```python
     from salad.steps.everything import *
     ```
 
-1. Also inside the features directory, create a `terrain.py` file, to be used for all features in the folder
+1. Also 1. Inside the features directory, create a `terrain.py`, that imports the salad steps, like:
     
     ```python
     from salad.terrains.everything import *

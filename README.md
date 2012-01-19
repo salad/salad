@@ -241,7 +241,7 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 0.3
 ---
 
-* Added the ability to choose your browser, using the "Given that I am using ___browser___" step.
+* Added the ability to choose your browser, using the "Given that I am using zope/firefox/chrome" step.
 * Added `zope.testbrowser` to the required libs
 * Salad's own lettuce tests now run, and have coverage of the browser loading.
 

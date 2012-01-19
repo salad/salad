@@ -1,4 +1,0 @@
-[0119/120351:WARNING:webdriver_capabilities_parser.cc(97)] Ignoring unrecognized capability: browserName
-[0119/120351:WARNING:webdriver_capabilities_parser.cc(97)] Ignoring unrecognized capability: javascriptEnabled
-[0119/120351:WARNING:webdriver_capabilities_parser.cc(97)] Ignoring unrecognized capability: platform
-[0119/120351:WARNING:webdriver_capabilities_parser.cc(97)] Ignoring unrecognized capability: version

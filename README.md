@@ -90,7 +90,7 @@ Writing your first lettuce feature
     I open the Wieden+Kennedy website using lettuce
 
     Scenario: Opening the W+K website works
-        Given I access the url "http://www.wk.com/"
+        Given I visit the url "http://www.wk.com/"
         When I look around
         Then I should see "Wieden+Kennedy"
     ```
@@ -130,7 +130,7 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
   I open the Wieden+Kennedy website using lettuce             # features/our-website-is-up.feature:4
 
   Scenario: Opening the W+K website works                     # features/our-website-is-up.feature:6
-    Given I access the url "http://www.wk.com/"               # features/our-website-is-up-steps.py:8
+    Given I visit the url "http://www.wk.com/"               # features/our-website-is-up-steps.py:8
     When I look around                                        # features/our-website-is-up-steps.py:80
     Then I should see "Wieden+Kennedy"                        # features/our-website-is-up-steps.py:37
 
@@ -205,14 +205,14 @@ Feature: Ensuring that other browsers work
 
     Scenario: Opening the W+K website works
         Given I am using zope
-         And I access the url "http://www.google.com/"
+         And I visit the url "http://www.google.com/"
         When I I fill in "q" with "Wieden Kennedy"
           And I wait 1 second
         Then I should not see "www.wk.com"
 
     Scenario: Opening the W+K website works
         Given I am using firefox
-          And I access the url "http://www.google.com/"
+          And I visit the url "http://www.google.com/"
         When I I fill in "q" with "Wieden Kennedy"
           And I wait 1 second
         Then I should see "www.wk.com"
@@ -254,6 +254,7 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 
 * `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
 * Salad now runs a simple server for its tests, and has test cases for its own steps
+* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  `I visit the url` will be removed in v0.5, and now warns if it's used.  Note that changes like this aren't the trend for this project, but since I know everyone using salad at this point, it's ok.
 
 
 0.3

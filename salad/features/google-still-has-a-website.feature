@@ -5,7 +5,7 @@ Feature: Ensuring that salad works, and Google's website loads
 
     Scenario: Opening the google website works
         Given I am using firefox
-          And I access the url "http://www.google.com/"
+          And I visit the url "http://www.google.com/"
         When I look around
         Then I should see "About Google"
 

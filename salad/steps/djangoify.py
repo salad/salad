@@ -1,5 +1,5 @@
-import logging
 from lettuce import step, world
+from salad.logger import logger
 
 try:
     from lettuce.django import django_url
@@ -8,4 +8,4 @@ try:
     def go_to_the_url(step, url):
         world.response = world.browser.visit(django_url(url))
 except:
-    logging.warn("Django steps not imported.")
+    logger.warn("Django steps not imported.")

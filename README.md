@@ -218,6 +218,18 @@ Feature: Ensuring that other browsers work
         Then I should see "www.wk.com"
 ```
 
+Using Chrome
+------------
+
+If you run into problems using Google Chrome in testing (and you have it installed), you probably need to download and install the chrome webdriver.
+
+If you're using a mac, you can:
+
+```bash
+brew install chromedriver
+```
+
+Otherwise, you can find for your operating system here: http://code.google.com/p/chromium/downloads/list
 
 Django and South
 ----------------
@@ -236,6 +248,12 @@ Roadmap
 -------
 
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
+
+0.4
+---
+
+* `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
+* Salad now runs a simple server for its tests, and has test cases for its own steps
 
 
 0.3

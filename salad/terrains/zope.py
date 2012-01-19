@@ -1,21 +1,21 @@
-import logging
 from lettuce import before, world, after
 from splinter.browser import Browser
+from salad.logger import logger
 
 
 @before.all
 def setup_browser():
-    logging.info("Setting up zope...")
+    logger.info("Setting up zope...")
     try:
         world.zope = Browser("zope.testbrowser")
     except:
-        logging.warn("Error starting up zope")
+        logger.warn("Error starting up zope")
 
 
 @after.all
 def teardown_browser(total):
-    logging.info("Tearing down browser...")
+    logger.info("Tearing down browser...")
     try:
         world.zope.quit()
     except:
-        logging.warn("Error tearing down zope")
+        logger.warn("Error tearing down zope")

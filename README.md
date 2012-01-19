@@ -95,7 +95,7 @@ Writing your first lettuce feature
         Then I should see "Wieden+Kennedy"
     ```
 
-1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad steps, like:
+1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad terrains, like:
     
     ```python
     from salad.steps.everything import *

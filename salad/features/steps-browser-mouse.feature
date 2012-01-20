@@ -3,12 +3,125 @@ Feature: Ensuring that the page steps work
     As a developer
     I test against the page test files
 
-    # Only Chrome supports mouse events.
-    # It's only necessary to switch to chrome in the first scenario - it remains after that.
-    Scenario: Click by id works
-        Given I am using Chrome  
-          and I visit the salad test url "browser/mouse.html"
-        When I click on the element with id "mouse_target"
-        Then I should see "Clicked" somewhere in the page
+    Scenario Outline: Mouse events by id works.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the element with id "mouse_target"
+        Then I should see "<expected_results>" somewhere in the page
 
- 
+    # Elements
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+    
+    Scenario Outline: Mouse events by name works.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the element named "mouse_target_name"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+
+    Scenario Outline: Mouse events by css works.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the element with the css selector ".mouse_target_class"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+
+    # Links
+    Scenario Outline: Mouse events for links by id work.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the link to "#mousetargetlink"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+    
+    Scenario Outline: Mouse events for links by name work.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the link to a url that contains "argetlink"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+
+    Scenario Outline: Mouse events for links by css work.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the link with the text "Mouse Target Link"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+
+    Scenario Outline: Mouse events for links by css work.
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the link with text that contains "Target Link"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | click on      | Clicked          |
+        | mouse over    | Moused over      |
+        | mouse-over    | Moused over      |
+        | mouseover     | Moused over      |
+
+
+
+    Scenario Outline: Mouse out works
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I mouse over the element with id "mouse_target" 
+          And I <action> the element with id "mouse_target"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | mouse out     | Moused out       |
+        | mouse-out     | Moused out       |
+        | mouseout      | Moused out       |
+
+
+    Scenario Outline: Doubleclick works
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I <action> the element with id "double_click"
+        Then I should see "<expected_results>" somewhere in the page
+
+    Examples:
+        | action        | expected_results |
+        | double click  | Double-clicked   |
+        | double-click  | Double-clicked   |
+        | doubleclick   | Double-clicked   |
+    

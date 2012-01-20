@@ -10,7 +10,7 @@ def look_around(step):
 
 @step(r'wait (\d+) seconds?')
 def wait(step, seconds):
-    time.sleep(int(seconds))
+    time.sleep(float(seconds))
 
 
 @step(r'Then I should fail because "(.*)"')

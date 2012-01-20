@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>Mouse test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $("#input_target, #test_textarea").keyup(function(){
+                if ( $(this).val() != "" ) {
+                    set_response("Filled"+"!");
+                }
+            });
+            $("#test_radio_1, #test_radio_2").change(function(){
+                set_response("Chosen"+"!");
+            });
+            $("#test_file").change(function(){
+                set_response("Attached"+"!");
+            });
+            $("#unchecked_box").change(function(){
+                if ($(this).is(":checked")) {
+                    set_response("Checked"+"!");
+                }
+            });
+            $("#checked_box").change(function(){
+                if (! $(this).is(":checked")) {
+                    set_response("Checked"+"!");
+                }
+            });
+            $("#test_select").change(function(){
+                if ($(this).val() == "my test value") {
+                    set_response("Selected"+"!");
+                }
+            });
+            $("#focus_me").focus(function(){set_response("Focused"+"!")}).blur(function(){set_response("Blurred"+"!")});
+            $(body).keydown(function(e){ 
+                console.log(e.which)
+                if (e.which == 13) {
+                    set_response("Entered!")
+                }
+            })
+        });
+        function set_response(text) {
+            $("#response_area").html(text);
+        }
+        </script>
+        <style type="text/css">
+            
+        </style>
+    </head>
+    <body>
+        <form>
+            <div id="response_area"></div>
+            <input name="input_target_name" class="input_target_class" id="input_target" value="" type="text" />
+            <textarea name="test_textarea_name" class="test_textarea_class" id="test_textarea" ></textarea>
+            <input name="test_file_name" class="test_file_class" id="test_file" value="" type="file" />
+
+            <label for="test_radio_1" name="label_for_radio_1_name" class="label_for_radio_1_class" id="label_for_radio_1"><input name="test_radio_1_name" class="test_radio_1_class" id="test_radio_1" value="1" type="radio" > Radio 1</label>
+            <label for="test_radio_2" name="label_for_radio_2_name" class="label_for_radio_2_class" id="label_for_radio_2"><input name="test_radio_2_name" class="test_radio_2_class" id="test_radio_2" value="2" type="radio" > Radio 2</label>
+
+            <input name="unchecked_box_name" class="unchecked_box_class" id="unchecked_box" value="1" type="checkbox" />
+            <input name="checked_box_name" class="checked_box_class" id="checked_box" value="2" type="checkbox" checked />
+
+
+            <select name="test_select_name" class="test_select_class" id="test_select" >
+                <option value="foo">Bar</option>
+                <option value="my test value">My test text</option>
+            </select>
+            <input name="focus_me_name" class="focus_me_class" id="focus_me" value="" type="text" />
+        </form>
+    </body>
+</html>

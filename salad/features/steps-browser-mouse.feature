@@ -44,6 +44,21 @@ Feature: Ensuring that the page steps work
         | mouse-over    | Moused over      |
         | mouseover     | Moused over      |
 
+    # Find by value currently broken in splinter
+    # https://github.com/cobrateam/splinter/pull/83
+    #Scenario Outline: Mouse events by value work.
+    #    Given I am using Firefox
+    #      And I visit the salad test url "browser/mouse.html"
+    #    When I <action> the element with the value "mouse input target value"
+    #    Then I should see "<expected_results>" somewhere in the page
+
+    #Examples:
+    #    | action        | expected_results |
+    #    | click on      | Clicked          |
+    #    | mouse over    | Moused over      |
+    #    | mouse-over    | Moused over      |
+    #    | mouseover     | Moused over      |
+
     # Links
     Scenario Outline: Mouse events for links by id work.
         Given I am using Chrome

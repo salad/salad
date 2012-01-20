@@ -2,7 +2,8 @@ from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate
 from salad.logger import logger
 
-# Find and verify that elements exist, have the expected content.
+# Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
+#
 
 
 @step(r'should( not)? see "(.*)" somewhere in (?:the|this) page')
@@ -10,7 +11,7 @@ def should_see_in_the_page(step, negator, text):
     assert_with_negate(text in world.browser.html, negator)
 
 
-@step(r'should( not)? see "(.*)"')
+@step(r'should( not)? see "(.*)"$')
 def should_see(step, negator, text):
     logger.warn("'should see (text)' has been deprecated in favor of 'should see (text) somewhere in the page'.")
     logger.warn("'should see' will be removed in v0.5 of salad, please update your code!")

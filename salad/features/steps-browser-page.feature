@@ -32,3 +32,8 @@ Feature: Ensuring that the page steps work
         Given I visit the salad test url "browser/basic.html"
         When I look around
         Then I should not see that the page html is "some random text"
+    
+    Scenario: IFrames work
+        Given I visit the salad test url "browser/basic.html"
+        When I look around
+        Then I should fail because "this test isn't done."

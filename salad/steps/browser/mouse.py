@@ -1,7 +1,6 @@
-from lettuce import step, world
-from salad.logger import logger
-from splinter.exceptions import ElementDoesNotExist
-import time
+from lettuce import step
+from salad.steps.browser.finders import ELEMENT_FINDERS, LINK_FINDERS, ELEMENT_THING_STRING, LINK_THING_STRING, _get_element
+
 
 # Click on things, mouse over, move the mouse around.
 
@@ -20,12 +19,14 @@ import time
 # link (searches for <A hrefs>)
 # thing
 #
-# <find clause> can be
+# <find clause> for any page element can be:
 # named "foo"
 # with the id "foo"
 # with the css selector ""
-# to "http://www.google.com" (links only)
-# to a url that contains ".google.com" (links only)
+#
+# <find clause> for links can be
+# to "http://www.google.com"
+# to a url that contains ".google.com"
 # with the text "foo"
 # with text that contains "foo"
 
@@ -40,41 +41,6 @@ actions = {
     "(?: double click|double-click|doubleclick)": "double_click",
     "(?: right click|right-click|rightclick)": "right_click",
 }
-
-finders = {
-    'named "(.*)"': "find_by_name",
-    'with(?: the)? id "(.*)"': "find_by_id",
-    'with(?: the)? css selector "(.*)"': "find_by_css",
-}
-
-link_finders = {
-    'to "(.*)"': "find_link_by_href",
-    'to a url that contains "(.*)"': "find_link_by_partial_href",
-    'with(?: the)? text "(.*)"': "find_link_by_text",
-    'with text that contains "(.*)"': "find_link_by_partial_text",
-}
-
-element_thing_string = "(?:element|thing)"
-link_thing_string = "link"
-
-
-def _get_element(finder_function, first, last, pattern):
-    ele = world.browser.__getattribute__(finder_function)(pattern)
-    try:
-        if first:
-            ele = ele.first
-        if last:
-            ele = ele.last
-
-        if len(ele) > 1:
-            logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_string, pattern))
-
-        ele = ele.first
-
-    except ElementDoesNotExist:
-            logger.error("Element not found: %s for %s" % (finder_string, pattern))
-            raise ElementDoesNotExist
-    return ele
 
 
 def step_generator(action_string, action_function, thing_string, finder_string, finder_function):
@@ -101,24 +67,24 @@ def drag_and_drop_generator(thing_string, finder_string, finder_function):
 
 
 for action_string, action_function in actions.iteritems():
-    for finder_string, finder_function in finders.iteritems():
+    for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         globals()["element_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
                                                                                         action_function,
-                                                                                        element_thing_string,
+                                                                                        ELEMENT_THING_STRING,
                                                                                         finder_string,
                                                                                         finder_function
                                                                                         )
 
-    for finder_string, finder_function in link_finders.iteritems():
+    for finder_string, finder_function in LINK_FINDERS.iteritems():
         globals()["link_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
                                                                                         action_function,
-                                                                                        link_thing_string,
+                                                                                        LINK_THING_STRING,
                                                                                         finder_string,
                                                                                         finder_function
                                                                                         )
 
-for finder_string, finder_function in finders.iteritems():
-    globals()["element_drag_%s" % (finder_function)] = drag_and_drop_generator(element_thing_string,
+for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
+    globals()["element_drag_%s" % (finder_function)] = drag_and_drop_generator(ELEMENT_THING_STRING,
                                                                                     finder_string,
                                                                                     finder_function
                                                                                     )

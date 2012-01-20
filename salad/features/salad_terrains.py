@@ -1,3 +1,4 @@
+import time
 from os.path import abspath, join, dirname
 from subprocess import Popen
 from sys import path
@@ -29,6 +30,7 @@ def setup_test_server():
                                     stderr=world.silent_output,
                                     stdout=world.silent_output
                                 ))
+    time.sleep(3)  # Wait for server to spin up
 
 
 @after.all
@@ -40,5 +42,6 @@ def teardown_test_server(total):
         except:
             try:
                 s.kill()
-            except Exception, e:
-                logger.error(e)
+            except OSError:
+                # Ignore an exception for process already killed.
+                pass

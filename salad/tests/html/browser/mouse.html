@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Javascript test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $("#mouse_target").mouseover(function(){$("#mouse_action").html("Moused over")});
+            $("#mouse_target").mouseout(function(){$("#mouse_action").html("Moused out")});
+            $("#mouse_target").click(function(e){
+                    console.log(e.which)
+                    switch (e.which) {
+                        case 1:
+                            $("#mouse_action").html("Clicked");
+                            break;
+                        case 3:
+                            $("#mouse_action").html("Right-clicked");
+                            break;
+                        default:
+                            break;
+                    }
+            });
+            $("#mouse_target").dblclick(function(){$("#mouse_action").html("Double-clicked")});
+            $("#drag_handler").draggable();
+            $("#drag_target").droppable({
+                drop: function( e, ui ) {
+                    $(this).html("Dropped on me!");
+                }
+            });
+        });
+        </script>
+        <style type="text/css">
+            #drag_handler {  width: 50px; height: 50px; border: 1px solid #000; background: red;}
+            #drag_target, #drag_not_target {  width: 100px; height: 100px; border: 1px solid #000; background: #AAA;}
+        </style>
+    </head>
+    <body>
+        <div id="mouse_target" class="mouse_target_class">The target of the mouse</div>
+        <div id="mouse_action"></div>
+
+        <div id="drag_handler">Drag Me</div>
+        <div id="drag_target">To Me</div>
+        <div id="drag_not_target">Not Me</div>
+    </body>
+</html>

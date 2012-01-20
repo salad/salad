@@ -9,8 +9,7 @@ def setup_browser():
     try:
         world.chrome = Browser("chrome")
     except Exception, e:
-        print e
-        logger.warn("Error starting up chrome")
+        logger.warn("Error starting up chrome: %s" % e)
 
 
 @after.all
@@ -19,4 +18,4 @@ def teardown_browser(total):
     try:
         world.chrome.quit()
     except:
-        logger.warn("Error tearing down chrome")
+        logger.warn("Error tearing down chrome.")

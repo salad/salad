@@ -9,6 +9,9 @@ from salad.steps.everything import *
 from salad.tests import TEST_SERVER_PORT
 
 
-@step(r'access the salad test url "(.*)"')
+@step(r'visit the salad test url "(.*)"')
 def go_to_the_salad_test_url(step, url):
-    go_to_the_url(step, "localhost:%s/%s" % (TEST_SERVER_PORT, url))
+    try:
+        go_to_the_url(step, "http://localhost:%s/%s" % (TEST_SERVER_PORT, url))
+    except:
+        go_to_the_url(step, "http://localhost:%s/%s" % (TEST_SERVER_PORT, url))

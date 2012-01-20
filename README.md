@@ -254,7 +254,8 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 
 * `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
 * Salad now runs a simple server for its tests, and has test cases for its own steps
-* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  `I visit the url` will be removed in v0.5, and now warns if it's used.  Note that changes like this aren't the trend for this project, but since I know everyone using salad at this point, it's ok.
+* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid verbs for visiting a web page going forward.
+* Backwards-incompatable: `should see (text)` has been changed to the clearer `should see (text) somewhere in the page`.  `should see` has been deprecated, and will continue to work until v0.5, at which point it will be removed.
 
 
 0.3

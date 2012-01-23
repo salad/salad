@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>Page-level stuff test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $(".alert_link").click(function(){
+                alert("My Test Alert");
+                return false;
+            });
+            $(".prompt_link").click(function(){
+                var num = prompt("What's a number you like?");
+                if (num != null) {
+                    set_response("You entered " + num);
+                } else {
+                    set_response("Cancelled!");
+                }
+                return false;
+            });
+            $(".nothing_link").click(function(){return false;});
+        });
+         function set_response(text) {
+            $("#response_area").html(text);
+        }
+        </script>
+        </script>
+        <style type="text/css">
+            #drag_handler {  width: 50px; height: 50px; border: 1px solid #000; background: red;}
+            #drag_target, #drag_not_target {  width: 100px; height: 100px; border: 1px solid #000; background: #AAA;}
+            #mouse_target, #mouse_target_link { display: block; width: 100px; margin: 50px;}
+        </style>
+    </head>
+    <body>
+        <div id="mouse_target" class="mouse_target_class" name="mouse_target_name">The target of the mouse</div>
+        <a class="alert_link" href="#alertlink" >Alert</a>
+        <a class="prompt_link" href="#promptlink" >Prompt me</a>
+        <a class="nothing_link" href="#" >Nothing</a>
+        <div id="response_area"></div>
+    </body>
+</html>

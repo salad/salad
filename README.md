@@ -92,7 +92,7 @@ Writing your first lettuce feature
     Scenario: Opening the W+K website works
         Given I visit the url "http://www.wk.com/"
         When I look around
-        Then I should see "Wieden+Kennedy"
+        Then I should see "Wieden+Kennedy" somewhere in the page
     ```
 
 1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad terrains, like:
@@ -130,9 +130,9 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
   I open the Wieden+Kennedy website using lettuce             # features/our-website-is-up.feature:4
 
   Scenario: Opening the W+K website works                     # features/our-website-is-up.feature:6
-    Given I visit the url "http://www.wk.com/"               # features/our-website-is-up-steps.py:8
+    Given I visit the url "http://www.wk.com/"                # features/our-website-is-up-steps.py:8
     When I look around                                        # features/our-website-is-up-steps.py:80
-    Then I should see "Wieden+Kennedy"                        # features/our-website-is-up-steps.py:37
+    Then I should see "Wieden+Kennedy" somewhere in the page  # features/our-website-is-up-steps.py:37
 
 1 feature (1 passed)
 1 scenario (1 passed)
@@ -206,16 +206,16 @@ Feature: Ensuring that other browsers work
     Scenario: Opening the W+K website works
         Given I am using zope
          And I visit the url "http://www.google.com/"
-        When I I fill in "q" with "Wieden Kennedy"
+        When I I fill in the field named "q" with "Wieden Kennedy"
           And I wait 1 second
         Then I should not see "www.wk.com"
 
     Scenario: Opening the W+K website works
         Given I am using firefox
           And I visit the url "http://www.google.com/"
-        When I I fill in "q" with "Wieden Kennedy"
+        When I I fill in the field named "q" with "Wieden Kennedy"
           And I wait 1 second
-        Then I should see "www.wk.com"
+        Then I should see "www.wk.com" somewhere in the page
 ```
 
 Using Chrome
@@ -259,7 +259,10 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Syntax changes:
 
 * Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid verbs for visiting a web page going forward.
-* Backwards-incompatable: `should see (text)` has been changed to the clearer `should see (text) somewhere in the page`.  `should see` has been deprecated, and will continue to work until v0.5, at which point it will be removed.
+* Backwards-incompatable: `should see (text)` has changed meaning.  
+    
+    * If the you mean "this text should appear somewhere in the HTML for this page", use `should see (text) somewhere in the page`.
+    * If you mean "the element that I am about to describe should be in the page and be visible", use `should see <element description>`
 
 
 0.3

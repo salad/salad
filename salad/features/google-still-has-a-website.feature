@@ -7,5 +7,5 @@ Feature: Ensuring that salad works, and Google's website loads
         Given I am using firefox
           And I visit the url "http://www.google.com/"
         When I look around
-        Then I should see "About Google"
+        Then I should see "About Google" somewhere in the page
 

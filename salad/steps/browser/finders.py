@@ -20,7 +20,7 @@ ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|checkbox|la
 LINK_THING_STRING = "link"
 
 
-def _get_element(finder_function, first, last, pattern):
+def _get_element(finder_function, first, last, pattern, expect_not_to_find=False, leave_in_list=False):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
@@ -33,10 +33,12 @@ def _get_element(finder_function, first, last, pattern):
         if len(ele) > 1:
             logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
 
-        ele = ele.first
+        if not leave_in_list:
+            ele = ele.first
 
     except ElementDoesNotExist:
-            logger.error("Element not found: %s for %s" % (finder_function, pattern))
+            if not expect_not_to_find:
+                logger.error("Element not found: %s for %s" % (finder_function, pattern))
             raise ElementDoesNotExist
 
     world.current_element = ele

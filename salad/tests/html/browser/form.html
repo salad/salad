@@ -33,7 +33,6 @@
             });
             $("#focus_me").focus(function(){set_response("Focused"+"!")}).blur(function(){set_response("Blurred"+"!")});
             $(body).keydown(function(e){ 
-                console.log(e.which)
                 if (e.which == 13) {
                     set_response("Entered!")
                 }

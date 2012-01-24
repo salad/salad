@@ -80,7 +80,7 @@ Feature: Ensuring that the forms steps work
 # Attach
     Scenario Outline: Attaching a file works.
         Given I visit the salad test url "browser/form.html"
-        When I attach "my_file.jpg" onto the field <finder>
+        When I attach "/tmp/temp_lettuce_test" onto the field <finder>
         Then I should see "Attached!" somewhere in the page
 
     Examples:
@@ -157,14 +157,17 @@ Feature: Ensuring that the forms steps work
         When I hit enter
         Then I should see "Entered!" somewhere in the page
     
-    Scenario: Hitting enter in a field works.
+    Scenario: Focusing works
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
-          And I hit enter
+          And I click on the field named "focus_me_name"
+          And I wait 2 seconds
         Then I should see "Focused!" somewhere in the page
     
-    Scenario: Hitting enter in a field works.
+    Scenario: Blurring works
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
+          And I wait 2 seconds
           And I click on the element with the css selector "body"
+          And I wait 2 seconds
         Then I should see "Blurred!" somewhere in the page

@@ -12,7 +12,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'fill in the( first)?( last)? %s %s with "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern, text):
             ele = _get_element(finder_function, first, last, find_pattern)
-            ele.value = text
+            try:
+                ele.value = text
+            except:
+                ele._control.value = text
 
         return _this_step
 
@@ -38,7 +41,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'attach "(.*)" onto the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, first, last, find_pattern):
             ele = _get_element(finder_function, first, last, find_pattern)
-            ele.value = file_name
+            try:
+                ele.value = file_name
+            except:
+                ele._control.value = file_name
 
         return _this_step
 
@@ -85,7 +91,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'(?:should see that the)? value of the( first)?( last)? %s %s is( not)? "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern, negate, value):
             ele = _get_element(finder_function, first, last, find_pattern)
-            assert_equals_with_negate(ele.value, value, negate)
+            try:assert_equals_with_negate(
+                ele.value, value, negate)
+            except:
+                ele._control.value = text
 
         return _this_step
 

@@ -19,7 +19,14 @@
                             break;
                     }
             });
-            $("#double_click").dblclick(function(){$("#mouse_action").html("Double"+"-clicked")});
+            var last_double_click_click = false;
+            $("#double_click").click(function(){
+                var now = new Date().getTime();
+                if (last_double_click_click && now < last_double_click_click + 1000) {
+                    $("#mouse_action").html("Double-"+"clicked");
+                }
+                last_double_click_click = now;
+            });
             $("#drag_handler").draggable();
             $("#drag_target").droppable({
                 drop: function( e, ui ) {

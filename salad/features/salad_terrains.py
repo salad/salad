@@ -1,4 +1,5 @@
 import time
+from os import remove
 from os.path import abspath, join, dirname
 from subprocess import Popen
 from sys import path
@@ -23,6 +24,7 @@ def setup_test_server():
     file_server_command = "python -m SimpleHTTPServer %s" % (TEST_SERVER_PORT)
     test_dir = abspath(join(SALAD_ROOT, "salad", "tests", "html"))
     world.silent_output = file('/dev/null', 'a+')
+    world.tempfile = file('/dev/null', 'a+')
 
     world.subprocesses.append(Popen(file_server_command,
                                     shell=True,
@@ -45,3 +47,14 @@ def teardown_test_server(total):
             except OSError:
                 # Ignore an exception for process already killed.
                 pass
+
+
+@before.all
+def create_tempfile():
+    world.tempfile = file('/tmp/temp_lettuce_test', 'a+')
+    world.tempfile.close()
+
+
+@after.all
+def remove_tempfile(total):
+    remove("/tmp/temp_lettuce_test")

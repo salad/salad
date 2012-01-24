@@ -128,15 +128,11 @@ Feature: Ensuring that the page steps work
         | mouseout      | Moused out       |
 
 
-    Scenario Outline: Doubleclick works
+    Scenario: Doubleclick works
         Given I am using Chrome
           And I visit the salad test url "browser/mouse.html"
-        When I <action> the element with id "double_click"
-        Then I should see "<expected_results>" somewhere in the page
+        When I click the element with id "double_click"
+          And I click the element with id "double_click"
+        Then I should see "Double-clicked" somewhere in the page
 
-    Examples:
-        | action        | expected_results |
-        | double click  | Double-clicked   |
-        | double-click  | Double-clicked   |
-        | doubleclick   | Double-clicked   |
     

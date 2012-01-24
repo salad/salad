@@ -91,10 +91,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'(?:should see that the)? value of the( first)?( last)? %s %s is( not)? "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern, negate, value):
             ele = _get_element(finder_function, first, last, find_pattern)
-            try:assert_equals_with_negate(
-                ele.value, value, negate)
-            except:
-                ele._control.value = text
+            assert_equals_with_negate(ele.value, value, negate)
 
         return _this_step
 

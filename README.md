@@ -169,10 +169,10 @@ Subjects
 For any element in the page, you can use this phrasing to specify the subject
 
 ```gherkin
-<action> the <element|thing|field|textarea|radio button|checkbox|label> named "my_name"'
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the id "my_id"
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the css selector ".my_css_selector>"
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the value "my value"
+<action> the <element|thing|field|textarea|radio button|button|checkbox|label> named "my_name"'
+<action> the <element|thing|field|textarea|radio button|button|checkbox|label> with the id "my_id"
+<action> the <element|thing|field|textarea|radio button|button|checkbox|label> with the css selector ".my_css_selector>"
+<action> the <element|thing|field|textarea|radio button|button|checkbox|label> with the value "my value"
 
 ```
 

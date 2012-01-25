@@ -16,7 +16,7 @@ LINK_FINDERS = {
     'with text that contains "(.*)"': "find_link_by_partial_text",
 }
 
-ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|checkbox|label)"
+ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"
 LINK_THING_STRING = "link"
 
 

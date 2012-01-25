@@ -3,3 +3,4 @@
 salad.egg-info
 salad.egg-info/*
 dist/*
+salad/chromedriver.log

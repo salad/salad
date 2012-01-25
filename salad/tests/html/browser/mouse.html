@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <title>Mouse test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $("#mouse_target, #mouse_target_link, #mouse_input_target").mouseover(function(){$("#mouse_action").html("Moused"+" over")});
+            $("#mouse_target, #mouse_target_link, #mouse_input_target").mouseout(function(){$("#mouse_action").html("Moused"+" out")});
+            $("#mouse_target, #mouse_target_link, #mouse_input_target").click(function(e){
+                    switch (e.which) {
+                        case 1:
+                            $("#mouse_action").html("Clic"+"ked");
+                            break;
+                        case 3:
+                            $("#mouse_action").html("Right-"+"clicked");
+                            break;
+                        default:
+                            break;
+                    }
+            });
+            var last_double_click_click = false;
+            $("#double_click").click(function(){
+                var now = new Date().getTime();
+                if (last_double_click_click && now < last_double_click_click + 1000) {
+                    $("#mouse_action").html("Double-"+"clicked");
+                }
+                last_double_click_click = now;
+            });
+            $("#drag_handler").draggable();
+            $("#drag_target").droppable({
+                drop: function( e, ui ) {
+                    $(this).html("Dropped " + "on me!");
+                }
+            });
+        });
+        </script>
+        <style type="text/css">
+            #drag_handler {  width: 50px; height: 50px; border: 1px solid #000; background: red;}
+            #drag_target, #drag_not_target {  width: 100px; height: 100px; border: 1px solid #000; background: #AAA;}
+            #mouse_target, #mouse_target_link { display: block; width: 100px; margin: 50px;}
+        </style>
+    </head>
+    <body>
+        <div id="mouse_target" class="mouse_target_class" name="mouse_target_name">The target of the mouse</div>
+        <a id="mouse_target_link" class="mouse_target_link_class" name="mouse_target_link_name" href="#mousetargetlink" >Mouse Target Link</a>
+        <input id="mouse_input_target" class="mouse_input_target_class" name="mouse_input_target_name" value="mouse input target value" type="text" />
+        <div id="double_click" class="double_click_class" name="double_click_name">Double-click target</div>
+        <div id="mouse_action"></div>
+
+        <div id="drag_handler" class="drag_handler_class" name="drag_handler_name" >Drag Me</div>
+        <div id="drag_target" class="drag_target_class" name="drag_target_name" >To Me</div>
+        <div id="drag_not_target" class="drag_not_target_class" name="drag_not_target_name" >Not Me</div>
+    </body>
+</html>

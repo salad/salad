@@ -1,21 +1,21 @@
-import logging
 from lettuce import before, world, after
 from splinter.browser import Browser
+from salad.logger import logger
 
 
 @before.all
 def setup_browser():
-    logging.info("Setting up chrome...")
+    logger.info("Setting up chrome...")
     try:
         world.chrome = Browser("chrome")
-    except:
-        logging.warn("Error starting up chrome")
+    except Exception, e:
+        logger.warn("Error starting up chrome: %s" % e)
 
 
 @after.all
 def teardown_browser(total):
-    logging.info("Tearing down chrome...")
+    logger.info("Tearing down chrome...")
     try:
         world.chrome.quit()
     except:
-        logging.warn("Error tearing down chrome")
+        logger.warn("Error tearing down chrome.")

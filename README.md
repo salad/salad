@@ -27,46 +27,27 @@ Usage
 Salad is mostly lettuce.
 ------------------------
 
-Salad is mostly lettuce.  So, you should use their [great documentation](http://lettuce.it/) with gusto.  If you're interacting with the browser, you're doing it through [splinter](http://splinter.cobrateam.info/docs/), and their docs are great as well.
+Salad is mostly lettuce.  So, you should use their [great documentation](http://lettuce.it/) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](http://splinter.cobrateam.info/docs/), and their docs are great as well.
 
-Salad includes some steps and terrains
---------------------------------------
 
-To make it even easier to test, salad includes a number of common steps and terrains you can import into your files and use.
+Salad includes helpful steps and terrains.
+------------------------------------------
 
-For example, if you're writing a django app, you can:
+There's a detailed description below on all of the included modules, but if you just want to get up and running quickly, you can:
 
-my_app_steps.py
-
-```python
-from salad.steps.common import *
-from salad.steps.browser import *
-from salad.steps.djangoify import *
-```
-
-and
-
-my_app_terrain.py
-
-```python
-from salad.terrains.browser import *
-from salad.terrains.djangoify import *
-```
-
-and you're done. If you don't care about importing too much, there's always
+*steps.py*
 
 ```python
 from salad.steps.everything import *
 ```
 
-and
+*terrains.py*
 
 ```python
 from salad.terrains.everything import *
 ```
 
-
-The source is pretty friendly, and always accurate. Check it out to see what steps and terrains salad's got.
+And you're done.
 
 
 Salad 101
@@ -144,12 +125,21 @@ Easy.
 Salad Built-ins:
 ================
 
-Please read the steps and terrain source code for details, but for a high-level look at the built-ins, here's what salad has:
+The steps and terrain source files are your best source of information, but here's a high-level look at salad's built-ins:
 
 Steps
 -----
 
-* `browser` - Lots of page-element checking, form-interacting goodness
+* `browser` - Broken into submodules. Importing `browser` gets them all.
+    * `alerts` - Handle alerts and prompts.
+    * `browers` - Switch between browsers.
+    * `elements` - Verify that elements exist, have expected contents or attributes.
+    * `finders` - No actual steps - just helper functions to find elements.
+    * `forms` - Interact with form fields - type, focus, select, fill in, and the like.
+    * `javascript` - Run javascript and verify results.
+    * `mouse` - Click, mouse over, mouse out, drag and drop.
+    * `navigation` - Visit a URL, back, forward, refresh.
+    * `page` - Page title, URL, full html.
 * `common` - A few utility steps, like wait and look around.
 * `djangoify` - Django-focused steps, helping with url reversing and the like.
 * `everything` - browser, common, and django.
@@ -166,6 +156,95 @@ Terrains
 * `everything` - Includes everything above.
 
 
+Step syntax
+-----------
+
+The built-in steps are designed to be flexible in syntax, and implement all of the actions supported by splinter.  Generally, your best bet is to simply read the steps to see what's supported.  However, for parts of `elements`, `forms`, and `mouse`, the code is a bit opaque, so here's a better explanation of how those parts work:
+
+Generally, when you're interacting with forms, page elements, or the mouse, you can think of salad's steps as having a subject, and an action.
+
+Subjects
+--------
+
+For any element in the page, you can use this phrasing to specify the subject
+
+```gherkin
+<action> the <element|thing|field|textarea|radio button|checkbox|label> named "<name>"'
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the id "<id>"
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the css selector "<css selector>"
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the value "<value>"
+
+```
+
+If you're just looking for a link, you can use:
+
+```gherkin
+<action> the link to "<some text>"
+<action> the link to a url that contains "<some text>"
+<action> the link with(?: the)? text "<some text>"
+<action> the link with text that contains "<some text>"
+```
+
+
+
+Actions
+-------
+
+The second part is actions.  To verify presence and content, you can use these actions:
+
+```gherkin
+should (not) see <subject>
+should (not) see that the <subject> contains "some text"
+should (not) see that the <subject> contains exactly "some text"
+should (not) see that the <subject> has an attribute called "attr_name"
+should (not) see that the <subject> has an attribute called "attr_name" with the value "attr value"
+should (not) see "some text" anywhere in the page
+```
+
+To interact with forms, you can use these:
+
+```gherkin
+fill in the <subject> with "some text"
+(slowly) type "some text" into the <subject>
+attach "some/file.name" into the <subject>
+select the option named "option name" from the <subject>
+select the option with the value "option_value" from the <subject>
+focus on the the <subject>
+blur from the <subject>
+see that the value <subject> is (not) "some text"
+```
+
+To use the mouse, you've got:
+
+```gherkin
+click on the <subject>
+mouse over the <subject>
+mouse out the <subject>
+double click the <subject>
+right click the <subject>
+drag the <subject_1> and drop it on the <subject_2>
+```
+
+
+Together, it's quite a flexible system - you can say things like:
+
+```gherkin
+Given I visit "http://www.my-test-site.com"
+When I select the option named "Cheese" from the radio button named "shops"
+  And I click on first link with text that contains "Go"
+Then I should see an element with the css selector ".cheese_shop_banner"
+  And I should not see "MeatCo" anywhere in the page.
+```
+
+Using an alternate browser
+--------------------------
+
+Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  To switch what browser you're using, you simply:
+
+```gherkin
+Given I am using chrome
+```
+
 
 Tips and Tricks
 ===============
@@ -176,47 +255,6 @@ Keeping tests organized
 As you've noticed above, we use the convention of naming the steps file the same as the feature file, with `-steps` appended.  It's worked well so far. For django apps, it's also been easiest to keep the features for each app within the app structure.
 
 We're still early in using lettuce on larger projects, and as better advice comes out, we'll be happy to share it.  If you have advice, type it up in a pull request, or open an issue!
-
-
-Using an alternate browser
---------------------------
-
-Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  Here's an example using zope and chrome, to test differing behaviors when javascript is disabled.
-
-*terrain.py*
-
-```python
-from salad.terrains.everything import *
-```
-
-*steps.py*
-
-```python
-from salad.steps.everything import *
-```
-
-*other_browsers_work.feature*
-
-```gherkin
-Feature: Ensuring that other browsers work
-    In order to make sure that other browsers work
-    As a developer
-    I search for the Wieden+Kennedy website using zope and firefox
-
-    Scenario: Opening the W+K website works
-        Given I am using zope
-         And I visit the url "http://www.google.com/"
-        When I I fill in the field named "q" with "Wieden Kennedy"
-          And I wait 1 second
-        Then I should not see "www.wk.com"
-
-    Scenario: Opening the W+K website works
-        Given I am using firefox
-          And I visit the url "http://www.google.com/"
-        When I I fill in the field named "q" with "Wieden Kennedy"
-          And I wait 1 second
-        Then I should see "www.wk.com" somewhere in the page
-```
 
 Using Chrome
 ------------
@@ -258,11 +296,13 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 
 Syntax changes:
 
-* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid verbs for visiting a web page going forward.
+* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid actions for visiting a web page going forward.
 * Backwards-incompatable: `should see (text)` has changed meaning.  
     
     * If the you mean "this text should appear somewhere in the HTML for this page", use `should see (text) somewhere in the page`.
-    * If you mean "the element that I am about to describe should be in the page and be visible", use `should see <element description>`
+    * If you mean "the element that I am about to describe should be in the page and be visible", use `should see <subject>`
+
+Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather start fresh and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.
 
 
 0.3

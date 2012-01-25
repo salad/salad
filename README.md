@@ -169,20 +169,20 @@ Subjects
 For any element in the page, you can use this phrasing to specify the subject
 
 ```gherkin
-<action> the <element|thing|field|textarea|radio button|checkbox|label> named "<name>"'
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the id "<id>"
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the css selector "<css selector>"
-<action> the <element|thing|field|textarea|radio button|checkbox|label> with the value "<value>"
+<action> the <element|thing|field|textarea|radio button|checkbox|label> named "my_name"'
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the id "my_id"
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the css selector ".my_css_selector>"
+<action> the <element|thing|field|textarea|radio button|checkbox|label> with the value "my value"
 
 ```
 
 If you're just looking for a link, you can use:
 
 ```gherkin
-<action> the link to "<some text>"
-<action> the link to a url that contains "<some text>"
-<action> the link with(?: the)? text "<some text>"
-<action> the link with text that contains "<some text>"
+<action> the link to "some text"
+<action> the link to a url that contains "someurl.com"
+<action> the link with(?: the)? text "some text"
+<action> the link with text that contains "some t"
 ```
 
 
@@ -206,7 +206,7 @@ To interact with forms, you can use these:
 ```gherkin
 fill in the <subject> with "some text"
 (slowly) type "some text" into the <subject>
-attach "some/file.name" into the <subject>
+attach "some/file.name" onto the <subject>
 select the option named "option name" from the <subject>
 select the option with the value "option_value" from the <subject>
 focus on the the <subject>
@@ -279,6 +279,12 @@ Include the django steps and terrains into your steps and terrains, and you're a
 *Gotcha alert:*  If you're serving static media with `staticfiles`, you'll want to pass `-d` to harvest, to run in debug mode (and enable static media.)
 
 
+The built-in steps are a helper, not a crutch
+----------------------------------------------
+
+Cucumber and salad make BDD beautiful by allowing us to write tests in natural, human language.  Please don't let salad's built-ins drive how your tests read. They're there for convienence, if the syntax they use fits your scenario's needs.  One of the great gains of gherkin syntax is the ability to make a scenario that reads `then I should see that I'm logged in`.  Don't lose that beauty!
+
+
 Updates and Roadmap
 ===================
 
@@ -293,16 +299,12 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 * Massive upgrade to the included steps.  There are now steps for almost everything you can do in splinter, with friendly, consistent syntax!
 * Features written for all of salad's steps. That's 100% test coverage, folks!
 * `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
-
-Syntax changes:
-
 * Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid actions for visiting a web page going forward.
-* Backwards-incompatable: `should see (text)` has changed meaning.  
+* Backwards-incompatable: `should see "some text"` has changed meaning.  
     
-    * If the you mean "this text should appear somewhere in the HTML for this page", use `should see (text) somewhere in the page`.
-    * If you mean "the element that I am about to describe should be in the page and be visible", use `should see <subject>`
-
-Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather start fresh and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.
+    * If you mean *this text should appear somewhere in the HTML for this page*, use `should see "some text" somewhere in the page`.
+    * If you mean *the element that I am about to describe should be in the page and be visible*, use `should see <subject>`
+    * Note: Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather make the jump and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.
 
 
 0.3
@@ -321,7 +323,7 @@ Backwards-incompatable changes will not be the norm around here - at the moment,
 Credits:
 ========
 
-All of the hard work was done by the brilliant folks who wrote lettuce and splinter and cucumber.  Our goals with this package was to make it dead-simple to get everything up and running for a sweet BDD setup.
+All of the hard work was done by the brilliant folks who wrote [lettuce](http://lettuce.it) and [splinter](http://splinter.cobrateam.info/) and [cucumber](http://cukes.info/).  Our goals with this package was to make it dead-simple to get everything up and running for a sweet BDD setup.
 
 All copyrights and licenses for lettuce and splinter remain with their authors, and this package (which doesn't include their source) makes no claim to their code.
 

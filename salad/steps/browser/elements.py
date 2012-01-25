@@ -6,7 +6,7 @@ from splinter.exceptions import ElementDoesNotExist
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
 
 
-@step(r'should( not)? see "(.*)" somewhere in (?:the|this) page')
+@step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page')
 def should_see_in_the_page(step, negate, text):
     assert_with_negate(text in world.browser.html, negate)
 

@@ -1,5 +1,5 @@
-import logging
 from lettuce import before, world, after
+from salad.logger import logger
 
 try:
     from django.core.management import call_command
@@ -13,7 +13,7 @@ try:
 
     @before.all
     def setup_database():
-        logging.info("Setting up a test database ...\n")
+        logger.info("Setting up a test database ...\n")
 
         if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
             from django.db import connection
@@ -37,13 +37,13 @@ try:
 
     @after.all
     def teardown_database(total):
-        logging.info("Destroying test database ...\n")
+        logger.info("Destroying test database ...\n")
         world.test_runner.teardown_test_environment()
 
     @after.each_feature
     def reset_data(scenario):
-        logging.info("Flushing...")
+        logger.info("Flushing...")
         call_command('flush', interactive=False, verbosity=0)
 
 except:
-    logging.warn("Django terrains not imported.")
+    logger.warn("Django terrains not imported.")

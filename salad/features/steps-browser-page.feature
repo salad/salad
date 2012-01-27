@@ -82,9 +82,7 @@ Feature: Ensuring that the page steps work
 
    # Currently, there's a bug in 
     Scenario: Prompts cancelling works
-        Given I am using firefox
-          And I visit the salad test url "browser/page.html"
-          And I should fail because "There is a bug in prompt dismissing, and leaving this test in breaks all the following tests."
+        Given I visit the salad test url "browser/page.html"
         When I click on the link with the text "Prompt me"
           And I cancel the prompt
         Then I should see "Cancelled!" somewhere in the page.

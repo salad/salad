@@ -53,19 +53,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_exactly_%s" % (finder_function,)] = _is_exactly_generator(finder_string, finder_function)
 
-    def _attribute_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first)?( last)? %s %s has (?:an|the) attribute (?:of|called) "(.*)"$' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, first, last, find_pattern, attr_name):
-            ele = _get_element(finder_function, first, last, find_pattern)
-            assert_with_negate(ele[attr_name] != None, negate)
-
-        return _this_step
-
-    globals()["form_attribute_%s" % (finder_function,)] = _attribute_generator(finder_string, finder_function)
-
-    # TODO: fix this up to work
     def _attribute_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first)?( last)? %s %s has an attribute (?:named|called) "(.*)" with(?: the)? value "(.*)"' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'should( not)? see that the( first)?( last)? %s %s has (?:an|the) attribute (?:of|named|called) "(.*)" with(?: the)? value "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, first, last, find_pattern, attr_name, attr_value):
             ele = _get_element(finder_function, first, last, find_pattern)
             assert_equals_with_negate("%s" % ele[attr_name], attr_value, negate)
@@ -73,3 +62,16 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         return _this_step
 
     globals()["form_attribute_value_%s" % (finder_function,)] = _attribute_value_generator(finder_string, finder_function)
+
+    def _attribute_generator(finder_string, finder_function):
+        @step(r'should( not)? see that the( first)?( last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$' % (ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, first, last, find_pattern, attr_name):
+            ele = _get_element(finder_function, first, last, find_pattern)
+            print ele
+            print attr_name
+            print ele[attr_name]
+            assert_with_negate(ele[attr_name] != None, negate)
+
+        return _this_step
+
+    globals()["form_attribute_%s" % (finder_function,)] = _attribute_generator(finder_string, finder_function)

@@ -46,8 +46,8 @@ def should_see_prompt_with_text(step, negate, text):
 def cancel_prompt(step):
     if not hasattr(world, "prompt") or not world.prompt:
         world.prompt = _get_alert_or_none()
-
-    world.prompt.dismiss()
+    # for some reason, world.prompt.dismiss() doesn't work.
+    world.prompt._alert.dismiss()
 
 
 @step(r'enter "(.*)" into the prompt')

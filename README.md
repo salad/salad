@@ -293,7 +293,15 @@ Roadmap
 
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
 
-0.4.1
+0.4.2
+-----
+
+* Fixed up the cancel prompt code
+* Clarified attribute regex to properly match.
+* Moved js test to local files (no internet connection needed.)
+
+
+0.4.
 -----
 
 * Bugfix in finding element code for single links.

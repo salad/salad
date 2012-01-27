@@ -30,11 +30,12 @@ def _get_element(finder_function, first, last, pattern, expect_not_to_find=False
         if last:
             ele = ele.last
 
-        if len(ele) > 1:
-            logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
+        if not "WebDriverElement" in "%s" % type(ele):
+            if len(ele) > 1:
+                logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
 
-        if not leave_in_list:
-            ele = ele.first
+            if not leave_in_list:
+                ele = ele.first
 
     except ElementDoesNotExist:
             if not expect_not_to_find:

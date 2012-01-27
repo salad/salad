@@ -27,7 +27,7 @@ Usage
 Salad is mostly lettuce.
 ------------------------
 
-Salad is mostly lettuce.  So, you should use their [great documentation](http://lettuce.it/) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](http://splinter.cobrateam.info/docs/), and their docs are great as well.
+Salad is mostly [lettuce](http://lettuce.it/).  So, you should use their [great documentation](http://lettuce.it/contents.html) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](http://splinter.cobrateam.info/), and their [docs](http://splinter.cobrateam.info/docs/) are great as well.
 
 
 Salad includes helpful steps and terrains.
@@ -292,6 +292,11 @@ Roadmap
 -------
 
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
+
+0.4.1
+-----
+
+* Bugfix in finding element code for single links.
 
 0.4
 ---

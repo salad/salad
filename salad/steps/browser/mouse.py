@@ -45,7 +45,7 @@ actions = {
 
 def step_generator(action_string, action_function, thing_string, finder_string, finder_function):
 
-    @step(r'%s the( first)?( last)? %s %s' % (action_string, thing_string, finder_string))
+    @step(r'%s (?:a|the)( first)?( last)? %s %s' % (action_string, thing_string, finder_string))
     def _this_step(step, first, last, find_pattern):
         ele = _get_element(finder_function, first, last, find_pattern)
 

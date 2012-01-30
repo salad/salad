@@ -179,7 +179,7 @@ For any element in the page, you can use this phrasing to specify the subject
 If you're just looking for a link, you can use:
 
 ```gherkin
-<action> the link to "some text"
+<action> the link to "http://someurl.com"
 <action> the link to a url that contains "someurl.com"
 <action> the link with(?: the)? text "some text"
 <action> the link with text that contains "some t"
@@ -211,7 +211,7 @@ select the option named "option name" from the <subject>
 select the option with the value "option_value" from the <subject>
 focus on the the <subject>
 blur from the <subject>
-see that the value <subject> is (not) "some text"
+see that the value of the <subject> is (not) "some text"
 ```
 
 To use the mouse, you've got:

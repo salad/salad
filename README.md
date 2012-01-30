@@ -294,26 +294,26 @@ Roadmap
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
 
 
-0.4.2
------
+Recent updates (full log in CHANGES)
+------------------------------------
+
+*0.4.3*
 
 * Steps for iFrame context switching added.
 
-0.4.2
------
+*0.4.2*
 
 * Fixed up the cancel prompt code
 * Clarified attribute regex to properly match.
 * Moved js test to local files (no internet connection needed.)
 
 
-0.4.1
------
+*0.4.1*
 
 * Bugfix in finding element code for single links.
 
-0.4
----
+*0.4*
+
 
 * Massive upgrade to the included steps.  There are now steps for almost everything you can do in splinter, with friendly, consistent syntax!
 * Features written for all of salad's steps. That's 100% test coverage, folks!
@@ -325,17 +325,6 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
     * If you mean *the element that I am about to describe should be in the page and be visible*, use `should see <subject>`
     * Note: Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather make the jump and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.
 
-
-0.3
----
-
-* Added the ability to choose your browser, using the "Given that I am using zope/firefox/chrome" step.
-* Added `zope.testbrowser` to the required libs
-* Salad's own lettuce tests now run, and have coverage of the browser loading.
-
-0.2
----
-* Initial dev
 
 
 

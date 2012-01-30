@@ -80,9 +80,23 @@ Feature: Ensuring that the page steps work
           And I enter "5" into the prompt
         Then I should see "You entered 5" somewhere in the page.
 
-   # Currently, there's a bug in 
     Scenario: Prompts cancelling works
         Given I visit the salad test url "browser/page.html"
         When I click on the link with the text "Prompt me"
           And I cancel the prompt
         Then I should see "Cancelled!" somewhere in the page.
+
+    Scenario: Switching to an iframe works
+        Given I visit the salad test url "browser/iframe.html"
+        When I switch to the iframe "my_iframe"
+        Then I should see "iFrame Page" somewhere in the page.
+          And I should not see "Main Page" somewhere in the page.
+    
+    Scenario: Switching to an iframe, then back to the parent frame works
+        Given I visit the salad test url "browser/iframe.html"
+        When I switch to the iframe "my_iframe"
+          And I switch back to the parent frame
+        Then I should see "Main Page" somewhere in the page.
+          And I should not see "iFrame Page" somewhere in the page.
+          
+          

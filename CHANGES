@@ -1,0 +1,45 @@
+
+
+0.4.2
+-----
+
+* Steps for iFrame context switching added.
+
+0.4.2
+-----
+
+* Fixed up the cancel prompt code
+* Clarified attribute regex to properly match.
+* Moved js test to local files (no internet connection needed.)
+
+
+0.4.1
+-----
+
+* Bugfix in finding element code for single links.
+
+0.4
+---
+
+* Massive upgrade to the included steps.  There are now steps for almost everything you can do in splinter, with friendly, consistent syntax!
+* Features written for all of salad's steps. That's 100% test coverage, folks!
+* `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
+* Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid actions for visiting a web page going forward.
+* Backwards-incompatable: `should see "some text"` has changed meaning.  
+    
+    * If you mean *this text should appear somewhere in the HTML for this page*, use `should see "some text" somewhere in the page`.
+    * If you mean *the element that I am about to describe should be in the page and be visible*, use `should see <subject>`
+    * Note: Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather make the jump and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.
+
+
+0.3
+---
+
+* Added the ability to choose your browser, using the "Given that I am using zope/firefox/chrome" step.
+* Added `zope.testbrowser` to the required libs
+* Salad's own lettuce tests now run, and have coverage of the browser loading.
+
+0.2
+---
+* Initial dev
+

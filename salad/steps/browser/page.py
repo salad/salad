@@ -1,5 +1,6 @@
 from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate
+
 # Verify page-level attributes (title, size, etc)
 
 
@@ -16,3 +17,13 @@ def should_have_the_url(step, negate, url):
 @step(r'should( not)? see that the page html is "(.*)"')
 def should_have_html(step, negate, html):
     assert_equals_with_negate(world.browser.html, html, negate)
+
+
+@step(r'switch(?: back) to the parent frame')
+def back_to_the_parent_frame(step):
+    world.browser.driver.switch_to_frame(None)
+
+
+@step(r'switch to the iframe "(.*)"')
+def switch_to_iframe(step, iframe_id):
+    world.browser.driver.switch_to_frame(iframe_id)

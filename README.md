@@ -294,6 +294,11 @@ Roadmap
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
 
 
+*0.5 (Planned)*
+
+* `SALAD_SUBJECT_GLOSSARY` - allows project specific extensions to the subjects. For example, you could map `'the submit button'` to `'the element with the css selector ".submit_btn"'`, and use it for clicks, mouseovers, etc without having to write a specific step for each permuation.
+
+
 Recent updates (full log in CHANGES)
 ------------------------------------
 

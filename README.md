@@ -331,7 +331,7 @@ Recent updates (full log in CHANGES)
 Credits:
 ========
 
-All of the hard work was done by the brilliant folks who wrote [lettuce](http://lettuce.it) and [splinter](http://splinter.cobrateam.info/) and [cucumber](http://cukes.info/).  Our goals with this package was to make it dead-simple to get everything up and running for a sweet BDD setup.
+All of the hard work was done by the brilliant folks who wrote [lettuce](http://lettuce.it) and [splinter](http://splinter.cobrateam.info/) and [cucumber](http://cukes.info/).  Our goal with this package was to make it dead-simple to get everything up and running for a sweet BDD setup.
 
 All copyrights and licenses for lettuce and splinter remain with their authors, and this package (which doesn't include their source) makes no claim to their code.
 

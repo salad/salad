@@ -6,7 +6,7 @@ from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
-for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
+for finder_string, finder_function in ELEMENT_FINDERS:
 
     def _fill_generator(finder_string, finder_function):
         @step(r'fill in the( first)?( last)? %s %s with "(.*)"' % (ELEMENT_THING_STRING, finder_string))

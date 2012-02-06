@@ -1,20 +1,27 @@
 from lettuce import world
 from salad.logger import logger
+from salad.glossary_loader import SALAD_GLOSSARY
 from splinter.exceptions import ElementDoesNotExist
 
-ELEMENT_FINDERS = {
+ELEMENT_FINDERS = {}
+ELEMENT_FINDERS.update(SALAD_GLOSSARY)
+ELEMENT_FINDERS.update({
     'named "(.*)"': "find_by_name",
     'with(?: the)? id "(.*)"': "find_by_id",
     'with(?: the)? css selector "(.*)"': "find_by_css",
     'with(?: the)? value (.*)': "find_by_value",
-}
+})
 
-LINK_FINDERS = {
+LINK_FINDERS = {}
+LINK_FINDERS.update(SALAD_GLOSSARY)
+LINK_FINDERS.update({
     'to "(.*)"': "find_link_by_href",
     'to a url that contains "(.*)"': "find_link_by_partial_href",
     'with(?: the)? text "(.*)"': "find_link_by_text",
     'with text that contains "(.*)"': "find_link_by_partial_text",
-}
+})
+
+print ELEMENT_FINDERS
 
 ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"
 LINK_THING_STRING = "link"

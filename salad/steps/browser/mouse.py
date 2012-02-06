@@ -66,8 +66,8 @@ def drag_and_drop_generator(thing_string, finder_string, finder_function):
     return _this_step
 
 
-for action_string, action_function in actions.iteritems():
-    for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
+for action_string, action_function in actions:
+    for finder_string, finder_function in ELEMENT_FINDERS:
         globals()["element_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
                                                                                         action_function,
                                                                                         ELEMENT_THING_STRING,
@@ -75,7 +75,7 @@ for action_string, action_function in actions.iteritems():
                                                                                         finder_function
                                                                                         )
 
-    for finder_string, finder_function in LINK_FINDERS.iteritems():
+    for finder_string, finder_function in LINK_FINDERS:
         globals()["link_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
                                                                                         action_function,
                                                                                         LINK_THING_STRING,
@@ -83,7 +83,7 @@ for action_string, action_function in actions.iteritems():
                                                                                         finder_function
                                                                                         )
 
-for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
+for finder_string, finder_function in ELEMENT_FINDERS:
     globals()["element_drag_%s" % (finder_function)] = drag_and_drop_generator(ELEMENT_THING_STRING,
                                                                                     finder_string,
                                                                                     finder_function

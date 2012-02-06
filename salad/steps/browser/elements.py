@@ -67,9 +67,6 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'should( not)? see that the( first)?( last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, first, last, find_pattern, attr_name):
             ele = _get_element(finder_function, first, last, find_pattern)
-            print ele
-            print attr_name
-            print ele[attr_name]
             assert_with_negate(ele[attr_name] != None, negate)
 
         return _this_step

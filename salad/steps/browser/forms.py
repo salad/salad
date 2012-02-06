@@ -43,10 +43,9 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             ele = _get_element(finder_function, first, last, find_pattern)
             try:
                 ele.value = file_name
-            except:
-                css = _convert_pattern_to_css(finder_function, first, last, find_pattern)
-                driver_ele = world.browser.driver.find_element_by_css_selector(css)
-                driver_ele._control.value = file_name
+            except Exception, e:
+                print e
+                ele._control.value = file_name
 
         return _this_step
 

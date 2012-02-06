@@ -44,7 +44,9 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             try:
                 ele.value = file_name
             except:
-                ele._control.value = file_name
+                css = _convert_pattern_to_css(finder_function, first, last, find_pattern)
+                driver_ele = world.browser.driver.find_element_by_css_selector(css)
+                driver_ele.send_keys(file_name)
 
         return _this_step
 

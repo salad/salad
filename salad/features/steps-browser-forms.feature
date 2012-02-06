@@ -79,7 +79,8 @@ Feature: Ensuring that the forms steps work
       
 # Attach
     Scenario Outline: Attaching a file works.
-        Given I visit the salad test url "browser/form.html"
+        Given I am using firefox
+          And I visit the salad test url "browser/form.html"
         When I attach "/tmp/temp_lettuce_test" onto the field <finder>
         Then I should see "Attached!" somewhere in the page
 

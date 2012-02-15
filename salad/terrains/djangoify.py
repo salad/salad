@@ -5,6 +5,7 @@ try:
     from django.core.management import call_command
     from django.conf import settings
     from django.test.simple  import DjangoTestSuiteRunner
+    from django.core import mail
     try:
         from south.management.commands import patch_for_test_db_setup
         USE_SOUTH = True
@@ -44,6 +45,12 @@ try:
     def reset_data(scenario):
         logger.info("Flushing...")
         call_command('flush', interactive=False, verbosity=0)
+
+    @before.each_feature
+    def empty_outbox(scenario):
+        logger.info("Emptying outbox...")
+        mail.outbox = []
+
 
 except:
     logger.warn("Django terrains not imported.")

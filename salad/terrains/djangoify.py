@@ -8,7 +8,7 @@ try:
     from django.core import mail
     try:
         from south.management.commands import patch_for_test_db_setup
-        USE_SOUTH = True
+        USE_SOUTH = getattr(settings, "SOUTH_TESTS_MIGRATE", False)
     except:
         USE_SOUTH = False
 

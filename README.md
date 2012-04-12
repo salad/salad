@@ -302,6 +302,12 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Recent updates (full log in CHANGES)
 ------------------------------------
 
+
+*0.4.4*
+
+* South migrations are now based on SOUTH_TESTS_MIGRATE
+
+
 *0.4.3*
 
 * Steps for iFrame context switching added.

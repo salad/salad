@@ -43,7 +43,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             ele = _get_element(finder_function, first, last, find_pattern)
             try:
                 ele.value = file_name
-            except:  # Zope
+            except:
                 ele._control.value = file_name
 
         return _this_step

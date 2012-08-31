@@ -1,6 +1,8 @@
 from lettuce import before, world, after
 from salad.logger import logger
 
+old_database_name = None
+
 try:
     from django.core.management import call_command
     from django.conf import settings
@@ -18,11 +20,9 @@ try:
 
         if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
             from django.db import connection
-            database_name = settings.DATABASES["default"]["NAME"]
-            cursor = connection.cursor()
-            cursor.execute("DROP DATABASE %s" % database_name)
-            cursor.execute("CREATE DATABASE %s" % database_name)
-            connection.close()
+            global old_database_name
+            old_database_name = settings.DATABASES["default"]["NAME"]
+            connection.creation.create_test_db()
         else:
             # connection.settings_dict["NAME"] = ":memory:"
             pass
@@ -40,6 +40,9 @@ try:
     def teardown_database(total):
         logger.info("Destroying test database ...\n")
         world.test_runner.teardown_test_environment()
+        if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
+            from django.db import connection
+            connection.creation.destroy_test_db(old_database_name)
 
     @after.each_feature
     def reset_data(scenario):

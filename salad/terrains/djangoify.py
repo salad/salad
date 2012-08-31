@@ -14,8 +14,8 @@ try:
     except:
         USE_SOUTH = False
 
-    @before.all
-    def setup_database():
+    @before.runserver
+    def setup_database(actual_server):
         logger.info("Setting up a test database ...\n")
 
         if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
@@ -36,8 +36,8 @@ try:
         call_command('syncdb', interactive=False, verbosity=0)
         call_command('flush', interactive=False, verbosity=0)
 
-    @after.all
-    def teardown_database(total):
+    @after.runserver
+    def teardown_database(actual_server):
         logger.info("Destroying test database ...\n")
         world.test_runner.teardown_test_environment()
         if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":

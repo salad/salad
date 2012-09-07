@@ -11,12 +11,12 @@ def should_see_in_the_page(step, negate, text):
     assert_with_negate(text in world.browser.html, negate)
 
 
-@step(r'should( not)? see a link (?:called|with the text) "(.*)"')
+@step(r'should( not)? see (?:the|a) link (?:called|with the text) "(.*)"')
 def should_see_a_link_called(step, negate, text):
     assert_with_negate(len(world.browser.find_link_by_text(text)) > 0, negate)
 
 
-@step(r'should( not)? see a link to "(.*)"')
+@step(r'should( not)? see (?:the|a) link to "(.*)"')
 def should_see_a_link_to(step, negate, link):
     assert_with_negate(len(world.browser.find_link_by_href(link)) > 0, negate)
 

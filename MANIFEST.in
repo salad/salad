@@ -1,2 +1,3 @@
 include README.md AUTHORS LICENSE
 recursive-include salad/features *
+recursive-include salad/tests/html *

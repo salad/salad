@@ -1,5 +1,6 @@
 from lettuce import step, world
 from splinter.driver.webdriver import TypeIterator
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
 from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_element, _convert_pattern_to_css
 from salad.tests.util import assert_equals_with_negate
@@ -97,20 +98,31 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
-    def _enter_generator(finder_string, finder_function):
-        @step(r'hit enter in the ( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+    def _key_generator(finder_string, finder_function):
+        @step(r'hit the (.*) key in the ( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern):
+            key = transform_key_string(key_string)
             ele = _get_element(finder_function, first, last, find_pattern)
-            ele.type("\n")
+            ele.type(key)
 
         return _this_step
 
-    globals()["form_enter_%s" % (finder_function,)] = _enter_generator(finder_string, finder_function)
+    globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
 
-@step(r'hit enter')
-def hit_enter(step):
+@step(r'hit the (.*) key')
+def hit_key(step, key_string):
+    key = transform_key_string(key_string)
     try:
-        world.current_element._element.send_keys("\n")
+        world.browser.driver.switch_to_active_element().send_keys(key)
     except StaleElementReferenceException:
-        world.browser.find_by_css("body").type("\n")
+        world.browser.find_by_css("body").type(key)
+
+def transform_key_string(key_string):
+    key_string = key_string.upper().replace(' ', '_')
+    if key_string == 'BACKSPACE':
+        key_string = 'BACK_SPACE'
+    elif key_string == 'SPACEBAR':
+        key_string = 'SPACE'
+    key = Keys.__getattribute__(Keys, key_string)
+    return key

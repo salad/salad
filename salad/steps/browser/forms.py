@@ -111,6 +111,6 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 @step(r'hit enter')
 def hit_enter(step):
     try:
-        world.current_element._element.send_keys("\n")
+        world.browser.driver.switch_to_active_element().send_keys("\n")
     except StaleElementReferenceException:
         world.browser.find_by_css("body").type("\n")

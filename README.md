@@ -10,7 +10,7 @@ We like simple things.
 pip install salad
 ```
 
-If you want django integration, 
+If you want django integration,
 
 ```bash
 pip install django django-extensions
@@ -77,13 +77,13 @@ Writing your first lettuce feature
     ```
 
 1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad terrains, like:
-    
+
     ```python
     from salad.steps.everything import *
     ```
 
 1. Also 1. Inside the features directory, create a `terrain.py`, that imports the salad steps, like:
-    
+
     ```python
     from salad.terrains.everything import *
     ```
@@ -272,9 +272,9 @@ Otherwise, you can find for your operating system here: http://code.google.com/p
 Django and South
 ----------------
 
-Salad plays nicely with both django and south, but doesn't require them.  
+Salad plays nicely with both django and south, but doesn't require them.
 
-Include the django steps and terrains into your steps and terrains, and you're all set. `manage.py harvest` and all of the lettuce goodies should just work. 
+Include the django steps and terrains into your steps and terrains, and you're all set. `manage.py harvest` and all of the lettuce goodies should just work.
 
 *Gotcha alert:*  If you're serving static media with `staticfiles`, you'll want to pass `-d` to harvest, to run in debug mode (and enable static media.)
 
@@ -303,6 +303,12 @@ Recent updates (full log in CHANGES)
 ------------------------------------
 
 
+*0.4.6*
+
+* Consistent grammar on link-finding.
+* Fixed Django + Postgresql support.
+* Lots more keys tested.
+
 *0.4.4*
 
 * South migrations are now based on SOUTH_TESTS_MIGRATE
@@ -330,8 +336,8 @@ Recent updates (full log in CHANGES)
 * Features written for all of salad's steps. That's 100% test coverage, folks!
 * `browser` steps are now a module, organized by the area of interaction (forms, mouse, etc).  `import steps.browser` will still behave as before.
 * Future-proofing: `I access the url` is now deprecated in favor of the friendlier `I visit the url`.  "visit", "access" and "open" will all be valid actions for visiting a web page going forward.
-* Backwards-incompatable: `should see "some text"` has changed meaning.  
-    
+* Backwards-incompatable: `should see "some text"` has changed meaning.
+
     * If you mean *this text should appear somewhere in the HTML for this page*, use `should see "some text" somewhere in the page`.
     * If you mean *the element that I am about to describe should be in the page and be visible*, use `should see <subject>`
     * Note: Backwards-incompatable changes will not be the norm around here - at the moment, I'm fairly sure I know everywhere salad is being used, so I'd rather make the jump and get things right.  Future backwards-incompatible changes will go through a deprecation schedule.

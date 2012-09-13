@@ -152,12 +152,36 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".test_select_class"   |
           
 
-# Enter
-    Scenario: Hitting enter generally works.
+    Scenario: Hitting keys generally works.
         Given I visit the salad test url "browser/form.html"
-        When I hit enter
-        Then I should see "Entered!" somewhere in the page
-    
+        When I hit the <key> key
+        Then I should see "<output>" somewhere in the page
+
+    Examples:
+        | key       | output      |
+        | enter     | Entered!    |
+        | return    | Entered!    |
+        | up        | Up Arrow!   |
+        | down      | Down Arrow! |
+        | left      | Left Arrow! |
+        | right     | Right Arrow!|
+        | escape    | Escaped!    |
+        | space     | Spaced Out! |
+        | control   | Controlled! |
+        | alt       | Altered!    |
+        | tab       | Tabbed!     |
+        | shift     | Shifted!    |
+        | backspace | Backspaced! |
+        | home      | Homed!      |
+        | end       | Ended!      |
+        | insert    | Inserted!   |
+        | delete    | Deleted!    |
+        | page up   | Page Upped! |
+        | page down | Page Downed!|
+        | f1        | F1ed!       |
+        | f12       | F12ed       |
+
+
     Scenario: Focusing works
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"

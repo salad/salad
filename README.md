@@ -1,5 +1,6 @@
 Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to make writing acceptance tests downright fun.
 
+[![Build Status](https://secure.travis-ci.org/wieden-kennedy/salad.png)](http://travis-ci.org/wieden-kennedy/salad)
 
 Installing
 ==========
@@ -302,6 +303,10 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Recent updates (full log in CHANGES)
 ------------------------------------
 
+
+*0.4.7*
+
+* Travis-ci integration.
 
 *0.4.6*
 

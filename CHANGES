@@ -1,5 +1,10 @@
 0.4.6
 -----
+
+* Travis-CI integration (via medwards)
+
+0.4.6
+-----
 Pulls from medwards and akaihola:
 
 * Consistent grammar on link-finding.

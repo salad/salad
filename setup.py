@@ -11,7 +11,7 @@ setup(
     author="Steven Skoczen",
     author_email="steven.skoczen@wk.com",
     url="https://github.com/wieden-kennedy/salad",
-    version="0.4.6",
+    version="0.4.7",
     install_requires=["lettuce", "nose", "splinter", "zope.testbrowser"],
     packages=find_packages(),
     zip_safe=False,

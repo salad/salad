@@ -1,6 +1,6 @@
 Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to make writing acceptance tests downright fun.
 
-[![Build Status](https://secure.travis-ci.org/wieden-kennedy/salad.png)](http://travis-ci.org/wieden-kennedy/salad)
+[![Build Status](https://secure.travis-ci.org/wieden-kennedy/salad.png?branch=master)](http://travis-ci.org/wieden-kennedy/salad)
 
 Installing
 ==========

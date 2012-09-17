@@ -39,7 +39,8 @@ try:
     @after.runserver
     def teardown_database(actual_server):
         logger.info("Destroying test database ...\n")
-        world.test_runner.teardown_test_environment()
+        if hasattr(world, "test_runner"):
+            world.test_runner.teardown_test_environment()
         if settings.DATABASES["default"]["ENGINE"] != "django.db.backends.sqlite3":
             from django.db import connection
             connection.creation.destroy_test_db(old_database_name)

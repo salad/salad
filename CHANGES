@@ -1,4 +1,9 @@
-0.4.6
+0.4.8
+-----
+
+* Bugfix of django teardown.
+
+0.4.7
 -----
 
 * Travis-CI integration (via medwards)

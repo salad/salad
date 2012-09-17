@@ -1,7 +1,7 @@
 import sys
 import os
 
-from lettuce import lettuce_cli
+from lettuce.bin import main as lettuce_main
 from lettuce.fs import FileSystem
 
 
@@ -25,7 +25,7 @@ def main(args=sys.argv[1:]):
         globals()['SALAD_GLOSSARY'] = module.SALAD_GLOSSARY
     sys.path.remove(base_dir)
 
-    lettuce_cli.main(*args)
+    lettuce_main(args=sys.argv[1:])
 
 if __name__ == '__main__':
     main()

@@ -1,6 +1,7 @@
 #/usr/bin/env python
 import os
 from setuptools import setup, find_packages
+from salad import VERSION
 
 ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
@@ -11,7 +12,7 @@ setup(
     author="Steven Skoczen",
     author_email="steven.skoczen@wk.com",
     url="https://github.com/wieden-kennedy/salad",
-    version="0.4.8",
+    version=VERSION,
     install_requires=["lettuce", "nose", "splinter", "zope.testbrowser"],
     packages=find_packages(),
     zip_safe=False,
@@ -26,4 +27,7 @@ setup(
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
+    entry_points={
+        'console_scripts': ['salad = salad.cli:main'],
+    },
 )

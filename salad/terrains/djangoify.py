@@ -57,4 +57,9 @@ try:
 
 
 except:
-    logger.warn("Django terrains not imported.")
+    try:
+        # Only complain if it seems likely that using django was intended.
+        import django
+        logger.warn("Django terrains not imported.")
+    except:
+        pass

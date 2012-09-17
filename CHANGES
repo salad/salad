@@ -1,3 +1,9 @@
+0.4.9
+-----
+
+* Django only warns about imports if it seems likely you're using django (it imports cleanly)
+* Added 'salad' command.
+
 0.4.8
 -----
 

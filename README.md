@@ -93,23 +93,23 @@ Writing your first lettuce feature
 That's it, you're ready to run the tests!
 
 
-Running your first lettuce test
+Running your first salad test
 -------------------------------
 
 
 In the directory above features (your project root), run:
 
 ```
-lettuce
+salad
 ```
 
 That should be it - you should see:
 
 ```
 Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-website-is-up.feature:1
-  In order to make sure that lettuce works                    # features/our-website-is-up.feature:2
+  In order to make sure that salad works                      # features/our-website-is-up.feature:2
   As a developer                                              # features/our-website-is-up.feature:3
-  I open the Wieden+Kennedy website using lettuce             # features/our-website-is-up.feature:4
+  I open the Wieden+Kennedy website using salad               # features/our-website-is-up.feature:4
 
   Scenario: Opening the W+K website works                     # features/our-website-is-up.feature:6
     Given I visit the url "http://www.wk.com/"                # features/our-website-is-up-steps.py:8

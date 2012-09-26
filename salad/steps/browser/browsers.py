@@ -16,3 +16,8 @@ def using_chrome(step):
 @step(r'am using (?:F|f)irefox')
 def using_firefox(step):
     world.browser = world.firefox
+
+
+@step(r'am using (?:Z|z)ombiejs')
+def using_zombiejs(step):
+    world.browser = world.zombiejs

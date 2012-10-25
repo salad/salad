@@ -1,3 +1,9 @@
+0.4.12
+-----
+
+* Actual bugfix of db install for mysql, sqlite even in memory works now.
+
+
 0.4.11
 -----
 

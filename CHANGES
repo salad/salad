@@ -1,4 +1,4 @@
-0.4.10
+0.4.11
 -----
 
 * Fix of db install for mysql, generalized works.

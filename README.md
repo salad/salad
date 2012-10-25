@@ -303,9 +303,10 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Recent updates (full log in CHANGES)
 ------------------------------------
 
-*0.4.10*
+*0.4.11*
 
 * Fix of db install for mysql, generalized works.
+* Version bump
 
 
 *0.4.8*

@@ -303,6 +303,11 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Recent updates (full log in CHANGES)
 ------------------------------------
 
+*0.4.10*
+
+* Fix of db install for mysql, generalized works.
+
+
 *0.4.8*
 
 * Bugfix of django teardown.

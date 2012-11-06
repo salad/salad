@@ -52,8 +52,6 @@ try:
         mail.outbox = []
 
 except:
-    from traceback import print_exc
-    print_exc()
     try:
         # Only complain if it seems likely that using django was intended.
         import django

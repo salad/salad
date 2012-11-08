@@ -13,7 +13,8 @@ setup(
     author_email="steven.skoczen@wk.com",
     url="https://github.com/wieden-kennedy/salad",
     version=VERSION,
-    install_requires=["git+git://github.com/skoczen/lettuce.git#egg=lettuce", "nose", "splinter", "zope.testbrowser"],
+    install_requires=["nose", "splinter", "zope.testbrowser"],  # lettuce
+    dependency_links = ['https://github.com/skoczen/lettuce.git/tarball/master#egg=lettuce', ],
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

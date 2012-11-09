@@ -1,3 +1,15 @@
+0.4.14
+-----
+
+* Fixed django imports
+
+
+0.4.13
+-----
+
+* Switched to my fork of lettuce, which properly sets up a test database.  Will switch back to trunk lettuce once it's merged in!
+
+
 0.4.12
 -----
 

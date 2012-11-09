@@ -1,13 +1,13 @@
 from lettuce import before
 from salad.logger import logger
 
+logger.info("Loading the terrain file...")
 try:
-    logger.info("Loading the terrain file...")
+    from django.core import mail
+    from django.core.management import call_command
 
     @before.each_scenario
     def reset_data(scenario):
-        from django.core.management import call_command
-
         # Clean up django.
         logger.info("Flushing the test database...")
         call_command('flush', interactive=False, verbosity=0)
@@ -15,7 +15,6 @@ try:
 
     @before.each_feature
     def empty_outbox(scenario):
-        from django.core import mail
         logger.info("Emptying outbox...")
         mail.outbox = []
 

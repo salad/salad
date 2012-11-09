@@ -305,6 +305,12 @@ We use salad to test our projects, and it's a fairly new component.  As such it'
 Recent updates (full log in CHANGES)
 ------------------------------------
 
+*0.4.14*
+
+* Switched to my fork of lettuce, which properly sets up a test database.  Will switch back to trunk lettuce once it's merged in!
+* Fixed django imports
+
+
 *0.4.12* (and up to it)
 
 * Bugfix of db install for mysql, and other dbs. Generally works now!

@@ -1,11 +1,19 @@
 language: python
+env:
+  global:
+    - PATH=$PATH:/tmp/bin
+  matrix:
+    - BROWSER=firefox
+    - BROWSER=chrome
 python:
   - "2.6"
   - "2.7"
   #- "3.2" # Fails miserably in Python 3
 install:
-  - "python setup.py test"
-  - "easy_install *.egg"
+  - "python setup.py install"
+  # Install the Selenium Server
+  - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar"
+  - "java -jar selenium-server.jar &"
   # Firefox is already installed
   # Install Google Chrome
   - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb"
@@ -17,8 +25,12 @@ install:
   - "wget https://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip"
   - "unzip chromedriver_linux32_23.0.1240.0.zip"
   - "mv chromedriver /tmp/bin"
+
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-script: "PATH=$PATH:/tmp/bin lettuce salad --verbosity=2"
+script:
+  - "salad --browsers $BROWSER -- salad/features --verbosity=2"
+  # Disabled until splinter pushes latest to PyPI
+  #- "salad --browsers firefox --remote-url http://127.0.0.1:4444/wd/hub -- salad/features --verbosity=2"

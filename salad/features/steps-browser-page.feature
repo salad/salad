@@ -16,7 +16,7 @@ Feature: Ensuring that the page steps work
     Scenario: Page url works
         Given I visit the salad test url "browser/basic.html"
         When I look around
-        Then I should see that the url is "http://localhost:9990/browser/basic.html"
+        Then I should see that the url is "http://localhost:9090/browser/basic.html"
 
     Scenario: Page url negation works
         Given I visit the salad test url "browser/basic.html"

@@ -4,17 +4,28 @@ from salad.logger import logger
 
 
 @before.all
-def setup_browser():
-    logger.info("Setting up browser %s..." % world.browsers[0])
+def setup_master_browser():
+    world.master_browser = setup_browser(world.drivers[0], world.remote_url)
+    world.browser = world.master_browser
+
+
+def setup_browser(browser, url=None):
+    logger.info("Setting up browser %s..." % browser)
     try:
-        if world.remote_url:
-            world.browser = Browser('remote', url=world.remote_url,
-                    browser=world.browsers[0])
+        if url:
+            browser = Browser('remote', url=url,
+                    browser=browser)
         else:
-            world.browser = Browser(world.browsers[0])
+            browser = Browser(browser)
     except Exception as e:
-        logger.warn("Error starting up %s: %s" % (world.browsers[0], e))
+        logger.warn("Error starting up %s: %s" % (browser, e))
         raise
+    return browser
+
+
+@before.each_scenario
+def clear_alternative_browsers(step):
+    world.browsers = []
 
 
 @after.each_scenario
@@ -23,10 +34,21 @@ def reset_to_parent_frame(step):
         world.browser = world.parent_browser
 
 
+@after.each_scenario
+def restore_browser(step):
+    world.browser = world.master_browser
+    for browser in world.browsers:
+        teardown_browser(browser)
+
+
 @after.all
-def teardown_browser(total):
-    logger.info("Tearing down browser %s..." % world.browsers[0])
+def teardown_master_browser(total):
+    teardown_browser(world.master_browser)
+
+def teardown_browser(browser):
+    name = browser.driver_name
+    logger.info("Tearing down browser %s..." % name)
     try:
-        world.browser.quit()
+        browser.quit()
     except:
-        logger.warn("Error tearing down %s" % world.browsers[0])
+        logger.warn("Error tearing down %s" % name)

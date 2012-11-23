@@ -57,5 +57,5 @@ def teardown_browser(browser):
     logger.info("Tearing down browser %s..." % name)
     try:
         browser.quit()
-    except:
-        logger.warn("Error tearing down %s" % name)
+    except Exception as e:
+        logger.warn("Error tearing down %s: %s" % (name, e))

@@ -32,6 +32,7 @@ def setup_browser(browser, url=None):
 
 @before.each_scenario
 def clear_alternative_browsers(step):
+    world.browser = world.master_browser
     world.browsers = []
 
 
@@ -43,7 +44,6 @@ def reset_to_parent_frame(step):
 
 @after.each_scenario
 def restore_browser(step):
-    world.browser = world.master_browser
     for browser in world.browsers:
         teardown_browser(browser)
 

@@ -12,6 +12,11 @@ python:
   #- "3.2" # Fails miserably in Python 3
 install:
   - "python setup.py install"
+  # Remove after 4814 is resolved
+  # http://code.google.com/p/selenium/issues/detail?id=4814
+  - "wget http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/16.0/linux-i686/en-US/firefox-16.0.tar.bz2"
+  - "tar -xjf firefox-16.0.tar.bz2"
+  - "export PATH=./firefox:$PATH"
   # Install the Selenium Server
   - "wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar"
   # Firefox is already installed
@@ -25,11 +30,6 @@ install:
   - "wget https://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip"
   - "unzip chromedriver_linux32_23.0.1240.0.zip"
   - "mv chromedriver /tmp/bin"
-  # Remove after 4814 is resolved
-  # http://code.google.com/p/selenium/issues/detail?id=4814
-  - "wget http://download.cdn.mozilla.net/pub/mozilla.org/firefox/releases/16.0/linux-i686/en-US/firefox-16.0.tar.bz2"
-  - "tar -xjf firefox-16.0.tar.bz2"
-  - "export PATH=./firefox:$PATH"
 
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/

@@ -8,22 +8,22 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 BROWSER_CHOICES = [browser.lower()
                    for browser in DesiredCapabilities.__dict__.keys()
                    if not browser.startswith('_')]
-DEFAULT_BROWSERS = ['firefox']
+DEFAULT_BROWSER = 'firefox'
 
 
 def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(prog="Salad", description='BDD browswer-automation made tasty.')
 
-    parser.add_argument('--browsers', default=DEFAULT_BROWSERS, nargs='*',
+    parser.add_argument('--browser', default=DEFAULT_BROWSER,
                         metavar='BROWSER', choices=BROWSER_CHOICES,
-                        help=('List of browsers to use. Default is %s.' %
-                              DEFAULT_BROWSERS))
+                        help=('Browser to use. Default is %s.' %
+                              DEFAULT_BROWSER))
     parser.add_argument('--remote-url',
-                        help='Selenium server url to use for browsers')
+                        help='Selenium server url for remote browsers')
     parser.add_argument('args', nargs=argparse.REMAINDER)
 
     parsed_args = parser.parse_args()
-    world.drivers = parsed_args.browsers
+    world.drivers = [parsed_args.browser]
     world.remote_url = parsed_args.remote_url
     lettuce_main(args=parsed_args.args)
 

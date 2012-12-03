@@ -31,6 +31,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - "salad --browsers $BROWSER -- salad/features --verbosity=2"
+  - "salad --browser $BROWSER salad/features --verbosity=2"
   # Disabled until splinter pushes latest to PyPI
-  #- "salad --browsers firefox --remote-url http://127.0.0.1:4444/wd/hub -- salad/features --verbosity=2"
+  #- "salad --browser firefox --remote-url http://127.0.0.1:4444/wd/hub salad/features --verbosity=2"

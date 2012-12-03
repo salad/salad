@@ -5,6 +5,7 @@ env:
   matrix:
     - BROWSER=firefox
     - BROWSER=chrome
+    - REMOTE_ARG='--remote-url http://127.0.0.1:4444/wd/hub' BROWSER=firefox
 python:
   - "2.6"
   - "2.7"
@@ -31,6 +32,4 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - "salad --browser $BROWSER salad/features --verbosity=2"
-  # Disabled until splinter pushes latest to PyPI
-  #- "salad --browser firefox --remote-url http://127.0.0.1:4444/wd/hub salad/features --verbosity=2"
+  - "salad --browser $BROWSER $REMOTE_ARG salad/features --verbosity=2"

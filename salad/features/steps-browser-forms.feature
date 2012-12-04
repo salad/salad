@@ -193,6 +193,6 @@ Feature: Ensuring that the forms steps work
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
           And I wait 2 seconds
-          And I click on the element with the css selector "body"
+          And I click on the element with the css selector "#response_area"
           And I wait 2 seconds
         Then I should see "Blurred!" somewhere in the page

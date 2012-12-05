@@ -303,7 +303,7 @@ Recent updates (full log in CHANGES)
 
 *0.5*
 
-* Remote backends, so you can run salad against any arbitrary selenium remote!
+* Remote driver support, so you can run salad against any arbitrary selenium remote!
 * Command-line specification of browser using the new `--browser` flag.
 * Huge thanks to [medwards](https://github.com/medwards) for making this a reality.
 

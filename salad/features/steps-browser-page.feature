@@ -16,7 +16,7 @@ Feature: Ensuring that the page steps work
     Scenario: Page url works
         Given I visit the salad test url "browser/basic.html"
         When I look around
-        Then I should see that the url is "http://localhost:9990/browser/basic.html"
+        Then I should see that the url is "http://localhost:9090/browser/basic.html"
 
     Scenario: Page url negation works
         Given I visit the salad test url "browser/basic.html"
@@ -24,7 +24,8 @@ Feature: Ensuring that the page steps work
         Then I should not see that the url is "google.com"
 
     Scenario: Page body works
-        Given I am using chrome  # FF does weird things to the header.
+        # FF does weird things to the header.
+        Given I am using chrome
           And visit the salad test url "browser/basic.html"
         When I look around
         Then I should see that the page html is "<html><head><title>My Test Title</title></head><body></body></html>"

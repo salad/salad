@@ -16,8 +16,8 @@ def main(args=sys.argv[1:]):
 
     parser.add_argument('--browser', default=DEFAULT_BROWSER,
                         metavar='BROWSER', choices=BROWSER_CHOICES,
-                        help=('Browser to use. Default is %s.' %
-                              DEFAULT_BROWSER))
+                        help=('Browser to use. Options: %s Default is %s.' %
+                              (BROWSER_CHOICES, DEFAULT_BROWSER)))
     parser.add_argument('--remote-url',
                         help='Selenium server url for remote browsers')
     parser.add_argument('args', nargs=argparse.REMAINDER)

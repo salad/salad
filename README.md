@@ -7,9 +7,7 @@ Installing
 
 We like simple things.
 
-(Note: there's a pending pull request on lettuce. Until it's through, you'll have to install it manually.)
 ```bash
-pip install git+https://github.com/skoczen/lettuce.git#egg=lettuce
 pip install salad
 ```
 

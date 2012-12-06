@@ -123,6 +123,34 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
 
 Easy.
 
+Salad Command-line parameters
+-----------------------------
+
+Salad launches your tests using Firefox by default, but you can override this
+using:
+
+```
+salad --browser chrome
+```
+
+> You need the browser and its Selenium driver installed locally. For example
+> if you get `salad - WARNING - Error starting up chrome: Message: 'ChromeDriver executable needs to be available in the path.`
+> then make sure to read the (Using Chrome)[#using-chrome] section.
+
+If you don't have a browser installed locally you can specify a Selenium
+Server. For example, if you use SauceLabs and want to test on the iphone:
+
+```
+salad --browser iphone --remote-url http://username:######AA-####-####-A#A#-#A###AAA####@ondemand.saucelabs.com:80/wd/hub
+```
+
+> Replace username with your SauceLabs account name and the password is your
+> access key. Also be aware that the drivers for browsers other than Firefox
+> and Chrome there is sometimes inconsistent behaviour.
+
+If you need lower test verbosity, then use lettuce arguments and they should
+be passed along.
+
 Salad Built-ins:
 ================
 

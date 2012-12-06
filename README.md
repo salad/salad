@@ -32,27 +32,6 @@ Salad is mostly lettuce.
 
 Salad is mostly [lettuce](http://lettuce.it/).  So, you should use their [great documentation](http://lettuce.it/contents.html) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](http://splinter.cobrateam.info/), and their [docs](http://splinter.cobrateam.info/docs/) are great as well.
 
-
-Salad includes helpful steps and terrains.
-------------------------------------------
-
-There's a detailed description below on all of the included modules, but if you just want to get up and running quickly, you can:
-
-*steps.py*
-
-```python
-from salad.steps.everything import *
-```
-
-*terrains.py*
-
-```python
-from salad.terrains.everything import *
-```
-
-And you're done.
-
-
 Salad 101
 =========
 
@@ -77,18 +56,6 @@ Writing your first lettuce feature
         Given I visit the url "http://www.wk.com/"
         When I look around
         Then I should see "Wieden+Kennedy" somewhere in the page
-    ```
-
-1. Inside the features directory, create a steps file, `our-website-is-up-steps.py`, that imports the salad terrains, like:
-
-    ```python
-    from salad.steps.everything import *
-    ```
-
-1. Also 1. Inside the features directory, create a `terrain.py`, that imports the salad steps, like:
-
-    ```python
-    from salad.terrains.everything import *
     ```
 
 
@@ -287,6 +254,15 @@ The built-in steps are a helper, not a crutch
 
 Cucumber and salad make BDD beautiful by allowing us to write tests in natural, human language.  Please don't let salad's built-ins drive how your tests read. They're there for convienence, if the syntax they use fits your scenario's needs.  One of the great gains of gherkin syntax is the ability to make a scenario that reads `then I should see that I'm logged in`.  Don't lose that beauty!
 
+
+Using Just Lettuce
+------------------
+
+Older versions of salad were executed via the `lettuce` command. This still
+works and is an option, but in order for this to work you must include a
+`steps.py` file containing `from salad.steps.everything import *` and a
+`terrains.py` file containing `from salad.steps.terrains import *` in your
+features folder.
 
 Updates and Roadmap
 ===================

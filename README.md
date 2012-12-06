@@ -136,6 +136,7 @@ salad --browser chrome
 > You need the browser and its Selenium driver installed locally. For example
 > if you get `salad - WARNING - Error starting up chrome: Message: 'ChromeDriver executable needs to be available in the path.`
 > then make sure to read the (Using Chrome)[#using-chrome] section.
+> `salad -h` will list all browser drivers.
 
 If you don't have a browser installed locally you can specify a Selenium
 Server. For example, if you use SauceLabs and want to test on the iphone:

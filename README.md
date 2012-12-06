@@ -178,10 +178,8 @@ Terrains
 
 * `common` - Nothing, at the moment.
 * `djangoify` - Setup/teardown a test database for django, including south migrations if south is installed.
-* `browser` - Sets up a browser at `world.browser`. Uses firefox.
-* `firefox` - Same up a firefox browser at `world.firefox`.
-* `chrome` - Same up a chrome browser at `world.chrome`.
-* `zope` - Same up a zope browser (no javascript) at `world.zope`.
+* `browser` - Sets up a browser at `world.browser`. Uses firefox or the
+  command-line selected browser.
 * `everything` - Includes everything above.
 
 
@@ -271,7 +269,7 @@ Using an alternate browser
 Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  To switch what browser you're using, you simply:
 
 ```gherkin
-Given I am using chrome
+Given I am using zope.testbrowser
 ```
 
 

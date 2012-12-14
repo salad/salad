@@ -22,7 +22,7 @@ LINK_THING_STRING = "link"
 
 VISIBILITY_TIMEOUT = 5
 
-def _get_element(finder_function, first, last, pattern, expect_not_to_find=False, leave_in_list=False):
+def _get_element(finder_function, first, last, pattern, leave_in_list=False):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
@@ -41,16 +41,12 @@ def _get_element(finder_function, first, last, pattern, expect_not_to_find=False
 
         w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
         try:
-            if not expect_not_to_find:
-                w.until(lambda driver: ele.visible)
-            else:
-                w.until(lambda driver: not ele.visible)
+            w.until(lambda driver: ele.visible)
         except Exception as e:
             raise ElementDoesNotExist
 
     except ElementDoesNotExist:
-            if not expect_not_to_find:
-                logger.error("Element not found: %s for %s" % (finder_function, pattern))
+            logger.error("Element not found: %s for %s" % (finder_function, pattern))
             raise
 
     world.current_element = ele

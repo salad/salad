@@ -26,28 +26,23 @@ def _get_element(finder_function, first, last, pattern, leave_in_list=False):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
-    try:
-        if first:
+    if first:
+        ele = ele.first
+    if last:
+        ele = ele.last
+
+    if not "WebDriverElement" in "%s" % type(ele):
+        if len(ele) > 1:
+            logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
+
+        if not leave_in_list:
             ele = ele.first
-        if last:
-            ele = ele.last
 
-        if not "WebDriverElement" in "%s" % type(ele):
-            if len(ele) > 1:
-                logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
-
-            if not leave_in_list:
-                ele = ele.first
-
-        w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
-        try:
-            w.until(lambda driver: ele.visible)
-        except Exception as e:
-            raise ElementDoesNotExist
-
-    except ElementDoesNotExist:
-            logger.error("Element not found: %s for %s" % (finder_function, pattern))
-            raise
+    w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
+    try:
+        w.until(lambda driver: ele.visible)
+    except Exception as e:
+        raise ElementDoesNotExist
 
     world.current_element = ele
     return ele

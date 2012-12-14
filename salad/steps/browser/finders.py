@@ -2,6 +2,7 @@ from lettuce import world
 from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 ELEMENT_FINDERS = {
     'named "(.*)"': "find_by_name",
@@ -22,6 +23,19 @@ LINK_THING_STRING = "link"
 
 VISIBILITY_TIMEOUT = 5
 
+
+def _get_visible_element(*args):
+    element = _get_element(*args)
+
+    w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
+    try:
+        w.until(lambda driver: element.visible)
+    except TimeoutException as e:
+        raise ElementDoesNotExist
+
+    return element
+
+
 def _get_element(finder_function, first, last, pattern, leave_in_list=False):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
@@ -37,12 +51,6 @@ def _get_element(finder_function, first, last, pattern, leave_in_list=False):
 
         if not leave_in_list:
             ele = ele.first
-
-    w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
-    try:
-        w.until(lambda driver: ele.visible)
-    except Exception as e:
-        raise ElementDoesNotExist
 
     world.current_element = ele
     return ele

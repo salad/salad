@@ -1,0 +1,18 @@
+<html>
+    <body>
+        <ul id="ready_status" style="display: none">
+            <li>Ready!</li>
+        </ul>
+        <ul id="loading_status">
+            <li>Loading....</li>
+        </ul>
+        <script type="text/javascript">
+            function triggerMe() {
+                document.getElementById("loading_status").style.width = 0;
+                document.getElementById("loading_status").style.height = 0;
+                document.getElementById("ready_status").style.display = 'block';
+            }
+            window.setTimeout(triggerMe, 1200);
+        </script>
+    </body>
+</html>

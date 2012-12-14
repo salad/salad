@@ -36,7 +36,7 @@ def _get_visible_element(*args):
     return element
 
 
-def _get_element(finder_function, first, last, pattern, leave_in_list=False):
+def _get_element(finder_function, first, last, pattern):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
@@ -45,12 +45,10 @@ def _get_element(finder_function, first, last, pattern, leave_in_list=False):
     if last:
         ele = ele.last
 
-    if not "WebDriverElement" in "%s" % type(ele):
+    if not "WebDriverElement" in str(type(ele)):
         if len(ele) > 1:
             logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
-
-        if not leave_in_list:
-            ele = ele.first
+        ele = ele.first
 
     world.current_element = ele
     return ele

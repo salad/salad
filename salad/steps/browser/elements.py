@@ -25,7 +25,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'should( not)? see (?:the|a|an)( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, first, last, find_pattern):
             try:
-                _get_element(finder_function, first, last, find_pattern, expect_not_to_find=True)
+                _get_element(finder_function, first, last, find_pattern)
             except ElementDoesNotExist:
                 assert parsed_negator(negate)
 

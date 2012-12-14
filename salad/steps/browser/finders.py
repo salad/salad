@@ -1,6 +1,7 @@
 from lettuce import world
 from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
+from selenium.webdriver.support.wait import WebDriverWait
 
 ELEMENT_FINDERS = {
     'named "(.*)"': "find_by_name",
@@ -19,6 +20,7 @@ LINK_FINDERS = {
 ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"
 LINK_THING_STRING = "link"
 
+VISIBILITY_TIMEOUT = 5
 
 def _get_element(finder_function, first, last, pattern, expect_not_to_find=False, leave_in_list=False):
 
@@ -37,10 +39,19 @@ def _get_element(finder_function, first, last, pattern, expect_not_to_find=False
             if not leave_in_list:
                 ele = ele.first
 
+        w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
+        try:
+            if not expect_not_to_find:
+                w.until(lambda driver: ele.visible)
+            else:
+                w.until(lambda driver: not ele.visible)
+        except Exception as e:
+            raise ElementDoesNotExist
+
     except ElementDoesNotExist:
             if not expect_not_to_find:
                 logger.error("Element not found: %s for %s" % (finder_function, pattern))
-            raise ElementDoesNotExist
+            raise
 
     world.current_element = ele
     return ele

@@ -2,7 +2,7 @@ from lettuce import step, world
 from splinter.driver.webdriver import TypeIterator
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
-from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_element, _convert_pattern_to_css
+from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element, _convert_pattern_to_css
 from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
@@ -12,7 +12,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     def _fill_generator(finder_string, finder_function):
         @step(r'fill in the( first)?( last)? %s %s with "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern, text):
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             try:
                 ele.value = text
             except:
@@ -41,7 +41,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     def _attach_generator(finder_string, finder_function):
         @step(r'attach "(.*)" onto the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, first, last, find_pattern):
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             try:
                 ele.value = file_name
             except:  # Zope
@@ -71,7 +71,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     def _focus_generator(finder_string, finder_function):
         @step(r'focus on the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern):
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             ele.focus()
 
         return _this_step
@@ -81,7 +81,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     def _blur_generator(finder_string, finder_function):
         @step(r'(?:blur|move) from the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern):
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             ele.blur()
 
         return _this_step
@@ -91,7 +91,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     def _value_generator(finder_string, finder_function):
         @step(r'(?:should see that the)? value of the( first)?( last)? %s %s is( not)? "(.*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern, negate, value):
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             assert_equals_with_negate(ele.value, value, negate)
 
         return _this_step
@@ -102,7 +102,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'hit the (.*) key in the ( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, first, last, find_pattern):
             key = transform_key_string(key_string)
-            ele = _get_element(finder_function, first, last, find_pattern)
+            ele = _get_visible_element(finder_function, first, last, find_pattern)
             ele.type(key)
 
         return _this_step

@@ -7,9 +7,7 @@ Installing
 
 We like simple things.
 
-(Note: there's a pending pull request on lettuce. Until it's through, you'll have to install it manually.)
 ```bash
-pip install git+https://github.com/skoczen/lettuce.git#egg=lettuce
 pip install salad
 ```
 
@@ -125,6 +123,35 @@ Feature: Ensuring that Lettuce works, and W+K's website loads # features/our-web
 
 Easy.
 
+Salad Command-line parameters
+-----------------------------
+
+Salad launches your tests using Firefox by default, but you can override this
+using:
+
+```
+salad --browser chrome
+```
+
+> You need the browser and its Selenium driver installed locally. For example
+> if you get `salad - WARNING - Error starting up chrome: Message: 'ChromeDriver executable needs to be available in the path.`
+> then make sure to read the (Using Chrome)[#using-chrome] section.
+> `salad -h` will list all browser drivers.
+
+If you don't have a browser installed locally you can specify a Selenium
+Server. For example, if you use SauceLabs and want to test on the iphone:
+
+```
+salad --browser iphone --remote-url http://username:######AA-####-####-A#A#-#A###AAA####@ondemand.saucelabs.com:80/wd/hub
+```
+
+> Replace username with your SauceLabs account name and the password is your
+> access key. Also be aware that the drivers for browsers other than Firefox
+> and Chrome there is sometimes inconsistent behaviour.
+
+If you need lower test verbosity, then use lettuce arguments and they should
+be passed along.
+
 Salad Built-ins:
 ================
 
@@ -152,10 +179,8 @@ Terrains
 
 * `common` - Nothing, at the moment.
 * `djangoify` - Setup/teardown a test database for django, including south migrations if south is installed.
-* `browser` - Sets up a browser at `world.browser`. Uses firefox.
-* `firefox` - Same up a firefox browser at `world.firefox`.
-* `chrome` - Same up a chrome browser at `world.chrome`.
-* `zope` - Same up a zope browser (no javascript) at `world.zope`.
+* `browser` - Sets up a browser at `world.browser`. Uses firefox or the
+  command-line selected browser.
 * `everything` - Includes everything above.
 
 
@@ -245,7 +270,7 @@ Using an alternate browser
 Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  To switch what browser you're using, you simply:
 
 ```gherkin
-Given I am using chrome
+Given I am using zope.testbrowser
 ```
 
 

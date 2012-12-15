@@ -1,3 +1,10 @@
+0.5
+-----
+
+* Remote driver support, so you can run salad against any arbitrary selenium remote!
+* Command-line specification of browser using the new `--browser` flag.
+* Huge thanks to [medwards](https://github.com/medwards) for making this a reality.
+
 0.4.14
 -----
 

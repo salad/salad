@@ -324,13 +324,15 @@ Roadmap
 We use salad to test our projects, and it's a fairly new component.  As such it'll continue to evolve and improve.  There's not a specific development map - anything that makes it easier and faster to write BDD tests is on the table. Pull requests are welcome!
 
 
-*0.5 (Planned)*
-
-* `SALAD_SUBJECT_GLOSSARY` - allows project specific extensions to the subjects. For example, you could map `'the submit button'` to `'the element with the css selector ".submit_btn"'`, and use it for clicks, mouseovers, etc without having to write a specific step for each permuation.
-
 
 Recent updates (full log in CHANGES)
 ------------------------------------
+
+*0.5*
+
+* Remote driver support, so you can run salad against any arbitrary selenium remote!
+* Command-line specification of browser using the new `--browser` flag.
+* Huge thanks to [medwards](https://github.com/medwards) for making this a reality.
 
 *0.4.14*
 

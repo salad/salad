@@ -8,6 +8,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 BROWSER_CHOICES = [browser.lower()
                    for browser in DesiredCapabilities.__dict__.keys()
                    if not browser.startswith('_')]
+BROWSER_CHOICES.append('zope.testbrowser')
+BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
 
 

@@ -15,6 +15,8 @@ If you want django integration,
 
 ```bash
 pip install django django-extensions
+# Note: there's a pending pull request on lettuce. Until it's through, you'll have to install it manually.
+pip install git+https://github.com/skoczen/lettuce.git#egg=lettuce
 ```
 
 ```python

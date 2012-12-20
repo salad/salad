@@ -1,5 +1,6 @@
 from lettuce import world
 from salad.logger import logger
+from salad.steps.parsers import pick_to_index
 from splinter.exceptions import ElementDoesNotExist
 
 ELEMENT_FINDERS = {
@@ -20,15 +21,13 @@ ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|chec
 LINK_THING_STRING = "link"
 
 
-def _get_element(finder_function, first, last, pattern, expect_not_to_find=False, leave_in_list=False):
+def _get_element(finder_function, pick, pattern, expect_not_to_find=False, leave_in_list=False):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
     try:
-        if first:
-            ele = ele.first
-        if last:
-            ele = ele.last
+        index = pick_to_index(pick)
+        ele = ele[index]
 
         if not "WebDriverElement" in "%s" % type(ele):
             if len(ele) > 1:

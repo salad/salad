@@ -149,3 +149,10 @@ Feature: Ensuring that the elements steps work
         | named "i_attr_name"                     |
         | with the id "i_attr"                    |
         | with the css selector ".i_attr_class"   |
+
+    Scenario: Visibility of elements
+	Given I visit the salad test url "browser/invisible_elements.html"
+          And I should see the element with the id "loading_status"
+	When I look around
+	Then I should see the element with the id "ready_status"
+	 And I should not see the element with the id "loading_status"

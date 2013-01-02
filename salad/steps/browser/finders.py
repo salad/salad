@@ -1,5 +1,6 @@
 from lettuce import world
 from salad.logger import logger
+from salad.steps.parsers import pick_to_index
 from splinter.exceptions import ElementDoesNotExist
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
@@ -23,7 +24,6 @@ LINK_THING_STRING = "link"
 
 VISIBILITY_TIMEOUT = 5
 
-
 def _get_visible_element(*args):
     element = _get_element(*args)
 
@@ -36,16 +36,14 @@ def _get_visible_element(*args):
     return element
 
 
-def _get_element(finder_function, first, last, pattern):
+def _get_element(finder_function, pick, pattern):
 
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
-    if first:
-        ele = ele.first
-    if last:
-        ele = ele.last
+    index = pick_to_index(pick)
+    ele = ele[index]
 
-    if not "WebDriverElement" in str(type(ele)):
+    if not "WebDriverElement" in "%s" % type(ele):
         if len(ele) > 1:
             logger.warn("More than one element found when looking for %s for %s.  Using the first one. " % (finder_function, pattern))
         ele = ele.first

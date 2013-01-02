@@ -45,9 +45,9 @@ actions = {
 
 def step_generator(action_string, action_function, thing_string, finder_string, finder_function):
 
-    @step(r'%s (?:a|the)( first)?( last)? %s %s' % (action_string, thing_string, finder_string))
-    def _this_step(step, first, last, find_pattern):
-        ele = _get_visible_element(finder_function, first, last, find_pattern)
+    @step(r'%s (?:a|the)( first| last)? %s %s' % (action_string, thing_string, finder_string))
+    def _this_step(step, pick, find_pattern):
+        ele = _get_visible_element(finder_function, pick, find_pattern)
 
         ele.__getattribute__(action_function)()
 
@@ -56,10 +56,10 @@ def step_generator(action_string, action_function, thing_string, finder_string, 
 
 def drag_and_drop_generator(thing_string, finder_string, finder_function):
 
-    @step(r'drag the( first)?( last)? %s %s and drop it on the( first)?( last)? %s %s' % (thing_string, finder_string, thing_string, finder_string))
-    def _this_step(step, first_hander, last_handler, drag_handler_pattern, first_target, last_target, drag_target_pattern):
-        handler = _get_visible_element(finder_function, first_hander, last_handler, drag_handler_pattern)
-        target = _get_visible_element(finder_function, first_target, last_target, drag_target_pattern)
+    @step(r'drag the( first| last)? %s %s and drop it on the( first| last)? %s %s' % (thing_string, finder_string, thing_string, finder_string))
+    def _this_step(step, handler_pick, drag_handler_pattern, target_pick, drag_target_pattern):
+        handler = _get_visible_element(finder_function, handler_pick, drag_handler_pattern)
+        target = _get_visible_element(finder_function, target_pick, drag_target_pattern)
 
         handler.drag_and_drop(target)
 

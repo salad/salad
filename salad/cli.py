@@ -4,6 +4,8 @@ import argparse
 from lettuce.bin import main as lettuce_main
 from lettuce import world
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from salad.steps.everything import *
+from salad.terrains.everything import *
 
 BROWSER_CHOICES = [browser.lower()
                    for browser in DesiredCapabilities.__dict__.keys()

@@ -21,55 +21,59 @@ def should_see_a_link_to(step, negate, link):
     assert_with_negate(len(world.browser.find_link_by_href(link)) > 0, negate)
 
 
-for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
-    def _visible_generator(finder_string, finder_function):
-        @step(r'should( not)? see (?:the|a|an)( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, pick, find_pattern):
+class ExistenceStepsFactory(object):
+    def __init__(self, finders, step_pattern, test_function):
+        self.finders = finders
+        self.pattern = step_pattern
+        self.test = test_function
+        self.make_steps()
+
+    def make_steps(self):
+        for finder_string, finder_function in self.finders.iteritems():
+            self.make_step(finder_string, finder_function)
+
+    def make_step(self, finder_string, finder_function):
+        # NOTE: This *MUST* be seperate from make_steps or reusing the loop
+        # variables there will result in every step being the same
+        @step(self.pattern % (ELEMENT_THING_STRING, finder_string))
+        def _visible_step(step, negate, pick, find_pattern, *args):
             try:
-                _get_visible_element(finder_function, pick, find_pattern)
+                element = _get_visible_element(finder_function, pick, find_pattern)
             except ElementDoesNotExist:
                 assert parsed_negator(negate)
+                element = None
+            self.test(element, negate, *args)
 
-        return _this_step
 
-    globals()["form_visible_%s" % (finder_function,)] = _visible_generator(finder_string, finder_function)
+visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'
+def visibility_test(element, negate):
+    pass
 
-    def _contains_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first| last)? %s %s contains? "(.*)"' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, pick, find_pattern, content):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_with_negate(content in ele.text, negate)
 
-        return _this_step
+contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "(.*)"'
+def contains_test(element, negate, *args):
+    content = args[0]
+    assert_with_negate(content in element.text, negate)
 
-    globals()["form_contains_%s" % (finder_function,)] = _contains_generator(finder_string, finder_function)
 
-    def _is_exactly_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "(.*)"' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, pick, find_pattern, content):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate(ele.text, content, negate)
+contains_exactly_pattern = r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "(.*)"'
+def contains_exactly_test(element, negate, *args):
+    content = args[0]
+    assert_equals_with_negate(content, element.text, negate)
 
-        return _this_step
+attribute_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
+def attribute_test(element, negate, *args):
+    attribute = args[0]
+    assert_with_negate(element[attribute] != None, negate)
 
-    globals()["form_exactly_%s" % (finder_function,)] = _is_exactly_generator(finder_string, finder_function)
+attribute_value_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(.*)" with(?: the)? value "(.*)"'
+def attribute_value_test(element, negate, *args):
+    attribute = args[0]
+    value = args[1]
+    assert_equals_with_negate(element[attribute], value, negate)
 
-    def _attribute_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(.*)" with(?: the)? value "(.*)"' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, pick, find_pattern, attr_name, attr_value):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate("%s" % ele[attr_name], attr_value, negate)
-
-        return _this_step
-
-    globals()["form_attribute_value_%s" % (finder_function,)] = _attribute_value_generator(finder_string, finder_function)
-
-    def _attribute_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, pick, find_pattern, attr_name):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_with_negate(ele[attr_name] != None, negate)
-
-        return _this_step
-
-    globals()["form_attribute_%s" % (finder_function,)] = _attribute_generator(finder_string, finder_function)
+ExistenceStepsFactory(ELEMENT_FINDERS, visibility_pattern, visibility_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, contains_pattern, contains_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, contains_exactly_pattern, contains_exactly_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, attribute_pattern, attribute_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, attribute_value_pattern, attribute_value_test)

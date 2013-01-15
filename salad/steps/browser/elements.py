@@ -59,7 +59,7 @@ class ExistenceStepsFactory(object):
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'
 def visibility_test(element, negate, *args):
-    pass
+    assert_with_negate(element, negate)
 
 
 contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "(.*)"'

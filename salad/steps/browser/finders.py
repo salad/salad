@@ -37,7 +37,6 @@ def _get_visible_element(finder_function, pick, pattern, wait_time=VISIBILITY_TI
 
 
 def _get_element(finder_function, pick, pattern):
-
     ele = world.browser.__getattribute__(finder_function)(pattern)
 
     index = pick_to_index(pick)

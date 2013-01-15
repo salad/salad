@@ -44,9 +44,21 @@ class ExistenceStepsFactory(object):
                 element = None
             self.test(element, negate, *args)
 
+        self.wait_pattern = self.pattern + ' within (\d+) seconds'
+        @step(self.wait_pattern % (ELEMENT_THING_STRING, finder_string))
+        def _visible_wait_step(step, negate, pick, find_pattern, *args):
+            wait_time = int(args[-1])
+            try:
+                element = _get_visible_element(finder_function, pick,
+                        find_pattern, wait_time=wait_time)
+            except ElementDoesNotExist:
+                assert parsed_negator(negate)
+                element = None
+            self.test(element, negate, args[:-1])
+
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'
-def visibility_test(element, negate):
+def visibility_test(element, negate, *args):
     pass
 
 

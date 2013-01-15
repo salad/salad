@@ -24,10 +24,10 @@ LINK_THING_STRING = "link"
 
 VISIBILITY_TIMEOUT = 5
 
-def _get_visible_element(*args):
-    element = _get_element(*args)
+def _get_visible_element(finder_function, pick, pattern, wait_time=VISIBILITY_TIMEOUT):
+    element = _get_element(finder_function, pick, pattern)
 
-    w = WebDriverWait(world.browser.driver, VISIBILITY_TIMEOUT)
+    w = WebDriverWait(world.browser.driver, wait_time)
     try:
         w.until(lambda driver: element.visible)
     except TimeoutException as e:

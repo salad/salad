@@ -154,5 +154,5 @@ Feature: Ensuring that the elements steps work
         Given I visit the salad test url "browser/invisible_elements.html"
         And I should see the element with the id "loading_status"
         When I look around
-        Then I should see the element with the id "ready_status"
+        Then I should see the element with the id "ready_status" within 5 seconds
         And I should not see the element with the id "loading_status"

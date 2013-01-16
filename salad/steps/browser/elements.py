@@ -74,13 +74,15 @@ def visibility_test(element, negate, *args):
 contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "(.*)"'
 def contains_test(element, negate, *args):
     content = args[0]
-    assert_with_negate(content in element.text, negate)
+    text = getattr(element, 'text', None)
+    assert_with_negate(content in text, negate)
 
 
 contains_exactly_pattern = r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "(.*)"'
 def contains_exactly_test(element, negate, *args):
     content = args[0]
-    assert_equals_with_negate(content, element.text, negate)
+    text = getattr(element, 'text', None)
+    assert_equals_with_negate(content, text, negate)
 
 attribute_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
 def attribute_test(element, negate, *args):

@@ -8,7 +8,7 @@ from splinter.exceptions import ElementDoesNotExist
 
 @step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page')
 def should_see_in_the_page(step, negate, text):
-    assert_with_negate(text in world.browser.html, negate)
+    assert_with_negate(world.browser.is_text_present(text), negate)
 
 
 @step(r'should( not)? see (?:the|a) link (?:called|with the text) "(.*)"')

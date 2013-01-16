@@ -156,3 +156,27 @@ Feature: Ensuring that the elements steps work
         When I look around
         Then I should see the element with the id "ready_status" within 5 seconds
         And I should not see the element with the id "loading_status"
+
+
+    Scenario Outline: Element polling for disappearance
+        Given I visit the salad test url "browser/element_waiter.html"
+        When I look around
+        Then I should not see <thing> within 10 seconds
+
+    Examples:
+        | thing                                                                                   |
+        | that the element with id "disappear" has an attribute called "my_attr" with value "you" |
+        | that the element with id "disappear" contains exactly "appearances"                     |
+        | the element with id "disappear"                                                         |
+
+
+    Scenario Outline: Element polling for appearance
+        Given I visit the salad test url "browser/element_waiter.html"
+        When I look around
+        Then I should see <thing> within 10 seconds
+
+    Examples:
+        | thing                                                                                |
+        | the element with id "appear"                                                         |
+        | that the element with id "appear" contains exactly "can be deceiving"                |
+        | that the element with id "appear" has an attribute called "my_attr" with value "you" |

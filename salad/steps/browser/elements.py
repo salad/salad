@@ -2,6 +2,7 @@ from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
 from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element
 from splinter.exceptions import ElementDoesNotExist
+from selenium.webdriver.support.wait import WebDriverWait
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
 
@@ -48,13 +49,17 @@ class ExistenceStepsFactory(object):
         @step(self.wait_pattern % (ELEMENT_THING_STRING, finder_string))
         def _visible_wait_step(step, negate, pick, find_pattern, *args):
             wait_time = int(args[-1])
+            args = args[:-1]  # Chop off the wait_time arg
             try:
                 element = _get_visible_element(finder_function, pick,
                         find_pattern, wait_time=wait_time)
             except ElementDoesNotExist:
                 assert parsed_negator(negate)
                 element = None
-            self.test(element, negate, args[:-1])
+            waiter = WebDriverWait(None, wait_time,
+                                   ignored_exceptions=AssertionError)
+            done_test = lambda x: self.test(element, negate, args) is None
+            waiter.until(done_test)
 
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'

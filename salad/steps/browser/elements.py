@@ -50,15 +50,19 @@ class ExistenceStepsFactory(object):
         def _visible_wait_step(step, negate, pick, find_pattern, *args):
             wait_time = int(args[-1])
             args = args[:-1]  # Chop off the wait_time arg
-            try:
-                element = _get_visible_element(finder_function, pick,
-                        find_pattern, wait_time=wait_time)
-            except ElementDoesNotExist:
-                assert parsed_negator(negate)
-                element = None
+
+            def check_element():
+                try:
+                    element = _get_visible_element(finder_function, pick,
+                            find_pattern, wait_time=wait_time)
+                except ElementDoesNotExist:
+                    assert parsed_negator(negate)
+                    element = None
+                self.test(element, negate, *args)
+
             waiter = WebDriverWait(None, wait_time,
                                    ignored_exceptions=AssertionError)
-            done_test = lambda x: self.test(element, negate, args) is None
+            done_test = lambda x: check_element() is None
             waiter.until(done_test)
 
 

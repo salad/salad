@@ -22,7 +22,7 @@ LINK_FINDERS = {
 ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"
 LINK_THING_STRING = "link"
 
-VISIBILITY_TIMEOUT = 5
+VISIBILITY_TIMEOUT = 1
 
 def _get_visible_element(finder_function, pick, pattern, wait_time=VISIBILITY_TIMEOUT):
     element = _get_element(finder_function, pick, pattern)

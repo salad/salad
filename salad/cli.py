@@ -22,12 +22,11 @@ def main(args=sys.argv[1:]):
                               (BROWSER_CHOICES, DEFAULT_BROWSER)))
     parser.add_argument('--remote-url',
                         help='Selenium server url for remote browsers')
-    parser.add_argument('args', nargs=argparse.REMAINDER)
 
-    parsed_args = parser.parse_args()
+    (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
     world.remote_url = parsed_args.remote_url
-    lettuce_main(args=parsed_args.args)
+    lettuce_main(args=leftovers)
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,4 @@
-from lettuce import before
+from lettuce import before, after
 from salad.logger import logger
 
 logger.info("Loading the terrain file...")
@@ -6,7 +6,7 @@ try:
     from django.core import mail
     from django.core.management import call_command
 
-    @before.each_scenario
+    @after.each_scenario
     def reset_data(scenario):
         # Clean up django.
         logger.info("Flushing the test database...")

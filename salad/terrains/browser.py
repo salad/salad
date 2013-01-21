@@ -12,16 +12,18 @@ def setup_master_browser():
         browser = 'firefox'
         remote_url = None
 
-    world.master_browser = setup_browser(browser, remote_url)
+    capabilities = world.remote_capabilities
+    world.master_browser = setup_browser(browser, remote_url, **capabilities)
     world.browser = world.master_browser
 
 
-def setup_browser(browser, url=None):
+def setup_browser(browser, url=None, **capabilities):
     logger.info("Setting up browser %s..." % browser)
     try:
         if url:
+            logger.warn(capabilities)
             browser = Browser('remote', url=url,
-                    browser=browser)
+                    browser=browser, **capabilities)
         else:
             browser = Browser(browser)
     except Exception as e:

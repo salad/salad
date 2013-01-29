@@ -8,30 +8,60 @@ Feature: Ensuring that the elements steps work
         When I look around
         Then I should see "Text that exists" somewhere in the page
 
+    Scenario: Waiting for text in the page
+        Given I visit the salad test url "browser/element_waiter.html"
+        When I look around
+        Then I should see "can be deceiving" somewhere in the page within 10 seconds
+
     Scenario: seeing text that should not be in doesn't th page
         Given I visit the salad test url "browser/elements.html"
         When I look around
         Then I should not see "Text that doesn't exist" somewhere in the page
+
+    Scenario: Waiting for text not to be in the page
+        Given I visit the salad test url "browser/element_waiter.html"
+        When I look around
+        Then I should not see "appearances" somewhere in the page within 10 seconds
 
     Scenario: Seeing links in the page by url
         Given I visit the salad test url "browser/elements.html"
         When I look around
         Then I should see a link to "http://example.com"
 
+    Scenario: Waiting for links in the page by url
+        Given I visit the salad test url "browser/elements.html"
+        When I look around
+        Then I should see a link to "http://example.com" within 5 seconds
+
     Scenario: Not seeing links that should not be in the page by url
         Given I visit the salad test url "browser/elements.html"
         When I look around
         Then I should not see a link to "http://google.com"
+
+    Scenario: Wait to not see links that should not be in the page by url
+        Given I visit the salad test url "browser/elements.html"
+        When I look around
+        Then I should not see a link to "http://google.com" within 5 seconds
 
     Scenario: Seeing links in the page by link name
         Given I visit the salad test url "browser/elements.html"
         When I look around
         Then I should see a link called "example"
 
+    Scenario: Waiting to see links in the page by link name
+        Given I visit the salad test url "browser/elements.html"
+        When I look around
+        Then I should see a link called "example" within 5 seconds
+
     Scenario: Not seeing links that should not be in the page by link name
         Given I visit the salad test url "browser/elements.html"
         When I look around
         Then I should not see a link called "google"
+
+    Scenario: Wait to not see links that should not be in the page by link name
+        Given I visit the salad test url "browser/elements.html"
+        When I look around
+        Then I should not see a link called "google" within 5 seconds
 
     Scenario Outline: Existence of an element
         Given I visit the salad test url "browser/elements.html"

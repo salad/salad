@@ -5,21 +5,35 @@ from splinter.exceptions import ElementDoesNotExist
 from selenium.webdriver.support.wait import WebDriverWait
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
+@step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page(?: within (\d+) seconds)?')
+def should_see_in_the_page(step, negate, text, wait_time):
+    def assert_text_present_with_negates(negate, text):
+        assert_with_negate(world.browser.is_text_present(text), negate)
+
+    wait_for_completion(wait_time, assert_text_present_with_negates, negate, text)
 
 
-@step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page')
-def should_see_in_the_page(step, negate, text):
-    assert_with_negate(world.browser.is_text_present(text), negate)
+def wait_for_completion(wait_time, method, *args):
+    wait_time = int(wait_time or 0)
+    waiter = WebDriverWait(None, wait_time, ignored_exceptions=AssertionError)
+    done_test = lambda x: method(*args) is None
+    waiter.until(done_test)
 
 
-@step(r'should( not)? see (?:the|a) link (?:called|with the text) "(.*)"')
-def should_see_a_link_called(step, negate, text):
-    assert_with_negate(len(world.browser.find_link_by_text(text)) > 0, negate)
+@step(r'should( not)? see (?:the|a) link (?:called|with the text) "(.*)"(?: within (\d+) seconds)?')
+def should_see_a_link_called(step, negate, text, wait_time):
+    def assert_link_exists_negates(negate, text):
+        assert_with_negate(len(world.browser.find_link_by_text(text)) > 0, negate)
+
+    wait_for_completion(wait_time, assert_link_exists_negates, negate, text)
 
 
-@step(r'should( not)? see (?:the|a) link to "(.*)"')
-def should_see_a_link_to(step, negate, link):
-    assert_with_negate(len(world.browser.find_link_by_href(link)) > 0, negate)
+@step(r'should( not)? see (?:the|a) link to "(.*)"(?: within (\d+) seconds)?')
+def should_see_a_link_to(step, negate, link, wait_time):
+    def assert_link_exists_negates(negate, text):
+        assert_with_negate(len(world.browser.find_link_by_href(text)) > 0, negate)
+
+    wait_for_completion(wait_time, assert_link_exists_negates, negate, link)
 
 
 class ExistenceStepsFactory(object):

@@ -11,7 +11,9 @@
             var appear_element = document.getElementById('appear')
             function appear_appear() { appear_element.style.display = 'block'; }
             function appear_fill_in_text() { appear_element.innerHTML = 'can be deceiving'; }
-            function appear_set_attr() { appear_element.myattr = 'you'; }
+            // Selenium defect means use setAttribute instead of assignment
+            // see: https://code.google.com/p/selenium/issues/detail?id=5108
+            function appear_set_attr() { appear_element.setAttribute('myattr', 'you'); }
 
             window.setTimeout(disappear_set_attr, 200);
             window.setTimeout(disappear_wipe_text, 1000);

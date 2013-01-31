@@ -48,21 +48,10 @@ class ExistenceStepsFactory(object):
             self.make_step(finder_string, finder_function)
 
     def make_step(self, finder_string, finder_function):
-        # NOTE: This *MUST* be seperate from make_steps or reusing the loop
-        # variables there will result in every step being the same
-        @step(self.pattern % (ELEMENT_THING_STRING, finder_string))
-        def _visible_step(step, negate, pick, find_pattern, *args):
-            try:
-                element = _get_visible_element(finder_function, pick, find_pattern)
-            except ElementDoesNotExist:
-                assert parsed_negator(negate)
-                element = None
-            self.test(element, negate, *args)
-
-        self.wait_pattern = self.pattern + ' within (\d+) seconds'
-        @step(self.wait_pattern % (ELEMENT_THING_STRING, finder_string))
-        def _visible_wait_step(step, negate, pick, find_pattern, *args):
-            wait_time = int(args[-1])
+        self.step_pattern = self.pattern + '(?: within (\d+) seconds)?'
+        @step(self.step_pattern % (ELEMENT_THING_STRING, finder_string))
+        def _polling_assertion_step(step, negate, pick, find_pattern, *args):
+            wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
 
             def check_element():

@@ -209,4 +209,4 @@ Feature: Ensuring that the elements steps work
         | thing                                                                                |
         | the element with id "appear"                                                         |
         | that the element with id "appear" contains exactly "can be deceiving"                |
-        | that the element with id "appear" has an attribute called "my_attr" with value "you" |
+        | that the element with id "appear" has an attribute called "myattr" with value "you" |

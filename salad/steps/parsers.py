@@ -5,4 +5,8 @@ def pick_to_index(pick_string):
         return 0
     elif pick == "last":
         return -1
-    return int(pick.strip('st nd th')) - 1  # strip 'th' or 'rd off
+    try:
+        return int(pick.strip('st nd rd th')) - 1  # strip 'th' or 'rd off
+    except ValueError:
+        raise ValueError("Could not convert '%s'" % pick +
+                         " Only supports 'first', 'last', and '##nd'")

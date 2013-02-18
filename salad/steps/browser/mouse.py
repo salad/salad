@@ -1,5 +1,7 @@
 from lettuce import step
-from salad.steps.browser.finders import ELEMENT_FINDERS, LINK_FINDERS, ELEMENT_THING_STRING, LINK_THING_STRING, _get_visible_element
+from salad.steps.browser.finders import (ELEMENT_FINDERS, LINK_FINDERS,
+        ELEMENT_THING_STRING, LINK_THING_STRING, PICK_EXPRESSION,
+        _get_visible_element)
 
 
 # Click on things, mouse over, move the mouse around.
@@ -45,7 +47,7 @@ actions = {
 
 def step_generator(action_string, action_function, thing_string, finder_string, finder_function):
 
-    @step(r'%s (?:a|the)( first| last)? %s %s' % (action_string, thing_string, finder_string))
+    @step(r'%s (?:a|the)%s %s %s' % (action_string, PICK_EXPRESSION, thing_string, finder_string))
     def _this_step(step, pick, find_pattern):
         ele = _get_visible_element(finder_function, pick, find_pattern)
 

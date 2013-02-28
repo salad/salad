@@ -1,8 +1,10 @@
 from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
 from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element
+from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
 @step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page(?: within (\d+) seconds)?')
@@ -66,7 +68,18 @@ class ExistenceStepsFactory(object):
             waiter = WebDriverWait(None, wait_time,
                                    ignored_exceptions=AssertionError)
             done_test = lambda x: check_element() is None
-            waiter.until(done_test)
+            try:
+                waiter.until(done_test)
+            except TimeoutException:
+                message = ("Couldn't find matching element or values for step '%s' after %s seconds" %
+                           (step, wait_time))
+                raise AssertionError(message)
+            except Exception as error:
+                # BEWARE: only way to get step regular expression
+                expression, func = step._get_match(True)
+                logger.error("Encountered error trying to execute step '%s'" %
+                             expression.re.pattern)
+                raise
 
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'

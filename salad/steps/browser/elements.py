@@ -77,7 +77,7 @@ class ExistenceStepsFactory(object):
             except Exception as error:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
-                logger.error("Encountered error trying to execute step '%s'" %
+                logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
                 raise
 

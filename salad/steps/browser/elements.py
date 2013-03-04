@@ -71,8 +71,12 @@ class ExistenceStepsFactory(object):
             try:
                 waiter.until(done_test)
             except TimeoutException:
-                message = ("Couldn't find matching element or values for step '%s' after %s seconds" %
-                           (step, wait_time))
+                # BEWARE: only way to get step regular expression
+                expression, func = step._get_match(True)
+                logger.error("Encountered error using definition '%s'" %
+                             expression.re.pattern)
+                message = ("No matching element or values after %s seconds" %
+                           wait_time)
                 raise AssertionError(message)
             except Exception as error:
                 # BEWARE: only way to get step regular expression

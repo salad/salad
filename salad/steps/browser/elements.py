@@ -7,7 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
-@step(r'should( not)? see "(.*)" (?:somewhere|anywhere) in (?:the|this) page(?: within (\d+) seconds)?')
+@step(r'should( not)? see "([^"]*)" (?:somewhere|anywhere) in (?:the|this) page(?: within (\d+) seconds)?')
 def should_see_in_the_page(step, negate, text, wait_time):
     def assert_text_present_with_negates(negate, text):
         assert_with_negate(world.browser.is_text_present(text), negate)
@@ -22,7 +22,7 @@ def wait_for_completion(wait_time, method, *args):
     waiter.until(done_test)
 
 
-@step(r'should( not)? see (?:the|a) link (?:called|with the text) "(.*)"(?: within (\d+) seconds)?')
+@step(r'should( not)? see (?:the|a) link (?:called|with the text) "([^"]*)"(?: within (\d+) seconds)?')
 def should_see_a_link_called(step, negate, text, wait_time):
     def assert_link_exists_negates(negate, text):
         assert_with_negate(len(world.browser.find_link_by_text(text)) > 0, negate)
@@ -30,7 +30,7 @@ def should_see_a_link_called(step, negate, text, wait_time):
     wait_for_completion(wait_time, assert_link_exists_negates, negate, text)
 
 
-@step(r'should( not)? see (?:the|a) link to "(.*)"(?: within (\d+) seconds)?')
+@step(r'should( not)? see (?:the|a) link to "([^"]*)"(?: within (\d+) seconds)?')
 def should_see_a_link_to(step, negate, link, wait_time):
     def assert_link_exists_negates(negate, text):
         assert_with_negate(len(world.browser.find_link_by_href(text)) > 0, negate)
@@ -87,14 +87,14 @@ def visibility_test(element, negate, *args):
     assert_with_negate(element, negate)
 
 
-contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "(.*)"'
+contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "([^"]*)"'
 def contains_test(element, negate, *args):
     content = args[0]
     text = getattr(element, 'text', None)
     assert_with_negate(content in text, negate)
 
 
-contains_exactly_pattern = r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "(.*)"'
+contains_exactly_pattern = r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "([^"]*)"'
 def contains_exactly_test(element, negate, *args):
     content = args[0]
     text = getattr(element, 'text', None)
@@ -105,7 +105,7 @@ def attribute_test(element, negate, *args):
     attribute = args[0]
     assert_with_negate(element[attribute] != None, negate)
 
-attribute_value_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(.*)" with(?: the)? value "(.*)"'
+attribute_value_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "([^"]*)" with(?: the)? value "([^"]*)"'
 def attribute_value_test(element, negate, *args):
     attribute = args[0]
     value = args[1]

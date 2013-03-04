@@ -18,7 +18,7 @@ def should_see_alert(step, negate):
         alert.accept()
 
 
-@step(r'should( not)? see an alert (?:with the text|that says) "(.*)"')
+@step(r'should( not)? see an alert (?:with the text|that says) "([^"]*)"')
 def should_see_alert_with_text(step, negate, text):
     alert = _get_alert_or_none()
     assert_with_negate(alert is not None and alert.text == text, negate)
@@ -34,7 +34,7 @@ def should_see_prompt(step, negate):
         world.prompt.accept()
 
 
-@step(r'should( not)? see a prompt (?:with the text|that says) "(.*)"')
+@step(r'should( not)? see a prompt (?:with the text|that says) "([^"]*)"')
 def should_see_prompt_with_text(step, negate, text):
     world.prompt = _get_alert_or_none()
     assert_with_negate(world.prompt is not None and world.prompt.text == text, negate)
@@ -50,7 +50,7 @@ def cancel_prompt(step):
     world.prompt._alert.dismiss()
 
 
-@step(r'enter "(.*)" into the prompt')
+@step(r'enter "([^"]*)" into the prompt')
 def enter_into_the_prompt(step, text):
     if not hasattr(world, "prompt") or not world.prompt:
         world.prompt = _get_alert_or_none()

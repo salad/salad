@@ -10,7 +10,7 @@ from salad.tests.util import assert_equals_with_negate
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     def _fill_generator(finder_string, finder_function):
-        @step(r'fill in the( first| last)? %s %s with "(.*)"' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the( first| last)? %s %s with "([^"]*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, text):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             try:
@@ -23,7 +23,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
 
     def _type_generator(finder_string, finder_function):
-        @step(r'(slowly )?type "(.*)" into the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'(slowly )?type "([^"]*)" into the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, slowly, text, first, last, find_pattern):
             css = _convert_pattern_to_css(finder_function, first, last, find_pattern)
 
@@ -39,7 +39,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_type_%s" % (finder_function,)] = _type_generator(finder_string, finder_function)
 
     def _attach_generator(finder_string, finder_function):
-        @step(r'attach "(.*)" onto the( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'attach "([^"]*)" onto the( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             try:
@@ -52,7 +52,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_attach_%s" % (finder_function,)] = _attach_generator(finder_string, finder_function)
 
     def _select_generator(finder_string, finder_function):
-        @step(r'select the option (named|with the value)? "(.*)" (?:from|in) the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, named_or_with_value, field_value, first, last, find_pattern):
             css = _convert_pattern_to_css(finder_function, first, last, find_pattern, tag="select")
 
@@ -89,7 +89,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'(?:should see that the)? value of the( first| last)? %s %s is( not)? "(.*)"' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:should see that the)? value of the( first| last)? %s %s is( not)? "([^"]*)"' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, negate, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert_equals_with_negate(ele.value, value, negate)
@@ -99,7 +99,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _key_generator(finder_string, finder_function):
-        @step(r'hit the (.*) key in the ( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'hit the ([^"]*) key in the ( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             key = transform_key_string(key_string)
             ele = _get_visible_element(finder_function, pick, find_pattern)
@@ -110,7 +110,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
 
-@step(r'hit the (.*) key')
+@step(r'hit the ([^"]*) key')
 def hit_key(step, key_string):
     key = transform_key_string(key_string)
     try:

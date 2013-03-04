@@ -6,17 +6,17 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 
 ELEMENT_FINDERS = {
-    'named "(.*)"': "find_by_name",
-    'with(?: the)? id "(.*)"': "find_by_id",
-    'with(?: the)? css selector "(.*)"': "find_by_css",
-    'with(?: the)? value "(.*)"': "find_by_value",
+    'named "([^"]*)"': "find_by_name",
+    'with(?: the)? id "([^"]*)"': "find_by_id",
+    'with(?: the)? css selector "([^"]*)"': "find_by_css",
+    'with(?: the)? value "([^"]*)"': "find_by_value",
 }
 
 LINK_FINDERS = {
-    'to "(.*)"': "find_link_by_href",
-    'to a url that contains "(.*)"': "find_link_by_partial_href",
-    'with(?: the)? text "(.*)"': "find_link_by_text",
-    'with text that contains "(.*)"': "find_link_by_partial_text",
+    'to "([^"]*)"': "find_link_by_href",
+    'to a url that contains "([^"]*)"': "find_link_by_partial_href",
+    'with(?: the)? text "([^"]*)"': "find_link_by_text",
+    'with text that contains "([^"]*)"': "find_link_by_partial_text",
 }
 
 ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"

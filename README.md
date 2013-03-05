@@ -1,5 +1,7 @@
 Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to make writing acceptance tests downright fun.
 
+Salad was originally developed at [Wieden+Kennedy](http://wk.com), and was subsequently [open-sourced](https://github.com/wieden-kennedy/salad) under the BSD license.
+
 [![Build Status](https://secure.travis-ci.org/wieden-kennedy/salad.png?branch=master)](http://travis-ci.org/wieden-kennedy/salad)
 
 Installing

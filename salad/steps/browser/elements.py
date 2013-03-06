@@ -83,7 +83,7 @@ class ExistenceStepsFactory(object):
     def check_element(self, finder_function, negate, pick, find_pattern, wait_time, *args):
        try:
            element = _get_visible_element(finder_function, pick,
-                   find_pattern, wait_time=wait_time)
+                   find_pattern)
        except ElementDoesNotExist:
            assert parsed_negator(negate)
            element = None

@@ -60,20 +60,11 @@ class ExistenceStepsFactory(object):
             wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
 
-            def check_element():
-                try:
-                    element = _get_visible_element(finder_function, pick,
-                            find_pattern, wait_time=wait_time)
-                except ElementDoesNotExist:
-                    assert parsed_negator(negate)
-                    element = None
-                self.test(element, negate, *args)
-
-            waiter = WebDriverWait(None, wait_time,
+            waiter = SaladWaiter(None, wait_time,
                                    ignored_exceptions=AssertionError)
-            done_test = lambda x: check_element() is None
             try:
-                waiter.until(done_test)
+                waiter.until("in make_step", False, self.check_element,
+                        finder_function, negate, pick, find_pattern, wait_time, *args)
             except TimeoutException:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
@@ -88,6 +79,16 @@ class ExistenceStepsFactory(object):
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
                 raise
+
+    def check_element(self, finder_function, negate, pick, find_pattern, wait_time, *args):
+       try:
+           element = _get_visible_element(finder_function, pick,
+                   find_pattern, wait_time=wait_time)
+       except ElementDoesNotExist:
+           assert parsed_negator(negate)
+           element = None
+       self.test(element, negate, *args)
+       return True
 
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'

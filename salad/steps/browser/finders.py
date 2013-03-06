@@ -2,7 +2,8 @@ from lettuce import world
 from salad.logger import logger
 from salad.steps.parsers import pick_to_index
 from splinter.exceptions import ElementDoesNotExist
-from selenium.webdriver.support.wait import WebDriverWait
+#from selenium.webdriver.support.wait import SaladWaiter
+from salad.waiter import SaladWaiter
 from selenium.common.exceptions import TimeoutException
 
 ELEMENT_FINDERS = {
@@ -22,17 +23,11 @@ LINK_FINDERS = {
 ELEMENT_THING_STRING = "(?:element|thing|field|textarea|radio button|button|checkbox|label)"
 LINK_THING_STRING = "link"
 
-VISIBILITY_TIMEOUT = 1
 
-def _get_visible_element(finder_function, pick, pattern, wait_time=VISIBILITY_TIMEOUT):
+def _get_visible_element(finder_function, pick, pattern):
     element = _get_element(finder_function, pick, pattern)
-
-    w = WebDriverWait(world.browser.driver, wait_time)
-    try:
-        w.until(lambda driver: element.visible)
-    except TimeoutException as e:
+    if not element.visible:
         raise ElementDoesNotExist
-
     return element
 
 

@@ -1,17 +1,17 @@
 from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
 from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element
-from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
+from salad.logger import logger
 from salad.waiter import SaladWaiter
-from selenium.common.exceptions import TimeoutException
+from salad.waiter import TimeoutException
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
 
 def wait_for_completion(wait_time, method, *args):
     wait_time = int(wait_time or 0)
-    waiter = SaladWaiter(None, wait_time, ignored_exceptions=AssertionError)
-    waiter.until('in wait for completion', False, method, *args)
+    waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
+    waiter.until(False, method, *args)
 
 
 # the following three steps do not use the ExistenceStepsFactory
@@ -60,14 +60,14 @@ class ExistenceStepsFactory(object):
             wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
 
-            waiter = SaladWaiter(None, wait_time,
-                                   ignored_exceptions=AssertionError)
+            waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
             try:
-                waiter.until("in make_step", False, self.check_element,
+                waiter.until(False, self.check_element,
                         finder_function, negate, pick, find_pattern, wait_time, *args)
-            except TimeoutException:
+            except TimeoutException as t:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
+                logger.error(t.message)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
                 message = ("No matching element or values after %s seconds" %
@@ -76,19 +76,20 @@ class ExistenceStepsFactory(object):
             except Exception as error:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
+                logger.error("%s" % error)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
                 raise
 
-    def check_element(self, finder_function, negate, pick, find_pattern, wait_time, *args):
-       try:
-           element = _get_visible_element(finder_function, pick,
-                   find_pattern)
-       except ElementDoesNotExist:
-           assert parsed_negator(negate)
-           element = None
-       self.test(element, negate, *args)
-       return True
+    def check_element(self, finder_function, negate, pick,
+                                find_pattern, wait_time, *args):
+        try:
+            element = _get_visible_element(finder_function, pick, find_pattern)
+        except ElementDoesNotExist:
+            assert parsed_negator(negate)
+            element = None
+        self.test(element, negate, *args)
+        return True
 
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'

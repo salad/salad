@@ -2,9 +2,6 @@ from lettuce import world
 from salad.logger import logger
 from salad.steps.parsers import pick_to_index
 from splinter.exceptions import ElementDoesNotExist
-#from selenium.webdriver.support.wait import SaladWaiter
-from salad.waiter import SaladWaiter
-from selenium.common.exceptions import TimeoutException
 
 ELEMENT_FINDERS = {
     'named "([^"]*)"': "find_by_name",

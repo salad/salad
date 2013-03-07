@@ -11,7 +11,7 @@ from salad.waiter import TimeoutException
 def wait_for_completion(wait_time, method, *args):
     wait_time = int(wait_time or 0)
     waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
-    waiter.until(False, method, *args)
+    waiter.until(method, *args)
 
 
 # the following three steps do not use the ExistenceStepsFactory
@@ -62,7 +62,7 @@ class ExistenceStepsFactory(object):
 
             waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
             try:
-                waiter.until(False, self.check_element,
+                waiter.until(self.check_element,
                         finder_function, negate, pick, find_pattern, wait_time, *args)
             except TimeoutException as t:
                 # BEWARE: only way to get step regular expression

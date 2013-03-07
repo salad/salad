@@ -29,7 +29,7 @@ class SaladWaiter(object):
                 exceptions.append(ignored_exceptions)
         self._ignored_exceptions = tuple(exceptions)
 
-    def until(self, negate, method, *args):
+    def _until(self, negate, method, *args):
         """The provided method should return either True or False.
         It is then called until proper return value appears according to negate
         OR until timeout happens"""
@@ -50,6 +50,11 @@ class SaladWaiter(object):
                 break
         raise TimeoutException("%s did not return expected return value within %s seconds." % (method.func_name, self._timeout))
 
+    def until(self, method, *args):
+        return self._until(False, method, *args)
+
+    def until_not(self, method, *args):
+        return self._until(True, method, *args)
 
 class TimeoutException(Exception):
     pass

@@ -48,7 +48,7 @@ class SaladWaiter(object):
             time.sleep(self._poll)
             if(time.time() > end_time):
                 break
-        raise TimeoutException("%s did not return proper return value (True of False) in %s seconds." % (method.func_name, self._timeout))
+        raise TimeoutException("%s did not return expected return value within %s seconds." % (method.func_name, self._timeout))
 
 
 class TimeoutException(Exception):

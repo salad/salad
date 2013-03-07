@@ -70,7 +70,7 @@ class ExistenceStepsFactory(object):
                 logger.error(t.message)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
-                message = ("No matching element or values found for pattern '%s' after %s seconds" %
+                message = ("Element not found or assertion failed using pattern '%s' after %s seconds" %
                            (find_pattern, wait_time))
                 raise AssertionError(message)
             except Exception as error:

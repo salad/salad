@@ -1,31 +1,34 @@
 from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
 from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element
-from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from salad.logger import logger
+from salad.waiter import SaladWaiter
+from salad.waiter import TimeoutException
 
 # Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
+
+def wait_for_completion(wait_time, method, *args):
+    wait_time = int(wait_time or 0)
+    waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
+    waiter.until(method, *args)
+
+
+# the following three steps do not use the ExistenceStepsFactory
 @step(r'should( not)? see "([^"]*)" (?:somewhere|anywhere) in (?:the|this) page(?: within (\d+) seconds)?')
 def should_see_in_the_page(step, negate, text, wait_time):
     def assert_text_present_with_negates(negate, text):
         assert_with_negate(world.browser.is_text_present(text), negate)
+        return True
 
     wait_for_completion(wait_time, assert_text_present_with_negates, negate, text)
-
-
-def wait_for_completion(wait_time, method, *args):
-    wait_time = int(wait_time or 0)
-    waiter = WebDriverWait(None, wait_time, ignored_exceptions=AssertionError)
-    done_test = lambda x: method(*args) is None
-    waiter.until(done_test)
 
 
 @step(r'should( not)? see (?:the|a) link (?:called|with the text) "([^"]*)"(?: within (\d+) seconds)?')
 def should_see_a_link_called(step, negate, text, wait_time):
     def assert_link_exists_negates(negate, text):
         assert_with_negate(len(world.browser.find_link_by_text(text)) > 0, negate)
+        return True
 
     wait_for_completion(wait_time, assert_link_exists_negates, negate, text)
 
@@ -34,6 +37,7 @@ def should_see_a_link_called(step, negate, text, wait_time):
 def should_see_a_link_to(step, negate, link, wait_time):
     def assert_link_exists_negates(negate, text):
         assert_with_negate(len(world.browser.find_link_by_href(text)) > 0, negate)
+        return True
 
     wait_for_completion(wait_time, assert_link_exists_negates, negate, link)
 
@@ -56,34 +60,36 @@ class ExistenceStepsFactory(object):
             wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
 
-            def check_element():
-                try:
-                    element = _get_visible_element(finder_function, pick,
-                            find_pattern, wait_time=wait_time)
-                except ElementDoesNotExist:
-                    assert parsed_negator(negate)
-                    element = None
-                self.test(element, negate, *args)
-
-            waiter = WebDriverWait(None, wait_time,
-                                   ignored_exceptions=AssertionError)
-            done_test = lambda x: check_element() is None
+            waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
             try:
-                waiter.until(done_test)
-            except TimeoutException:
+                waiter.until(self.check_element,
+                        finder_function, negate, pick, find_pattern, wait_time, *args)
+            except TimeoutException as t:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
+                logger.error(t.message)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
-                message = ("No matching element or values after %s seconds" %
-                           wait_time)
+                message = ("Element not found or assertion failed using pattern '%s' after %s seconds" %
+                           (find_pattern, wait_time))
                 raise AssertionError(message)
             except Exception as error:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
+                logger.error("%s" % error)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
                 raise
+
+    def check_element(self, finder_function, negate, pick,
+                                find_pattern, wait_time, *args):
+        try:
+            element = _get_visible_element(finder_function, pick, find_pattern)
+        except ElementDoesNotExist:
+            assert parsed_negator(negate)
+            element = None
+        self.test(element, negate, *args)
+        return True
 
 
 visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'

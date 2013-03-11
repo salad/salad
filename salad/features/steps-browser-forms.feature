@@ -188,11 +188,11 @@ Feature: Ensuring that the forms steps work
           And I click on the field named "focus_me_name"
           And I wait 2 seconds
         Then I should see "Focused!" somewhere in the page
-    
+
     Scenario: Blurring works
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
-          And I wait 2 seconds
-          And I click on the element with the css selector "#response_area"
+          And I wait 1 seconds
+          And I click on the element named "input_target_name"
           And I wait 2 seconds
         Then I should see "Blurred!" somewhere in the page

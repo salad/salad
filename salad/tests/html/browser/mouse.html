@@ -27,19 +27,49 @@
                 }
                 last_double_click_click = now;
             });
+
             $("#drag_handler").draggable();
             $("#drag_target").droppable({
                 drop: function( e, ui ) {
                     $(this).html("Dropped " + "on me!");
                 }
             });
+
+            $("#drag_handler2").draggable();
+            $("#drag_target2").droppable({
+                drop: function( e, ui ) {
+                    $(this).html("Dropped " + "on me 2!");
+                }
+            });
+
+            $("#drag_handler3").draggable();
+            $("#drag_target3").droppable({
+                drop: function( e, ui ) {
+                    $(this).html("Dropped " + "on me 3!");
+                }
+            });
+
+            $("#drag_handler4").draggable();
+            $("#drag_target4").droppable({
+                drop: function( e, ui ) {
+                    $(this).html("Dropped " + "on me 4!");
+                }
+            });
         });
         </script>
+
         <style type="text/css">
             #drag_handler {  width: 50px; height: 50px; border: 1px solid #000; background: red;}
+            #drag_handler2 {  width: 50px; height: 50px; border: 1px solid #000; background: yellow;}
+            #drag_handler3 {  width: 50px; height: 50px; border: 1px solid #000; background: orange;}
+            #drag_handler4 {  width: 50px; height: 50px; border: 1px solid #000; background: green;}
             #drag_target, #drag_not_target {  width: 100px; height: 100px; border: 1px solid #000; background: #AAA;}
+            #drag_target2, #drag_not_target2 {  width: 100px; height: 100px; border: 1px solid #000; background: #AA4;}
+            #drag_target3, #drag_not_target3 {  width: 100px; height: 100px; border: 1px solid #000; background: #AAc;}
+            #drag_target4, #drag_not_target4 {  width: 100px; height: 100px; border: 1px solid #000; background: #AAf;}
             #mouse_target, #mouse_target_link { display: block; width: 100px; margin: 50px;}
         </style>
+
     </head>
     <body>
         <div id="mouse_target" class="mouse_target_class" name="mouse_target_name">The target of the mouse</div>
@@ -48,8 +78,30 @@
         <div id="double_click" class="double_click_class" name="double_click_name">Double-click target</div>
         <div id="mouse_action"></div>
 
-        <div id="drag_handler" class="drag_handler_class" name="drag_handler_name" >Drag Me</div>
-        <div id="drag_target" class="drag_target_class" name="drag_target_name" >To Me</div>
-        <div id="drag_not_target" class="drag_not_target_class" name="drag_not_target_name" >Not Me</div>
+        <table>
+          <tr>
+            <td>
+               <div id="drag_handler" class="drag_handler_class" name="drag_handler_name" >Drag Me</div>
+               <div id="drag_target" class="drag_target_class" name="drag_target_name" >To Me</div>
+               <div id="drag_not_target" class="drag_not_target_class" name="drag_not_target_name" >Not Me</div>
+            </td>
+            <td>
+               <div id="drag_handler2" class="drag_handler_class" name="drag_handler_name2" >Drag Me</div>
+               <div id="drag_target2" class="drag_target_class" name="drag_target_name2" >To Me</div>
+               <div id="drag_not_target2" class="drag_not_target_class" name="drag_not_target_name2" >Not Me</div>
+            </td>
+            <td>
+               <div id="drag_handler3" class="drag_handler_class" name="drag_handler_name3" >Drag Me</div>
+               <div id="drag_target3" class="drag_target_class" name="drag_target_name3" >To Me</div>
+               <div id="drag_not_target3" class="drag_not_target_class" name="drag_not_target_name3" >Drag Me</div>
+            </td>
+            <td>
+               <div id="drag_handler4"    class="drag_handler_class" name="drag_handler_name4" >Drag Me</div>
+               <div id="drag_target4"     class="drag_target_class"  name="drag_target_name4" >To Me</div>
+               <div id="drag_not_target4" class="drag_not_target_class" name="drag_not_target_name4" >Drag Me</div>
+            </td>
+          </tr>
+        </table>
+
     </body>
 </html>

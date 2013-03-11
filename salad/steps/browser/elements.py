@@ -1,6 +1,7 @@
 from lettuce import step, world
 from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
-from salad.steps.browser.finders import ELEMENT_FINDERS, ELEMENT_THING_STRING, _get_visible_element
+from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS, ELEMENT_THING_STRING,
+    _get_visible_element)
 from splinter.exceptions import ElementDoesNotExist
 from salad.logger import logger
 from salad.waiter import SaladWaiter
@@ -55,7 +56,7 @@ class ExistenceStepsFactory(object):
 
     def make_step(self, finder_string, finder_function):
         self.step_pattern = self.pattern + '(?: within (\d+) seconds)?'
-        @step(self.step_pattern % (ELEMENT_THING_STRING, finder_string))
+        @step(self.step_pattern % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _polling_assertion_step(step, negate, pick, find_pattern, *args):
             wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
@@ -92,30 +93,30 @@ class ExistenceStepsFactory(object):
         return True
 
 
-visibility_pattern = r'should( not)? see (?:the|a|an)( first| last)? %s %s'
+visibility_pattern = r'should( not)? see (?:the|a|an)%s %s %s'
 def visibility_test(element, negate, *args):
     assert_with_negate(element, negate)
 
 
-contains_pattern = r'should( not)? see that the( first| last)? %s %s contains "([^"]*)"'
+contains_pattern = r'should( not)? see that the%s %s %s contains "([^"]*)"'
 def contains_test(element, negate, *args):
     content = args[0]
     text = getattr(element, 'text', None)
     assert_with_negate(content in text, negate)
 
 
-contains_exactly_pattern = r'should( not)? see that the( first| last)? %s %s (?:is|contains) exactly "([^"]*)"'
+contains_exactly_pattern = r'should( not)? see that the%s %s %s (?:is|contains) exactly "([^"]*)"'
 def contains_exactly_test(element, negate, *args):
     content = args[0]
     text = getattr(element, 'text', None)
     assert_equals_with_negate(content, text, negate)
 
-attribute_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
+attribute_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
 def attribute_test(element, negate, *args):
     attribute = args[0]
     assert_with_negate(element[attribute] != None, negate)
 
-attribute_value_pattern = r'should( not)? see that the( first| last)? %s %s has (?:an|the) attribute (?:of|named|called) "([^"]*)" with(?: the)? value "([^"]*)"'
+attribute_value_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "([^"]*)" with(?: the)? value "([^"]*)"'
 def attribute_value_test(element, negate, *args):
     attribute = args[0]
     value = args[1]

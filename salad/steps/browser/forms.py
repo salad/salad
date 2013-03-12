@@ -27,8 +27,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         def _this_step(step, slowly, text, first, last, find_pattern):
             css = _convert_pattern_to_css(finder_function, first, last, find_pattern)
 
+# try to use _get_visible_element
+# i get a splinter element that has a selenium element as attribute
+# the driver here is selenium or the selenium browser
             driver_ele = world.browser.driver.find_element_by_css_selector(css)
-            slowly = False
             if slowly and slowly != "":
                 TypeIterator(driver_ele, text)
             else:

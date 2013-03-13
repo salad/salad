@@ -3,9 +3,9 @@ from salad.logger import logger
 from splinter.exceptions import ElementDoesNotExist
 
 ELEMENT_FINDERS = {
-    'named "(.*)"': "find_by_name",
-    'with(?: the)? id "(.*)"': "find_by_id",
-    'with(?: the)? css selector "(.*)"': "find_by_css",
+    'named "([^"]*)"': "find_by_name",
+    'with(?: the)? id "([^"]*)"': "find_by_id",
+    'with(?: the)? css selector "([^"]*)"': "find_by_css",
     'with(?: the)? value (.*)': "find_by_value",
 }
 

@@ -166,7 +166,7 @@ Steps
 
 * `browser` - Broken into submodules. Importing `browser` gets them all.
     * `alerts` - Handle alerts and prompts.
-    * `browers` - Switch between browsers.
+    * `browsers` - Switch between browsers.
     * `elements` - Verify that elements exist, have expected contents or attributes.
     * `finders` - No actual steps - just helper functions to find elements.
     * `forms` - Interact with form fields - type, focus, select, fill in, and the like.

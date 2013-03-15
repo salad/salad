@@ -152,8 +152,8 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".test_select_class"   |
           
 
-    Scenario: Hitting keys generally works.
-        Given I visit the salad test url "browser/form.html"
+    Scenario Outline: Hitting keys generally works.
+        Given I visit the salad test url "browser/hitkey.html"
         When I hit the <key> key
         Then I should see "<output>" somewhere in the page
 

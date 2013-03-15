@@ -162,3 +162,9 @@ def transform_key_string(key_string):
         key_string = 'SPACE'
     key = Keys.__getattribute__(Keys, key_string)
     return key
+
+def _type_slowly(driver_ele, text):
+    for c in text:
+        driver_ele.value += c
+        sleep(0.5)
+

@@ -183,16 +183,19 @@ Feature: Ensuring that the forms steps work
 
 
     Scenario: Focusing works
+		Given I am using chrome
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
           And I click on the field named "focus_me_name"
           And I wait 2 seconds
         Then I should see "Focused!" somewhere in the page
 
-    Scenario: Blurring works
+	Scenario: Blurring works
+		Given I am using chrome
         Given I visit the salad test url "browser/form.html"
         When I click on the field named "focus_me_name"
           And I wait 1 seconds
           And I click on the element named "input_target_name"
           And I wait 2 seconds
         Then I should see "Blurred!" somewhere in the page
+

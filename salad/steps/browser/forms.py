@@ -44,7 +44,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_select_%s" % (finder_function,)] = _select_generator(finder_string, finder_function)
 
     def _fill_generator(finder_string, finder_function):
-        @step(r'fill in the( first| last)? %s %s with "([^"]*)"' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the%s %s %s with "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, text):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             try:
@@ -56,26 +56,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
 
-    def _type_generator(finder_string, finder_function):
-        @step(r'(slowly )?type "([^"]*)" into the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, slowly, text, first, last, find_pattern):
-            css = _convert_pattern_to_css(finder_function, first, last, find_pattern)
-
-# try to use _get_visible_element
-# i get a splinter element that has a selenium element as attribute
-# the driver here is selenium or the selenium browser
-            driver_ele = world.browser.driver.find_element_by_css_selector(css)
-            if slowly and slowly != "":
-                TypeIterator(driver_ele, text)
-            else:
-                driver_ele.send_keys(text)
-
-        return _this_step
-
-    globals()["form_type_%s" % (finder_function,)] = _type_generator(finder_string, finder_function)
-
     def _attach_generator(finder_string, finder_function):
-        @step(r'attach "([^"]*)" onto the( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             try:
@@ -87,25 +69,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_attach_%s" % (finder_function,)] = _attach_generator(finder_string, finder_function)
 
-    def _select_generator(finder_string, finder_function):
-        @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the( first)?( last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, named_or_with_value, field_value, first, last, find_pattern):
-            css = _convert_pattern_to_css(finder_function, first, last, find_pattern, tag="select")
-
-            if named_or_with_value == "with the value":
-                css += " option[value='%s']" % (field_value,)
-                ele = world.browser.find_by_css(css).first
-            else:
-                ele = world.browser.find_option_by_text(field_value)
-
-            ele.click()
-
-        return _this_step
-
-    globals()["form_select_%s" % (finder_function,)] = _select_generator(finder_string, finder_function)
-
     def _focus_generator(finder_string, finder_function):
-        @step(r'focus on the( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'focus on the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             ele.focus()
@@ -115,7 +80,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_focus_%s" % (finder_function,)] = _focus_generator(finder_string, finder_function)
 
     def _blur_generator(finder_string, finder_function):
-        @step(r'(?:blur|move) from the( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:blur|move) from the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             ele.blur()
@@ -125,7 +90,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'(?:should see that the)? value of the( first| last)? %s %s is( not)? "([^"]*)"' % (ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:should see that the)? value of the%s %s %s is( not)? "([^"]*)"' % (
+            PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, negate, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert_equals_with_negate(ele.value, value, negate)
@@ -135,10 +101,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _key_generator(finder_string, finder_function):
-        @step(r'hit the ([^"]*) key in the ( first| last)? %s %s' % (ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, pick, find_pattern):
-            key = transform_key_string(key_string)
+        @step(r'hit the ([^"]*) key in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, key_string, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
+            key = transform_key_string(key_string)
             ele.type(key)
 
         return _this_step

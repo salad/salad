@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Mouse test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        var key_table = {
+            // String concatenation protects tests from detecting
+            // the word existing in the raw html. They should only
+            // appear completed if the keycode is entered
+            '13': 'Ent' + 'ered!',
+            '14': 'Ent' + 'ered!',
+            '38': 'Up A' + 'rrow!',
+            '40': 'Down A' + 'rrow!',
+            '37': 'Left A' + 'rrow!',
+            '39': 'Right A' + 'rrow!',
+            '27': 'Esc' + 'aped!',
+            '32': 'Space' + 'd Out!',
+            '17': 'Contro' + 'lled!',
+            '18': 'Alter' + 'ed!',
+            '9': 'Tab' + 'bed!',
+            '16': 'Shi' + 'fted!',
+            '8': 'Backspa' + 'ced!',
+            '36': 'Home' + 'd!',
+            '35': 'Ende' + 'd!',
+            '45': 'Inser' + 'ted!',
+            '46': 'Delet' + 'ed!',
+            '33': 'Page Uppe' + 'd!',
+            '34': 'Page D' + 'owned!',
+            '112': 'F' + '1ed!',
+            '123': 'F12' + 'ed!'
+        };
+        $(function(){
+            $('body').keydown(function(e){
+                if (key_table[e.which]) {
+                    set_response(key_table[e.which])
+                    if (e.which == 8) {
+                        return false;
+                    }
+                }
+            });
+        });
+        function set_response(text) {
+            $("#response_area").html(text);
+        }
+        </script>
+        <style type="text/css">
+
+        </style>
+    </head>
+    <body>
+        <form>
+            <div id="response_area"></div>
+            <div>I am a DIV</div>
+        </form>
+    </body>
+</html>

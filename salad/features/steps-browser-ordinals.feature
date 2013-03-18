@@ -12,18 +12,12 @@ Feature: Ensuring that selecting the XX. element of something works
     Examples:
         | ordinal   | output      |
         | first     | first up    |
-        | last      | last up     |
-        | 1st       | first up    |
         | 2st       | second up   |
-        | 3st       | third up    |
-        | 4st       | forth up    |
-        | 5th       | last up     |
 
-
+# Visibility
     Scenario Outline: Visibility of elements
         Given I visit the salad test url "browser/invisible_elements.html"
          When I look around
-         Then I should not see the element with css selector ".invisible"
          Then I should not see the <ordinal> element with css selector ".invisible"
 
     Examples:
@@ -32,77 +26,13 @@ Feature: Ensuring that selecting the XX. element of something works
         | last                                       |
         | 1st                                        |
         | 2nd                                        |
-        | 3rd                                        |
-        | 4th                                        |
-        | 5th                                        |
 
-
+# Content and Attributes
     Scenario Outline: Content of an element
         Given I visit the salad test url "browser/elements.html"
         When I look around
-        Then I should see that the <ordinal> element with css selector ".i_contain_class" contains "has"
-
-    Examples:
-        | ordinal                                    |
-        | first                                      |
-        | 1st                                        |
-        | 2nd                                        |
-        | 3rd                                        |
-        | 4th                                        |
-        | 5th                                        |
-
-    Scenario: Non-Content of an element
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should not see that the 6th element with css selector ".i_contain_class" contains "has"
-
-    Scenario Outline: Attribute of an element
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should see that the <ordinal> element with css selector ".i_contain_class" has an attribute called "class"
-
-    Examples:
-        | ordinal                                    |
-        | first                                      |
-        | 1st                                        |
-        | 2nd                                        |
-        | 3rd                                        |
-        | 4th                                        |
-        | 5th                                        |
-
-    Scenario: Non-Attribute of an element
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should not see that the last element with css selector ".i_contain_class" has an attribute called "label"
-
-    Scenario: Content of an <ordnial-number> element
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should see that the 6th element with css selector ".i_contain_class" is exactly "But I have."
-
-    Scenario Outline: Attribute on an element with value
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should see that the <ordinal> element with css selector ".i_attr_class" has an attribute called "my_attr" with value "me!"
-
-    Examples:
-        | ordinal                                    |
-        | first                                      |
-        | 1st                                        |
-        | 2nd                                        |
-        | 3rd                                        |
-        | 4th                                        |
-        | 5th                                        |
-
-    Scenario: Attribute not on a element with value
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should not see that the 6th element with css selector ".i_attr_class" has an attribute called "my_attr" with value "me!"
-
-    Scenario: Attribute not on a element with value
-        Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should not see that the 7th element with css selector ".i_attr_class" has an attribute called "my_attr" with value "me!"
+        Then I should see that the 1st element with css selector ".i_contain_class" contains "has"
+         And I should not see that the last element with css selector ".i_contain_class" contains "has"
 
 # Select Generator
     Scenario: Selecting works with "with the value".
@@ -117,10 +47,8 @@ Feature: Ensuring that selecting the XX. element of something works
 
         Examples:
             | ordinal | nr |
-            | first   | 1  |
             | last    | 4  |
             | 1st     | 1  |
-            | 2nd     | 2  |
             | 3rd     | 3  |
 
 # Value Generator
@@ -134,10 +62,7 @@ Feature: Ensuring that selecting the XX. element of something works
         | first     | some text 1    |
         | 1st       | some text 1    |
         | 2nd       | some text 2    |
-        | 3rd       | some text 3    |
-        | 4th       | some text 4    |
-        | 5th       | some text 5    |
-        | last      | some text 5    |
+        | last      | some text 2    |
 
 # Fill Generator
     Scenario Outline: Filling in a field works.
@@ -145,9 +70,7 @@ Feature: Ensuring that selecting the XX. element of something works
         When I fill in the <ordinal> element with css selector ".input_target_class" with "my test text"
         Then I should see "Filled" somewhere in the page
          And I should see that the value of the <ordinal> element with css selector ".input_target_class" is "my test text"
-         And I should see that the value of the <ordinal> element with css selector ".input_target_class" is "my test text"
-         And I should see that the value of the <ordinal> element with css selector ".input_target_class" is not "Hahaha ich bin's nicht!"
-        When I attach "/tmp/temp_lettuce_test" onto the first field named "test_file_name"
+         And I should see that the value of the <ordinal> element named "input_target_name" is not "Hahaha ich bin's nicht!"
 
     Examples:
         | ordinal                                       |
@@ -155,43 +78,17 @@ Feature: Ensuring that selecting the XX. element of something works
         | last                                          |
         | 1st                                           |
         | 2nd                                           |
-        | 3rd                                           |
-        | 4th                                              |
-
-    Scenario Outline: Typing in a field works.
-        Given I visit the salad test url "browser/form.html"
-        When I type "my test text" into the field <finder>
-        Then I should see "Filled!" somewhere in the page
-          And I should see that the value of the field <finder> is "my test text"
-
-    Examples:
-        | finder                                        |
-        | named "input_target_name"                     |
-        | with the id "input_target"                    |
-        | with the css selector ".input_target_class"   |
-
 
 # Attach Generator
-    Scenario Outline: Attaching a file works.
+    Scenario Outline: Attaching a file in <ordinal> fields works.
         Given I visit the salad test url "browser/form.html"
         When I attach "/tmp/temp_lettuce_test" onto the <ordinal> field named "test_file_name"
-        Then I should see "Attached" somewhere in the page
-        When I fill in the first element with css selector ".input_target_class" with "my test text"
+        Then I should see "Attached <nr>" somewhere in the page
 
     Examples:
-        | ordinal                                     |
-        | first                                       |
-        | 5th                                         |
-        | last                                        |
-
-    Scenario: Attaching a file works.
-        Given I visit the salad test url "browser/form.html"
-        When I attach "/tmp/temp_lettuce_test" onto the 2nd field named "test_file_name"
-        Then I should see "Attached 2" somewhere in the page
-        When I attach "/tmp/temp_lettuce_test" onto the 3rd field named "test_file_name"
-        Then I should see "Attached 3" somewhere in the page
-        When I attach "/tmp/temp_lettuce_test" onto the 4th field named "test_file_name"
-        Then I should see "Attached 4" somewhere in the page
+        | ordinal   | nr  |
+        | 2rd       | 2   |
+        | last      | 2   |
 
 # Type Generator # (slowly) typing in a field
     Scenario: Slowly typing in a field works.
@@ -202,15 +99,24 @@ Feature: Ensuring that selecting the XX. element of something works
     Scenario Outline: Slowly typing in a field works.
         Given I visit the salad test url "browser/form.html"
          When I type "my test text" into the <ordinal> field named "input_target_name"
-          And I wait 1 seconds
          Then I should see "<output>" somewhere in the page
           And I should see that the value of the <ordinal> field named "input_target_name" is "my test text"
 
     Examples:
-        | ordinal          |output                   |nr |
-        | last             |Filled!                  |4  |
-        | 2nd              |Filled 1!                |1  |
-        | 3rd              |Filled 2!                |2  |
-        | 4th              |Filled 3!                |3  |
-        | 5th              |Filled!                  |4  |
+        | ordinal          |output         |
+        | first            |Filled!        |
+        | 2nd              |Filled 1!      |
 
+    Scenario Outline: Mouse over some ordinal element works
+        Given I am using Chrome
+          And I visit the salad test url "browser/mouse.html"
+        When I mouseover the <ordinal> element named "mouse_target_name"
+        Then I should see "<expected_results>" somewhere in the page
+
+# Mouse
+    Examples:
+        | ordinal   | expected_results |
+        | first     | Moused over      |
+        | 1st       | Moused over      |
+        | 2nd       | Moused over 2    |
+        | last      | Moused over 2    |

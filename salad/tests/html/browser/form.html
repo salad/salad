@@ -47,30 +47,6 @@
                     }
                 }
             });
-            $('#keyup_target3').keydown(function(e){
-                if (e.which == '38') {
-                    set_response("third up")
-                    if (e.which == 8) {
-                        return false;
-                    }
-                }
-            });
-            $('#keyup_target4').keydown(function(e){
-                if (e.which == '38') {
-                    set_response("forth up")
-                    if (e.which == 8) {
-                        return false;
-                    }
-                }
-            });
-            $('#keyup_target5').keydown(function(e){
-                if (e.which == '38') {
-                    set_response("last up")
-                    if (e.which == 8) {
-                        return false;
-                    }
-                }
-            });
             $('#allkeys_target').keydown(function(e){
                 if (key_table[e.which]) {
                     set_response(key_table[e.which])
@@ -80,7 +56,7 @@
                 }
             });
 
-            $("#input_target, #test_textarea, #input_target4").keyup(function(){
+            $("#input_target, #test_textarea").keyup(function(){
                 if ( $(this).val() != "" ) {
                     set_response("Filled"+"!");
                 }
@@ -90,33 +66,16 @@
                     set_response("Filled 1"+"!");
                 }
             });
-            $("#input_target2").keyup(function(){
-                if ( $(this).val() != "" ) {
-                    set_response("Filled 2"+"!");
-                }
-            });
-            $("#input_target3").keyup(function(){
-                if ( $(this).val() != "" ) {
-                    set_response("Filled 3"+"!");
-                }
-            });
-
 
             $("#test_radio_1, #test_radio_2").change(function(){
                 set_response("Chosen"+"!");
             });
 
-            $("#test_file, #test_file5").change(function(){
+            $("#test_file").change(function(){
                 set_response("Attached"+"!");
             });
             $("#test_file2").change(function(){
                 set_response("Attached 2"+"!");
-            });
-            $("#test_file3").change(function(){
-                set_response("Attached 3"+"!");
-            });
-            $("#test_file4").change(function(){
-                set_response("Attached 4"+"!");
             });
 
             $("#unchecked_box").change(function(){
@@ -174,11 +133,8 @@
         <form>
             <div id="response_area"></div>
 
-            <input name="input_target_name" class="input_target_class"  id="input_target" value="" type="text" />
+            <input name="input_target_name"  class="input_target_class" id="input_target" value="" type="text" />
             <input name="input_target_name" class="input_target_class" id="input_target1" value="" type="text" />
-            <input name="input_target_name" class="input_target_class" id="input_target2" value="" type="text" />
-            <input name="input_target_name" class="input_target_class" id="input_target3" value="" type="text" />
-            <input name="input_target_name" class="input_target_class" id="input_target4" value="" type="text" />
 
             <textarea name="test_textarea_name" class="test_textarea_class" id="test_textarea" ></textarea>
 
@@ -190,15 +146,6 @@
           <td>
             <input name="test_file_name" class="test_file_class" id="test_file2" value="" type="file" />
           </td>
-          <td>
-            <input name="test_file_name" class="test_file_class" id="test_file3" value="" type="file" />
-          </td>
-          <td>
-            <input name="test_file_name" class="test_file_class" id="test_file4" value="" type="file" />
-          </td>
-          <td>
-            <input name="test_file_name" class="test_file_class" id="test_file5" value="" type="file" />
-          </td>
         </tr>
       </table>
 
@@ -209,15 +156,6 @@
           </td>
           <td>
             <span name="some_text_name" class="some_text_class2" id="some_text2">some text 2</span>
-          </td>
-          <td>
-            <span name="some_text_name" class="some_text_class3" id="some_text3">some text 3</span>
-          </td>
-          <td>
-            <span name="some_text_name" class="some_text_class4" id="some_text4">some text 4</span>
-          </td>
-          <td>
-            <span name="some_text_name" class="some_text_class5" id="some_text5">some text 5</span>
           </td>
         </tr>
       </table>
@@ -232,9 +170,6 @@
 
             <input name="keyup_target_name" class="keyup_target_class"  id="keyup_target" value="" type="text" />
             <input name="keyup_target_name" class="keyup_target_class" id="keyup_target2" value="" type="text" />
-            <input name="keyup_target_name" class="keyup_target_class" id="keyup_target3" value="" type="text" />
-            <input name="keyup_target_name" class="keyup_target_class" id="keyup_target4" value="" type="text" />
-            <input name="keyup_target_name" class="keyup_target_class" id="keyup_target5" value="" type="text" />
 
             <select name="test_select_name" class="test_select_class" id="test_select" >
                 <option value="foo">Bar</option>

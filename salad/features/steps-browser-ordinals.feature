@@ -123,25 +123,6 @@ Feature: Ensuring that selecting the XX. element of something works
             | 2nd     | 2  |
             | 3rd     | 3  |
 
-#    Scenario: Selecting works with "named".
-#        Given I visit the salad test url "browser/form.html"
-#        When I select the option named "text 3" from the field with id "nr_select_1"
-#        Then I should see "Selected 3 in Selector 1!" somewhere in the page
-#
-#    Scenario Outline: Selecting works with "named" and ordinal.
-#        Given I visit the salad test url "browser/form.html"
-#        When I select the option named "text 2" from the <ordinal> field named "nr_select_name"
-#        Then I should see "Selected 2 in Selector <nr>!" somewhere in the page
-#
-#    Examples:
-#        |ordinal   |nr |
-#        |first     |1  |
-#        |last      |4  |
-#        |1st       |1  |
-#        |2nd       |2  |
-#        |3rd       |3  |
-#        |4th       |4  |
-
 # Value Generator
     Scenario Outline: i should see that the value is ....
         Given I visit the salad test url "browser/form.html"
@@ -157,27 +138,6 @@ Feature: Ensuring that selecting the XX. element of something works
         | 4th       | some text 4    |
         | 5th       | some text 5    |
         | last      | some text 5    |
-
-
-# Focus and Blur Generator
-# neither chrome nor firefox webdriver has an attribute called "focus" or "blur"
-# but once it's been implemented, these tests should pass
-#    Scenario: Focusing with "focus on"
-#        Given I am using chrome
-#        Given I visit the salad test url "browser/form.html"
-#         When I focus on the first field named "focus_me_name"
-#          And I wait 2 seconds
-#         Then I should see "Focused" somewhere in the page
-#
-#    Scenario: Blurring works with "move/blur from"
-#        Given I am using chrome
-#        Given I visit the salad test url "browser/form.html"
-#         When I click on the 3rd field named "focus_me_name"
-#          And I wait 1 seconds
-#         When I move from the 3rd field named "focus_me_name"
-#          And I wait 2 seconds
-#         Then I should see "Blurred" somewhere in the page
-
 
 # Fill Generator
     Scenario Outline: Filling in a field works.

@@ -1,11 +1,13 @@
 from lettuce import step
-from salad.steps.browser.finders import ELEMENT_FINDERS, LINK_FINDERS, ELEMENT_THING_STRING, LINK_THING_STRING, _get_visible_element
+from salad.steps.browser.finders import (ELEMENT_FINDERS, LINK_FINDERS,
+        ELEMENT_THING_STRING, LINK_THING_STRING, PICK_EXPRESSION,
+        _get_visible_element)
 
 
 # Click on things, mouse over, move the mouse around.
 
 # General syntax:
-# <action> the (first|last) <thing> <find clause>
+# <action> the <how-many-eth> <thing> <find clause>
 #
 # <action> can be:
 # click on
@@ -13,6 +15,9 @@ from salad.steps.browser.finders import ELEMENT_FINDERS, LINK_FINDERS, ELEMENT_T
 # mouse out / mouseout
 # (double click / double-click / doubleclick) on
 # (right click / right-click / rightclick) on
+#
+# <how-many-eth> can be:
+# empty or first, last, 1st, 2nd, 3rd, 4th, 5th, ..
 #
 # <thing> can be:
 # element
@@ -45,7 +50,7 @@ actions = {
 
 def step_generator(action_string, action_function, thing_string, finder_string, finder_function):
 
-    @step(r'%s (?:a|the)( first| last)? %s %s' % (action_string, thing_string, finder_string))
+    @step(r'%s (?:a|the)%s %s %s' % (action_string, PICK_EXPRESSION, thing_string, finder_string))
     def _this_step(step, pick, find_pattern):
         ele = _get_visible_element(finder_function, pick, find_pattern)
 
@@ -54,12 +59,17 @@ def step_generator(action_string, action_function, thing_string, finder_string, 
     return _this_step
 
 
-def drag_and_drop_generator(thing_string, finder_string, finder_function):
+def drag_and_drop_generator(thing_string, finder_string_from, finder_string_to,
+        finder_function_from, finder_function_to):
 
-    @step(r'drag the( first| last)? %s %s and drop it on the( first| last)? %s %s' % (thing_string, finder_string, thing_string, finder_string))
+    @step(r'drag the%s %s %s and drop it on the%s %s %s' % (
+                PICK_EXPRESSION, thing_string, finder_string_from,
+                PICK_EXPRESSION, thing_string, finder_string_to
+                                                           )
+         )
     def _this_step(step, handler_pick, drag_handler_pattern, target_pick, drag_target_pattern):
-        handler = _get_visible_element(finder_function, handler_pick, drag_handler_pattern)
-        target = _get_visible_element(finder_function, target_pick, drag_target_pattern)
+        handler = _get_visible_element(finder_function_from, handler_pick, drag_handler_pattern)
+        target = _get_visible_element(finder_function_to, target_pick, drag_target_pattern)
 
         handler.drag_and_drop(target)
 
@@ -68,23 +78,28 @@ def drag_and_drop_generator(thing_string, finder_string, finder_function):
 
 for action_string, action_function in actions.iteritems():
     for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
-        globals()["element_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
-                                                                                        action_function,
-                                                                                        ELEMENT_THING_STRING,
-                                                                                        finder_string,
-                                                                                        finder_function
-                                                                                        )
+        globals()["element_%s_%s" % (action_function, finder_function)] = step_generator( action_string,
+                                                                                          action_function,
+                                                                                          ELEMENT_THING_STRING,
+                                                                                          finder_string,
+                                                                                          finder_function
+                                                                                         )
 
     for finder_string, finder_function in LINK_FINDERS.iteritems():
-        globals()["link_%s_%s" % (action_function, finder_function)] = step_generator(action_string,
-                                                                                        action_function,
-                                                                                        LINK_THING_STRING,
-                                                                                        finder_string,
-                                                                                        finder_function
-                                                                                        )
+        globals()["link_%s_%s" % (action_function, finder_function)] = step_generator( action_string,
+                                                                                       action_function,
+                                                                                       LINK_THING_STRING,
+                                                                                       finder_string,
+                                                                                       finder_function
+                                                                                      )
 
-for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
-    globals()["element_drag_%s" % (finder_function)] = drag_and_drop_generator(ELEMENT_THING_STRING,
-                                                                                    finder_string,
-                                                                                    finder_function
-                                                                                    )
+for finder_string_from, finder_function_from in ELEMENT_FINDERS.iteritems():
+    for finder_string_to, finder_function_to in ELEMENT_FINDERS.iteritems():
+        globals()["element_drag_%s_%s" % (finder_function_from, finder_function_to)] = drag_and_drop_generator(
+                                     ELEMENT_THING_STRING,
+                                     finder_string_from,
+                                     finder_string_to,
+                                     finder_function_from,
+                                     finder_function_to
+                                   )
+

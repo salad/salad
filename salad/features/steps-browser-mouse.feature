@@ -9,15 +9,14 @@ Feature: Ensuring that the page steps work
         When I <action> the element with id "mouse_target"
         Then I should see "<expected_results>" somewhere in the page
 
-    # Elements
-
+# Elements
     Examples:
         | action        | expected_results |
         | click on      | Clicked          |
         | mouse over    | Moused over      |
         | mouse-over    | Moused over      |
         | mouseover     | Moused over      |
-    
+
     Scenario Outline: Mouse events by name works.
         Given I am using Chrome
           And I visit the salad test url "browser/mouse.html"
@@ -59,7 +58,7 @@ Feature: Ensuring that the page steps work
     #    | mouse-over    | Moused over      |
     #    | mouseover     | Moused over      |
 
-    # Links
+# Links
     Scenario Outline: Mouse events for links by id work.
         Given I am using Chrome
           And I visit the salad test url "browser/mouse.html"
@@ -72,7 +71,7 @@ Feature: Ensuring that the page steps work
         | mouse over    | Moused over      |
         | mouse-over    | Moused over      |
         | mouseover     | Moused over      |
-    
+
     Scenario Outline: Mouse events for links by name work.
         Given I am using Chrome
           And I visit the salad test url "browser/mouse.html"
@@ -134,5 +133,3 @@ Feature: Ensuring that the page steps work
         When I click the element with id "double_click"
           And I click the element with id "double_click"
         Then I should see "Double-clicked" somewhere in the page
-
-    

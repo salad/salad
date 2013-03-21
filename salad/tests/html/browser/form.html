@@ -31,17 +31,53 @@
             '123': 'F12' + 'ed!'
         };
         $(function(){
+             $('#keyup_target').keydown(function(e){
+                if (e.which == '38') {
+                    set_response("first up")
+                    if (e.which == 8) {
+                        return false;
+                    }
+                }
+            });
+            $('#keyup_target2').keydown(function(e){
+                if (e.which == '38') {
+                    set_response("second up")
+                    if (e.which == 8) {
+                        return false;
+                    }
+                }
+            });
+            $('#allkeys_target').keydown(function(e){
+                if (key_table[e.which]) {
+                    set_response(key_table[e.which])
+                    if (e.which == 8) {
+                        return false;
+                    }
+                }
+            });
+
             $("#input_target, #test_textarea").keyup(function(){
                 if ( $(this).val() != "" ) {
                     set_response("Filled"+"!");
                 }
             });
+            $("#input_target1").keyup(function(){
+                if ( $(this).val() != "" ) {
+                    set_response("Filled 1"+"!");
+                }
+            });
+
             $("#test_radio_1, #test_radio_2").change(function(){
                 set_response("Chosen"+"!");
             });
+
             $("#test_file").change(function(){
                 set_response("Attached"+"!");
             });
+            $("#test_file2").change(function(){
+                set_response("Attached 2"+"!");
+            });
+
             $("#unchecked_box").change(function(){
                 if ($(this).is(":checked")) {
                     set_response("Checked"+"!");
@@ -57,15 +93,33 @@
                     set_response("Selected"+"!");
                 }
             });
-            $("#focus_me").focus(function(){set_response("Focused"+"!")}).blur(function(){set_response("Blurred"+"!")});
-            $('body').keydown(function(e){
-                if (key_table[e.which]) {
-                    set_response(key_table[e.which])
-                    if (e.which == 8) {
-                        return false;
-                    }
+
+            $("#nr_select_1").change(function(){
+                if ($(this).val() == "option 2") {
+                    set_response("Selected 2 in Selector 1"+"!");
+                } else if ($(this).val() == "option 3") {
+                    set_response("Selected 3 in Selector 1"+"!");
                 }
-            })
+            });
+            $("#nr_select_2").change(function(){
+                if ($(this).val() == "option 2") {
+                    set_response("Selected 2 in Selector 2"+"!");
+                }
+            });
+            $("#nr_select_3").change(function(){
+                if ($(this).val() == "option 2") {
+                    set_response("Selected 2 in Selector 3"+"!");
+                }
+            });
+            $("#nr_select_4").change(function(){
+                if ($(this).val() == "option 2") {
+                    set_response("Selected 2 in Selector 4"+"!");
+                }
+            });
+
+            $("#focus_me").focus(function(){set_response("Focused"+"!")}).blur(function(){set_response("Blurred"+"!")});
+            $("#focus_me2").focus(function(){set_response("Focused 2"+"!")}).blur(function(){set_response("Blurred 2"+"!")});
+            $("#focus_me3").focus(function(){set_response("Focused 3"+"!")}).blur(function(){set_response("Blurred 3"+"!")});
         });
         function set_response(text) {
             $("#response_area").html(text);
@@ -78,9 +132,33 @@
     <body>
         <form>
             <div id="response_area"></div>
-            <input name="input_target_name" class="input_target_class" id="input_target" value="" type="text" />
+
+            <input name="input_target_name"  class="input_target_class" id="input_target" value="" type="text" />
+            <input name="input_target_name" class="input_target_class" id="input_target1" value="" type="text" />
+
             <textarea name="test_textarea_name" class="test_textarea_class" id="test_textarea" ></textarea>
+
+      <table>
+        <tr>
+          <td>
             <input name="test_file_name" class="test_file_class" id="test_file" value="" type="file" />
+          </td>
+          <td>
+            <input name="test_file_name" class="test_file_class" id="test_file2" value="" type="file" />
+          </td>
+        </tr>
+      </table>
+
+      <table>
+        <tr>
+          <td>
+            <span name="some_text_name" class="some_text_class1" id="some_text">some text 1</span>
+          </td>
+          <td>
+            <span name="some_text_name" class="some_text_class2" id="some_text2">some text 2</span>
+          </td>
+        </tr>
+      </table>
 
             <label for="test_radio_1" name="label_for_radio_1_name" class="label_for_radio_1_class" id="label_for_radio_1"><input name="test_radio_1_name" class="test_radio_1_class" id="test_radio_1" value="1" type="radio" > Radio 1</label>
             <label for="test_radio_2" name="label_for_radio_2_name" class="label_for_radio_2_class" id="label_for_radio_2"><input name="test_radio_2_name" class="test_radio_2_class" id="test_radio_2" value="2" type="radio" > Radio 2</label>
@@ -88,12 +166,40 @@
             <input name="unchecked_box_name" class="unchecked_box_class" id="unchecked_box" value="1" type="checkbox" />
             <input name="checked_box_name" class="checked_box_class" id="checked_box" value="2" type="checkbox" checked />
 
+            <input name="allkeys_target_name" class="allkeys_target_class"  id="allkeys_target" value="" type="text" />
+
+            <input name="keyup_target_name" class="keyup_target_class"  id="keyup_target" value="" type="text" />
+            <input name="keyup_target_name" class="keyup_target_class" id="keyup_target2" value="" type="text" />
 
             <select name="test_select_name" class="test_select_class" id="test_select" >
                 <option value="foo">Bar</option>
                 <option value="my test value">My test text</option>
             </select>
+
+            <select name="nr_select_name" id="nr_select_1" >
+                <option value="option 1">text 1</option>
+                <option value="option 2">text 2</option>
+                <option value="option 3">text 3</option>
+            </select>
+            <select name="nr_select_name" id="nr_select_2" >
+                <option value="option 1">text 1</option>
+                <option value="option 2">text 2</option>
+                <option value="option 3">text 3</option>
+            </select>
+            <select name="nr_select_name" id="nr_select_3" >
+                <option value="option 1">text 1</option>
+                <option value="option 2">text 2</option>
+                <option value="option 3">text 3</option>
+            </select>
+            <select name="nr_select_name" id="nr_select_4" >
+                <option value="option 1">text 1</option>
+                <option value="option 2">text 2</option>
+                <option value="option 3">text 3</option>
+            </select>
+
             <input name="focus_me_name" class="focus_me_class" id="focus_me" value="" type="text" />
+            <input name="focus_me_name" class="focus_me_class" id="focus_me2" value="" type="text" />
+            <input name="focus_me_name" class="focus_me_class" id="focus_me3" value="" type="text" />
         </form>
     </body>
 </html>

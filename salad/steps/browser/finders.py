@@ -22,12 +22,17 @@ LINK_THING_STRING = "link"
 PICK_EXPRESSION = "( first| last| \d+..)?"
 
 
+#def find_element_by_tag_and_text(tag, text, partial=False):
+#    textstr = 'text()=%s' % text
+#    if partial:
+#        textstr = 'contains(text(), "%s")' % text
+#    return world.browser.find_by_xpath('//%s[%s]') % (tag, textstr,)
+#
 def _get_visible_element(finder_function, pick, pattern):
     element = _get_element(finder_function, pick, pattern)
     if not element.visible:
         raise ElementDoesNotExist
     return element
-
 
 def _get_element(finder_function, pick, pattern):
     ele = world.browser.__getattribute__(finder_function)(pattern)

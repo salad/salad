@@ -8,6 +8,7 @@ ELEMENT_FINDERS = {
     'with(?: the)? id "([^"]*)"': "find_by_id",
     'with(?: the)? css selector "([^"]*)"': "find_by_css",
     'with(?: the)? value "([^"]*)"': "find_by_value",
+    'with(?: the)? xpath "([^"]*)"': "find_by_xpath",
 }
 
 LINK_FINDERS = {

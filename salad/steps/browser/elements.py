@@ -98,7 +98,7 @@ def visibility_test(element, negate, *args):
     assert_with_negate(element, negate)
 
 
-contains_pattern = r'should( not)? see that the%s %s %s contains "([^"]*)"'
+contains_pattern = r'should( not)? see that the%s %s %s (?:has|contains)(?: the text)? "([^"]*)"'
 def contains_test(element, negate, *args):
     content = args[0]
     text = getattr(element, 'text', None)

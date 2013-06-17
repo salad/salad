@@ -89,6 +89,13 @@ Feature: Ensuring that the elements steps work
         | with the xpath "//div[@name='i_do_not_exist_name']" |
 
 
+    Scenario: Content of an element, different sentences
+        Given I visit the salad test url "browser/elements.html"
+        When I look around
+        Then I should see that the element with the xpath "//div[@class='i_contain_class']" has "has"
+        And I should see that the element with the xpath "//div[@class='i_contain_class']" has the text "has"
+        And I should see that the element with the xpath "//div[@class='i_contain_class']" contains the text "has"
+
     Scenario Outline: Content of an element
         Given I visit the salad test url "browser/elements.html"
         When I look around

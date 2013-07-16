@@ -48,7 +48,23 @@ def main(args=sys.argv[1:]):
         world.remote_capabilities['version'] = parsed_args.version
     if 'platform' in parsed_args:
         world.remote_capabilities['platform'] = parsed_args.platform
+
+    test_name = _parse_feature_name_from_leftovers(leftovers)
+    world.remote_capabilities['name'] = test_name
     lettuce_main(args=leftovers)
+
+def _parse_feature_name_from_leftovers(leftovers):
+    full_path = leftovers[0].upper()
+    full_path_parts = full_path.split("/")
+    feature_name = full_path_parts[-1].split("_")
+    country = (feature_name[-1].split("."))[0]
+    return " ".join((feature_name[0:-1] + [country, "-", _get_current_timestamp()]))
+
+def _get_current_timestamp():
+    from time import strftime
+    import datetime
+    return datetime.datetime.strftime(datetime.datetime.now(),
+                                      '%d.%m.%Y %H:%M')
 
 if __name__ == '__main__':
     main()

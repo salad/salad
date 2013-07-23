@@ -4,6 +4,22 @@ Feature: Ensuring that the forms steps work
     I test against the form test files
 
 # Fields
+    Scenario Outline: Filling in a field with random content and recalling the content
+        Given I visit the salad test url "browser/form.html"
+          And I look around
+         When I fill in the 1st field named "fill_me_in" with a random <thing> of length 10
+          And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with a random <thing>
+         Then I should see my random value in the 2nd field with the xpath "//div[@id='fill_in']/input"
+          And I should see my random value in the 1st field named "fill_me_in"
+
+    Examples:
+        | thing           |
+        | string          |
+        | name            |
+        | restaurant name |
+        | email           |
+
+
     Scenario Outline: Filling in a field works.
         Given I visit the salad test url "browser/form.html"
         When I fill in the field <finder> with "my test text"

@@ -1,4 +1,6 @@
 from time import sleep
+from string import ascii_letters
+from random import choice
 from selenium.webdriver.support.ui import Select
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
@@ -8,6 +10,35 @@ from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS, ELEME
 from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
+
+
+world.random_strings = []
+
+def _generate_content(type_of_fill, length):
+    if type_of_fill == 'email':
+        return _generate_random_string_with_suffix(length, '@mailinator.com')
+    elif type_of_fill == 'string':
+        return _generate_random_string_with_suffix(length, '')
+    elif type_of_fill == 'name':
+        return _generate_random_string_with_suffix(length, ' QA-Berlin')
+    elif type_of_fill == 'restaurant name':
+        return _generate_random_string_with_suffix(length, ' restaurant')
+
+    raise AssertionError("wrong type of random fill in specified. allowed "
+                         "values are string | email | restaurant name | name")
+
+# the random content is stored in world.random_strings which should be used
+# like a stack with push and pop
+# stack = []
+# stack.append(object) # push
+# object = stack.pop() # pop from end
+def _generate_random_string_with_suffix(length, suffix):
+    lst = [choice(ascii_letters) for n in xrange(length)]
+    randi = "".join(lst) + suffix
+    world.random_strings.append(randi)
+
+    return randi
+
 
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
@@ -56,6 +87,38 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         return _this_step
 
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
+
+    def _fill_with_random_generator(finder_string, finder_function):
+        @step(r'fill in the%s %s %s with a random (string|email|name|restaurant name)(?: of length (\d+))?' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, pick, find_pattern, type_of_fill, length):
+            if not length:
+                length = 9
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            text = _generate_content(type_of_fill, int(length))
+            try:
+                ele.value = text
+            except:
+                ele._control.value = text
+
+        return _this_step
+
+    globals()["form_fill_with_random_%s" % (finder_function,)] = _fill_with_random_generator(finder_string, finder_function)
+
+    def _remember_generator(finder_string, finder_function):
+        @step(r'should see my random value in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, pick, find_pattern):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            latest_random_value = world.random_strings.pop()
+            if not (ele.value == latest_random_value or
+                    ele.text == latest_random_value):
+                raise AssertionError("latest random string %s not found in "
+                                     "%s / %s" %
+                                     (latest_random_value,
+                                      finder_string, finder_function))
+
+        return _this_step
+
+    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
 
     def _attach_generator(finder_string, finder_function):
         @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -134,4 +197,3 @@ def _type_slowly(driver_ele, text):
     for c in text:
         driver_ele.value += c
         sleep(0.5)
-

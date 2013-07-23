@@ -8,9 +8,10 @@ Feature: Ensuring that the forms steps work
           And I look around
          When I store a random <thing> of length 15 as "<name1>"
           And I store a random <thing> as "<name2>"
-         Then I fill in the 1st element named "fill_me_in" with the stored value of "<name1>"
+          And I fill in the 1st element named "fill_me_in" with the stored value of "<name1>"
           And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with the stored value of "<name2>"
-          And I should see the stored value of "<name1>" in the field named "fill_me_in"
+         Then I should see the stored value of "<name1>" in the field named "fill_me_in"
+          And I should see the stored value of "<name2>" in the 2nd field with the xpath "//div[@id='fill_in']/input"
 
     Examples:
         | thing           | name1               | name2               |

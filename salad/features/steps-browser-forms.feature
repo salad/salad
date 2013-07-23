@@ -3,21 +3,38 @@ Feature: Ensuring that the forms steps work
     As a developer
     I test against the form test files
 
-# Fields
     Scenario Outline: Filling in a field with random content and recalling the content
         Given I visit the salad test url "browser/form.html"
           And I look around
-         When I fill in the 1st field named "fill_me_in" with a random <thing> of length 10
-          And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with a random <thing>
-         Then I should see my random value in the 2nd field with the xpath "//div[@id='fill_in']/input"
-          And I should see my random value in the 1st field named "fill_me_in"
+         When I store a random <thing> of length 15 as "<name1>"
+          And I store a random <thing> as "<name2>"
+         Then I fill in the 1st element named "fill_me_in" with the stored value of "<name1>"
+          And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with the stored value of "<name2>"
+          And I should see the stored value of "<name1>" in the field named "fill_me_in"
 
     Examples:
-        | thing           |
-        | string          |
-        | name            |
-        | restaurant name |
-        | email           |
+        | thing           | name1               | name2               |
+        | string          | my_string1          | my_string2          |
+        | name            | my_name1            | my_name2            |
+        | restaurant name | my_restaurant_name1 | my_restaurant_name2 |
+        | email           | my_email1           | my_email2           |
+
+
+    Scenario Outline: using the different variations of the random sentence
+        Given I visit the salad test url "browser/form.html"
+          And I look around
+         When I store a random email as "my_email"
+         Then I fill in the element named "fill_me_in" with the stored value of "my_email"
+          And I should see the stored <what> <name> "my_email" in the field named "fill_me_in"
+
+    Examples:
+        | what           | name   |
+        | value          | of     |
+        | value          | called |
+        | value          | named  |
+        | string         | of     |
+        | string         | called |
+        | string         | named  |
 
 
     Scenario Outline: Filling in a field works.

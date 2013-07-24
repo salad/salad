@@ -16,28 +16,20 @@ world.random_strings = []
 
 def _generate_content(type_of_fill, length):
     if type_of_fill == 'email':
-        return _generate_random_string_with_suffix(length, '@mailinator.com')
+        return _generate_random_string(length) + "@mailinator.com"
     elif type_of_fill == 'string':
-        return _generate_random_string_with_suffix(length, '')
+        return _generate_random_string(length)
     elif type_of_fill == 'name':
-        return _generate_random_string_with_suffix(length, ' QA-Berlin')
-    elif type_of_fill == 'restaurant name':
-        return _generate_random_string_with_suffix(length, ' restaurant')
+        return (_generate_random_string(length-2) + " " +
+                _generate_random_string(length+2))
 
     raise AssertionError("wrong type of random fill in specified. allowed "
                          "values are string | email | restaurant name | name")
 
-# the random content is stored in world.random_strings which should be used
-# like a stack with push and pop
-# stack = []
-# stack.append(object) # push
-# object = stack.pop() # pop from end
-def _generate_random_string_with_suffix(length, suffix):
-    lst = [choice(ascii_letters) for n in xrange(length)]
-    randi = "".join(lst) + suffix
-    world.random_strings.append(randi)
 
-    return randi
+def _generate_random_string(length):
+    lst = [choice(ascii_letters) for n in xrange(length)]
+    return "".join(lst)
 
 
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
@@ -183,6 +175,15 @@ def hit_key(step, key_string):
         world.browser.driver.switch_to_active_element().send_keys(key)
     except StaleElementReferenceException:
         world.browser.find_by_css("body").type(key)
+
+@step(r'store a random (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"')
+def store_value(step, type_of_fill, length, suffix, name):
+    if not length:
+        length = 9
+    if not suffix:
+        suffix = ""
+    random_value = _generate_content(type_of_fill, int(length)) + suffix
+    world.random_strings[name] = random_value
 
 def transform_key_string(key_string):
     key_string = key_string.upper().replace(' ', '_')

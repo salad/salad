@@ -11,8 +11,7 @@ from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
-
-world.random_strings = []
+world.random_strings = dict()
 
 def _generate_content(type_of_fill, length):
     if type_of_fill == 'email':
@@ -80,32 +79,30 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
 
-    def _fill_with_random_generator(finder_string, finder_function):
-        @step(r'fill in the%s %s %s with a random (string|email|name|restaurant name)(?: of length (\d+))?' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, pick, find_pattern, type_of_fill, length):
-            if not length:
-                length = 9
+    def _fill_with_stored_generator(finder_string, finder_function):
+        @step(r'I fill in the%s %s %s with the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            text = _generate_content(type_of_fill, int(length))
+            assert(world.random_strings[name])
             try:
-                ele.value = text
+                ele.value = world.random_strings[name]
             except:
-                ele._control.value = text
+                ele._control.value = world.random_strings[name]
 
         return _this_step
 
-    globals()["form_fill_with_random_%s" % (finder_function,)] = _fill_with_random_generator(finder_string, finder_function)
+    globals()["form_fill_with_stored_%s" % (finder_function,)] = _fill_with_stored_generator(finder_string, finder_function)
 
     def _remember_generator(finder_string, finder_function):
-        @step(r'should see my random value in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, pick, find_pattern):
+        @step(r'should see the stored value of "([^"]*)" in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            latest_random_value = world.random_strings.pop()
-            if not (ele.value == latest_random_value or
-                    ele.text == latest_random_value):
-                raise AssertionError("latest random string %s not found in "
+            random_value =  world.random_strings[name]
+            if not (ele.value == random_value or
+                    ele.text == random_value):
+                raise AssertionError("random string %s not found in "
                                      "%s / %s" %
-                                     (latest_random_value,
+                                     (random_value,
                                       finder_string, finder_function))
 
         return _this_step

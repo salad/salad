@@ -46,8 +46,7 @@ def main(args=sys.argv[1:]):
 
     parser.add_argument('--name',
                         help=('Give your test run a name so it '
-                              'can be identified on jenkins'),
-                        default="UNNAMED JOB")
+                              'can be identified on jenkins'))
 
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
@@ -60,25 +59,15 @@ def main(args=sys.argv[1:]):
     if 'platform' in parsed_args:
         world.remote_capabilities['platform'] = parsed_args.platform
 
-    if parsed_args.name == "UNNAMED JOB":
-        name = (_get_current_timestamp() + " - " +
-                _parse_feature_name_from_leftovers(leftovers))
+    name = _get_current_timestamp() + " -  "
+    if not parsed_args.name:
+        name += "unnamed job"
     else:
-        name = _get_current_timestamp() + " - " + parsed_args.name
+        name += parsed_args.name
     world.remote_capabilities['name'] = name
 
     lettuce_main(args=leftovers)
 
-def _parse_feature_name_from_leftovers(leftovers):
-    full_path = leftovers[0].upper()
-    full_path_parts = full_path.split("/")
-    feature_name = full_path_parts[-1]
-    if 'FEATURE' in feature_name:
-        result = re.search('(.*).FEATURE', feature_name)
-        if result and result.group(1):
-            feature_name = result.group(1)
-
-    return re.sub('[\s\-\_\.]+', ' ', feature_name)
 
 def _get_current_timestamp():
     from time import strftime

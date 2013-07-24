@@ -1,5 +1,6 @@
 import sys
 import argparse
+import re
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world
@@ -31,34 +32,53 @@ class store_driver_and_version(argparse.Action):
             setattr(namespace, 'platform', driver_info[2].replace('_', ' '))
 
 def main(args=sys.argv[1:]):
-    parser = argparse.ArgumentParser(prog="Salad", description='BDD browswer-automation made tasty.')
+    parser = argparse.ArgumentParser(prog="Salad",
+                                     description=("BDD browswer-automation "
+                                                  "made tasty."))
 
     parser.add_argument('--browser', default=DEFAULT_BROWSER,
                         action=store_driver_and_version, metavar='BROWSER',
                         help=('Browser to use. Options: %s Default is %s.' %
                               (BROWSER_CHOICES, DEFAULT_BROWSER)))
+
     parser.add_argument('--remote-url',
                         help='Selenium server url for remote browsers')
+
+    parser.add_argument('--name',
+                        help=('Give your test run a name so it '
+                              'can be identified on jenkins'),
+                        default="UNNAMED JOB")
 
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
     world.remote_url = parsed_args.remote_url
     world.remote_capabilities = {}
+
     if 'version' in parsed_args:
         world.remote_capabilities['version'] = parsed_args.version
+
     if 'platform' in parsed_args:
         world.remote_capabilities['platform'] = parsed_args.platform
 
-    test_name = _parse_feature_name_from_leftovers(leftovers)
-    world.remote_capabilities['name'] = test_name
+    if parsed_args.name == "UNNAMED JOB":
+        name = (_get_current_timestamp() + " - " +
+                _parse_feature_name_from_leftovers(leftovers))
+    else:
+        name = _get_current_timestamp() + " - " + parsed_args.name
+    world.remote_capabilities['name'] = name
+
     lettuce_main(args=leftovers)
 
 def _parse_feature_name_from_leftovers(leftovers):
     full_path = leftovers[0].upper()
     full_path_parts = full_path.split("/")
-    feature_name = full_path_parts[-1].split("_")
-    country = (feature_name[-1].split("."))[0]
-    return " ".join((feature_name[0:-1] + [country, "-", _get_current_timestamp()]))
+    feature_name = full_path_parts[-1]
+    if 'FEATURE' in feature_name:
+        result = re.search('(.*).FEATURE', feature_name)
+        if result and result.group(1):
+            feature_name = result.group(1)
+
+    return re.sub('[\s\-\_\.]+', ' ', feature_name)
 
 def _get_current_timestamp():
     from time import strftime

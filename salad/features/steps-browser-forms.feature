@@ -9,13 +9,15 @@ Feature: Ensuring that the forms steps work
          When I store a random <thing> of length 15 as "<name1>"
           And I store a random <thing> as "<name2>"
           And I store a random <thing> of length 5 with suffix " restaurant" as "<name3>"
+          And I store a random <thing> with suffix " SUFFIX" as "<name4>"
           And I fill in the 1st element named "fill_me_in" with the stored value of "<name1>"
           And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with the stored value of "<name2>"
           And I fill in the 3rd field named "fill_me_in" with the stored value of "<name3>"
-          And I wait 3 seconds
+          And I fill in the 4th field named "fill_me_in" with the stored value of "<name4>"
          Then I should see the stored value of "<name1>" in the field named "fill_me_in"
           And I should see the stored value of "<name2>" in the 2nd field with the xpath "//div[@id='fill_in']/input"
           And I should see the stored value of "<name3>" in the 3rd field named "fill_me_in"
+          And I should see the stored value of "<name4>" in the 4th field named "fill_me_in"
 
     Examples:
         | thing           | name1               | name2               |

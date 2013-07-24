@@ -1,6 +1,6 @@
 from time import sleep
 from string import ascii_letters
-from random import choice
+from random import choice, randint
 from selenium.webdriver.support.ui import Select
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
@@ -15,15 +15,15 @@ world.random_strings = dict()
 
 def _generate_content(type_of_fill, length):
     if type_of_fill == 'email':
-        return _generate_random_string(length) + "@mailinator.com"
+        return _generate_random_string(length) + '@mailinator.com'
     elif type_of_fill == 'string':
         return _generate_random_string(length)
     elif type_of_fill == 'name':
-        return (_generate_random_string(length-2) + " " +
-                _generate_random_string(length+2))
-
-    raise AssertionError("wrong type of random fill in specified. allowed "
-                         "values are string | email | restaurant name | name")
+        name = _generate_random_string(length)
+        if length <= 3:
+            return name
+        index = randint(1,len(name)-2)
+        return name[:index] + ' ' + name[index+1:]
 
 
 def _generate_random_string(length):

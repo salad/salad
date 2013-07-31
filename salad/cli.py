@@ -1,6 +1,5 @@
 import sys
 import argparse
-import re
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world

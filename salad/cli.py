@@ -45,8 +45,11 @@ def main(args=sys.argv[1:]):
                         help='Selenium server url for remote browsers')
 
     parser.add_argument('--name',
-                        help=('Give your test run a name so it '
-                              'can be identified on jenkins'))
+                        help=('Give your job a name so it '
+                              'can be identified on saucelabs'))
+
+    parser.add_argument('--timeout',
+                        help=("Set the saucelabs' idle-timeout for the job"))
 
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
@@ -65,6 +68,11 @@ def main(args=sys.argv[1:]):
     else:
         name += parsed_args.name
     world.remote_capabilities['name'] = name
+
+    if not parsed_args.timeout:
+        world.remote_capabilities['idle-timeout'] = 120
+    else:
+        world.remote_capabilities['idle-timeout'] = parsed_args.timeout
 
     lettuce_main(args=leftovers)
 

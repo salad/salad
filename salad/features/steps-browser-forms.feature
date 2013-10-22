@@ -3,7 +3,29 @@ Feature: Ensuring that the forms steps work
     As a developer
     I test against the form test files
 
-# Fields
+    Scenario Outline: Filling in a field with random content and recalling the content
+        Given I visit the salad test url "browser/form.html"
+          And I look around
+         When I store a random <thing> of length 15 as "<name1>"
+          And I store a random <thing> as "<name2>"
+          And I store a random <thing> of length 5 with suffix " restaurant" as "<name3>"
+          And I store a random <thing> with suffix " SUFFIX" as "<name4>"
+          And I fill in the 1st element named "fill_me_in" with the stored value of "<name1>"
+          And I fill in the 2nd field with the xpath "//div[@id='fill_in']/input" with the stored value of "<name2>"
+          And I fill in the 3rd field named "fill_me_in" with the stored value of "<name3>"
+          And I fill in the 4th field named "fill_me_in" with the stored value of "<name4>"
+         Then I should see the stored value of "<name1>" in the field named "fill_me_in"
+          And I should see the stored value of "<name2>" in the 2nd field with the xpath "//div[@id='fill_in']/input"
+          And I should see the stored value of "<name3>" in the 3rd field named "fill_me_in"
+          And I should see the stored value of "<name4>" in the 4th field named "fill_me_in"
+
+    Examples:
+        | thing           | name1               | name2               |
+        | string          | my_string1          | my_string2          |
+        | email           | my_email1           | my_email2           |
+        | name            | my_name1            | my_name2            |
+
+
     Scenario Outline: Filling in a field works.
         Given I visit the salad test url "browser/form.html"
         When I fill in the field <finder> with "my test text"

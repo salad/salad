@@ -5,8 +5,9 @@ from selenium.webdriver.support.ui import Select
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
-from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS, ELEMENT_THING_STRING,
-        _get_visible_element)
+from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
+                                         ELEMENT_THING_STRING,
+                                         _get_visible_element)
 from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
@@ -22,7 +23,7 @@ def _generate_content(type_of_fill, length):
         name = _generate_random_string(length)
         if length <= 3:
             return name
-        index = randint(1,len(name)-2)
+        index = randint(1, len(name)-2)
         return name[:index] + ' ' + name[index+1:]
 
 
@@ -34,8 +35,7 @@ def _generate_random_string(length):
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     def _type_generator(finder_string, finder_function):
-        @step(r'(slowly )?type "([^"]*)" into the%s %s %s' % (
-                PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(slowly )?type "([^"]*)" into the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, slowly, text, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             if slowly and slowly != "":
@@ -46,7 +46,6 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         return _this_step
 
     globals()["form_type_%s" % (finder_function,)] = _type_generator(finder_string, finder_function)
-
 
     def _select_generator(finder_string, finder_function):
         @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -173,6 +172,7 @@ def hit_key(step, key_string):
     except StaleElementReferenceException:
         world.browser.find_by_css("body").type(key)
 
+
 @step(r'store a random (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"')
 def store_value(step, type_of_fill, length, suffix, name):
     if not length:
@@ -190,6 +190,7 @@ def transform_key_string(key_string):
         key_string = 'SPACE'
     key = Keys.__getattribute__(Keys, key_string)
     return key
+
 
 def _type_slowly(driver_ele, text):
     for c in text:

@@ -12,7 +12,8 @@ from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
-world.random_strings = dict()
+world.stored_values = dict()
+
 
 def _generate_content(type_of_fill, length):
     if type_of_fill == 'email':
@@ -79,24 +80,24 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
 
     def _fill_with_stored_generator(finder_string, finder_function):
-        @step(r'I fill in the%s %s %s with the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the%s %s %s with the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert(world.random_strings[name])
+            assert(world.stored_values[name])
             try:
-                ele.value = world.random_strings[name]
+                ele.value = world.stored_values[name]
             except:
-                ele._control.value = world.random_strings[name]
+                ele._control.value = world.stored_values[name]
 
         return _this_step
 
     globals()["form_fill_with_stored_%s" % (finder_function,)] = _fill_with_stored_generator(finder_string, finder_function)
 
-    def _remember_generator(finder_string, finder_function):
+    def _see_stored_value_generator(finder_string, finder_function):
         @step(r'should see the stored value of "([^"]*)" in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            random_value =  world.random_strings[name]
+            random_value = world.stored_values[name]
             if not (ele.value == random_value or
                     ele.text == random_value):
                 raise AssertionError("random string %s not found in "
@@ -106,7 +107,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
+    globals()["form_see_stored_%s" % (finder_function,)] = _see_stored_value_generator(finder_string, finder_function)
 
     def _attach_generator(finder_string, finder_function):
         @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -180,7 +181,8 @@ def store_value(step, type_of_fill, length, suffix, name):
     if not suffix:
         suffix = ""
     random_value = _generate_content(type_of_fill, int(length)) + suffix
-    world.random_strings[name] = random_value
+    world.stored_values[name] = random_value
+
 
 def transform_key_string(key_string):
     key_string = key_string.upper().replace(' ', '_')

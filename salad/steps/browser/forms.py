@@ -23,8 +23,7 @@ def _generate_content(type_of_fill, length):
         if length <= 3:
             return name
         index = randint(1,len(name)-2)
-        name[index] = ' '
-        return name
+        return name[:index] + ' ' + name[index+1:]
 
 
 def _generate_random_string(length):

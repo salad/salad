@@ -1,0 +1,30 @@
+<html>
+    <body>
+        <div id="ready_status" style="display: none">
+            Ready!
+        </div>
+        <div id="loading_status" style="overflow: hidden">
+            Loading....
+        </div>
+        <div class="invisible" style="display: none;">
+          1. You totally cannot see me :|
+        </div>
+        <div class="invisible" style="display: none;">
+          2. You totally cannot see me :|
+        </div>
+
+        <script type="text/javascript">
+            function triggerMe() {
+                /* https://code.google.com/p/selenium/issues/detail?id=5022
+                   Should be resolved in selenium 2.29.0, in the meantime hide
+                   it more harshly
+                document.getElementById("loading_status").style.width = 0;
+                document.getElementById("loading_status").style.height = 0;
+                 */
+                document.getElementById("loading_status").style.display = 'none';
+                document.getElementById("ready_status").style.display = 'block';
+            }
+            window.setTimeout(triggerMe, 2000);
+        </script>
+    </body>
+</html>

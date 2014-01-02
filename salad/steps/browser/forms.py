@@ -164,6 +164,15 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
+    def _remember_generator(finder_string, finder_function):
+        @step(r'remember the (text|value) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, what, pick, find_pattern, name):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            value = getattr(ele, what)
+            setattr(world, name, value)
+
+    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
+
 
 @step(r'hit the ([^"]*) key')
 def hit_key(step, key_string):

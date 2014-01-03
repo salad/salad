@@ -93,22 +93,6 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_fill_with_stored_%s" % (finder_function,)] = _fill_with_stored_generator(finder_string, finder_function)
 
-    def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should see the stored value of "([^"]*)" in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, name, pick, find_pattern):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            random_value = world.stored_values[name]
-            if not (ele.value == random_value or
-                    ele.text == random_value):
-                raise AssertionError("random string %s not found in "
-                                     "%s / %s" %
-                                     (random_value,
-                                      finder_string, finder_function))
-
-        return _this_step
-
-    globals()["form_see_stored_%s" % (finder_function,)] = _see_stored_value_generator(finder_string, finder_function)
-
     def _attach_generator(finder_string, finder_function):
         @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
@@ -143,15 +127,26 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'(?:should see that the)? value of the%s %s %s is( not)? "([^"]*)"' % (
-            PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, pick, find_pattern, negate, value):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s is "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate(ele.value, value, negate)
+            assert_equals_with_negate(getattr(ele, attribute), value, negate)
 
         return _this_step
 
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
+
+    def _see_stored_value_generator(finder_string, finder_function):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (?:is|contains) the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, name):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            assert_equals_with_negate(getattr(ele, attribute),
+                                      world.stored_values[name],
+                                      negate)
+
+        return _this_step
+
+    globals()["form_stored_value_%s" % (finder_function,)] = _see_stored_value_generator(finder_string, finder_function)
 
     def _key_generator(finder_string, finder_function):
         @step(r'hit the ([^"]*) key in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -165,11 +160,11 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
     def _remember_generator(finder_string, finder_function):
-        @step(r'remember the (text|value) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'remember the (text|value|html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, what, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             value = getattr(ele, what)
-            setattr(world, name, value)
+            world.stored_values[name] = value
 
     globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
 

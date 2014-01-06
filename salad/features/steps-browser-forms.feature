@@ -68,8 +68,8 @@ Feature: Ensuring that the forms steps work
 
     Scenario Outline: Typing in a field works.
         Given I visit the salad test url "browser/form.html"
-        When I type "my test text" into the field <finder>
-        Then I should see "Filled!" somewhere in the page
+         When I type "my test text" into the field <finder>
+         Then I should see "Filled!" somewhere in the page
           And I should see that the value of the field <finder> is "my test text"
 
     Examples:
@@ -80,8 +80,8 @@ Feature: Ensuring that the forms steps work
 
     Scenario Outline: Slowly typing in a field works.
         Given I visit the salad test url "browser/form.html"
-        When I slowly type "my test text" into the field <finder>
-        Then I should see "Filled!" somewhere in the page
+         When I slowly type "my test text" into the field <finder>
+         Then I should see "Filled!" somewhere in the page
           And I should see that the value of the field <finder> is "my test text"
 
     Examples:
@@ -92,8 +92,8 @@ Feature: Ensuring that the forms steps work
 
    Scenario: Typing into the current field
         Given I visit the salad test url "browser/form.html"
-        When I fill in the field <finder> with "my test text"
-        Then I should see "Filled!" somewhere in the page
+         When I fill in the field <finder> with "my test text"
+         Then I should see "Filled!" somewhere in the page
           And I should see that the value of the field <finder> is "my test text"
 
     Examples:
@@ -129,8 +129,8 @@ Feature: Ensuring that the forms steps work
     Scenario Outline: Attaching a file works.
         Given I am using firefox
           And I visit the salad test url "browser/form.html"
-        When I attach "/tmp/temp_lettuce_test" onto the field <finder>
-        Then I should see "Attached!" somewhere in the page
+         When I attach "/tmp/temp_lettuce_test" onto the field <finder>
+         Then I should see "Attached!" somewhere in the page
 
     Examples:
         | finder                                     |
@@ -227,17 +227,17 @@ Feature: Ensuring that the forms steps work
 
     Scenario: Focusing works
         Given I am using chrome
-        Given I visit the salad test url "browser/form.html"
-        When I click on the field named "focus_me_name"
+          And I visit the salad test url "browser/form.html"
+         When I click on the field named "focus_me_name"
           And I click on the field named "focus_me_name"
           And I wait 2 seconds
-        Then I should see "Focused!" somewhere in the page
+         Then I should see "Focused!" somewhere in the page
 
     Scenario: Blurring works
         Given I am using chrome
-        Given I visit the salad test url "browser/form.html"
-        When I click on the field named "focus_me_name"
+          And I visit the salad test url "browser/form.html"
+         When I click on the field named "focus_me_name"
           And I wait 1 seconds
           And I click on the element named "input_target_name"
           And I wait 2 seconds
-        Then I should see "Blurred!" somewhere in the page
+         Then I should see "Blurred!" somewhere in the page

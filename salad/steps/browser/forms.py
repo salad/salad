@@ -84,10 +84,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert(world.stored_values[name])
-            try:
-                ele.value = world.stored_values[name]
-            except:
-                ele._control.value = world.stored_values[name]
+            ele.value = world.stored_values[name]
 
         return _this_step
 
@@ -97,10 +94,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            try:
-                ele.value = file_name
-            except:  # Zope
-                ele._control.value = file_name
+            ele.value = file_name
 
         return _this_step
 

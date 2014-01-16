@@ -1,21 +1,16 @@
-Feature: Ensuring that other browsers work
-    In order to make sure that other browsers work
+Feature: Ensuring that javascript works in all supported browsers
+    In order to make sure that javascript works
     As a developer
-    I search for the Wieden+Kennedy website using zope and firefox
+    I visit a page with javascript and the script should be executed
 
-    Scenario: Searching for W+K on Google with JS disabled does not auto-load the search results
-        Given I am using zope
-        When I visit the salad test url "browser/js.html"
-        Then I should not see "Test" somewhere in the page
-
-    Scenario: Searching for W+K on Google with JS enabled (firefox) does auto-load the search results
-        Given I am using firefox
-        When I visit the salad test url "browser/js.html"
+    Scenario Outline: The javascript rendered "Test" should be visible
+        Given I am using <browser>
+         When I visit the salad test url "browser/js.html"
           And I wait 1 second
-        Then I should see "Test" somewhere in the page
+         Then I should see "Test" somewhere in the page
 
-    Scenario: Searching for W+K on Google with JS enabled (chrome) does auto-load the search results
-        Given I am using chrome
-        When I visit the salad test url "browser/js.html"
-          And I wait 1 second
-        Then I should see "Test" somewhere in the page
+    Examples:
+    | browser   |
+    | chrome    |
+    | firefox   |
+    | phantomjs |

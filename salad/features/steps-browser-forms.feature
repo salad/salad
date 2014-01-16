@@ -26,7 +26,7 @@ Feature: Ensuring that the forms steps work
         | name   |
 
 
-    Scenario Outline: Remembering content of elements and recallling it
+    Scenario Outline: Remembering content of elements and recalling it
         Given I visit the salad test url "browser/form.html"
           And I look around
          When I remember the <what> of the element with the css selector "<finder>" as "<name>"

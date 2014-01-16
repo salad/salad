@@ -137,7 +137,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (?:is|contains) the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s is the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, attribute, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert_equals_with_negate(getattr(ele, attribute),

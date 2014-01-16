@@ -30,7 +30,7 @@ Feature: Ensuring that the forms steps work
         Given I visit the salad test url "browser/form.html"
           And I look around
          When I remember the <what> of the element with the css selector "<finder>" as "<name>"
-         Then I should see that the <what> of the element with the css selector "<finder>" contains the stored value of "<name>"
+         Then I should see that the <what> of the element with the css selector "<finder>" is the stored value of "<name>"
           And I should see that the <what> of the element with the css selector "<finder>" is "<value>"
 
     Examples:

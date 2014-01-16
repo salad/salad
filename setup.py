@@ -6,7 +6,8 @@ from salad import VERSION
 ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
 
-requirements = ["nose", "splinter>=0.4.9", "zope.testbrowser", "lettuce>=0.2.10.1"]
+requirements = ["nose", "splinter>=0.4.9", "zope.testbrowser",
+                "lettuce>=0.2.10.1", "cssselect"]
 try: import argparse
 except ImportError: requirements.append('argparse')
 

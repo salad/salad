@@ -236,10 +236,10 @@ Then I should see an element with the css selector ".cheese_shop_banner"
 Using an alternate browser
 --------------------------
 
-Salad ships with support for chrome, firefox, and zope's headless javascript-free browser.  Firefox is the default, but using one of the other browsers is pretty straightforward.  To switch what browser you're using, you simply:
+Salad ships with support for chrome, firefox, and phantomjs. Firefox is the default, but using another browser is pretty straightforward. To switch what browser you're using, you simply type:
 
 ```gherkin
-Given I am using zope.testbrowser
+Given I am using chrome
 ```
 
 

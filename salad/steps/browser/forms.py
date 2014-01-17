@@ -5,13 +5,15 @@ from selenium.webdriver.support.ui import Select
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
-from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS, ELEMENT_THING_STRING,
-        _get_visible_element)
+from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
+                                         ELEMENT_THING_STRING,
+                                         _get_visible_element)
 from salad.tests.util import assert_equals_with_negate
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
-world.random_strings = dict()
+world.stored_values = dict()
+
 
 def _generate_content(type_of_fill, length):
     if type_of_fill == 'email':
@@ -22,7 +24,7 @@ def _generate_content(type_of_fill, length):
         name = _generate_random_string(length)
         if length <= 3:
             return name
-        index = randint(1,len(name)-2)
+        index = randint(1, len(name)-2)
         return name[:index] + ' ' + name[index+1:]
 
 
@@ -34,8 +36,7 @@ def _generate_random_string(length):
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     def _type_generator(finder_string, finder_function):
-        @step(r'(slowly )?type "([^"]*)" into the%s %s %s' % (
-                PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(slowly )?type "([^"]*)" into the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, slowly, text, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             if slowly and slowly != "":
@@ -46,7 +47,6 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         return _this_step
 
     globals()["form_type_%s" % (finder_function,)] = _type_generator(finder_string, finder_function)
-
 
     def _select_generator(finder_string, finder_function):
         @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -80,43 +80,21 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
 
     def _fill_with_stored_generator(finder_string, finder_function):
-        @step(r'I fill in the%s %s %s with the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the%s %s %s with the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert(world.random_strings[name])
-            try:
-                ele.value = world.random_strings[name]
-            except:
-                ele._control.value = world.random_strings[name]
+            assert(world.stored_values[name])
+            ele.value = world.stored_values[name]
 
         return _this_step
 
     globals()["form_fill_with_stored_%s" % (finder_function,)] = _fill_with_stored_generator(finder_string, finder_function)
 
-    def _remember_generator(finder_string, finder_function):
-        @step(r'should see the stored value of "([^"]*)" in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, name, pick, find_pattern):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            random_value =  world.random_strings[name]
-            if not (ele.value == random_value or
-                    ele.text == random_value):
-                raise AssertionError("random string %s not found in "
-                                     "%s / %s" %
-                                     (random_value,
-                                      finder_string, finder_function))
-
-        return _this_step
-
-    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
-
     def _attach_generator(finder_string, finder_function):
         @step(r'attach "([^"]*)" onto the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            try:
-                ele.value = file_name
-            except:  # Zope
-                ele._control.value = file_name
+            ele.value = file_name
 
         return _this_step
 
@@ -143,15 +121,26 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'(?:should see that the)? value of the%s %s %s is( not)? "([^"]*)"' % (
-            PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, pick, find_pattern, negate, value):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s is "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate(ele.value, value, negate)
+            assert_equals_with_negate(getattr(ele, attribute), value, negate)
 
         return _this_step
 
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
+
+    def _see_stored_value_generator(finder_string, finder_function):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s is the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, name):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            assert_equals_with_negate(getattr(ele, attribute),
+                                      world.stored_values[name],
+                                      negate)
+
+        return _this_step
+
+    globals()["form_stored_value_%s" % (finder_function,)] = _see_stored_value_generator(finder_string, finder_function)
 
     def _key_generator(finder_string, finder_function):
         @step(r'hit the ([^"]*) key in the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
@@ -164,6 +153,15 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
+    def _remember_generator(finder_string, finder_function):
+        @step(r'remember the (text|value|html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, what, pick, find_pattern, name):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            value = getattr(ele, what)
+            world.stored_values[name] = value
+
+    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
+
 
 @step(r'hit the ([^"]*) key')
 def hit_key(step, key_string):
@@ -173,6 +171,7 @@ def hit_key(step, key_string):
     except StaleElementReferenceException:
         world.browser.find_by_css("body").type(key)
 
+
 @step(r'store a random (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"')
 def store_value(step, type_of_fill, length, suffix, name):
     if not length:
@@ -180,7 +179,8 @@ def store_value(step, type_of_fill, length, suffix, name):
     if not suffix:
         suffix = ""
     random_value = _generate_content(type_of_fill, int(length)) + suffix
-    world.random_strings[name] = random_value
+    world.stored_values[name] = random_value
+
 
 def transform_key_string(key_string):
     key_string = key_string.upper().replace(' ', '_')
@@ -190,6 +190,7 @@ def transform_key_string(key_string):
         key_string = 'SPACE'
     key = Keys.__getattribute__(Keys, key_string)
     return key
+
 
 def _type_slowly(driver_ele, text):
     for c in text:

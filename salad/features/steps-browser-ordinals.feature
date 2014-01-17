@@ -6,13 +6,16 @@ Feature: Ensuring that selecting the XX. element of something works
 # Key Generator
     Scenario Outline: Hitting keys in fields works.
         Given I visit the salad test url "browser/form.html"
-        When I hit the up key in the <ordinal> element named "keyup_target_name"
-        Then I should see "<output>" somewhere in the page
+          And I look around
+         When I click on the <ordinal> element named "keyup_target_name"
+          And I wait 1 second
+          And I hit the up key in the "<ordinal>" element named "keyup_target_name"
+         Then I should see "<text>" somewhere in the page within 3 seconds
 
     Examples:
-        | ordinal   | output      |
-        | first     | first up    |
-        | 2st       | second up   |
+        | ordinal | text      |
+        | 1st     | first up  |
+        | 2nd     | second up |
 
 # Visibility
     Scenario Outline: Visibility of elements
@@ -70,7 +73,7 @@ Feature: Ensuring that selecting the XX. element of something works
         When I fill in the <ordinal> element with css selector ".input_target_class" with "my test text"
         Then I should see "Filled" somewhere in the page
          And I should see that the value of the <ordinal> element with css selector ".input_target_class" is "my test text"
-         And I should see that the value of the <ordinal> element named "input_target_name" is not "Hahaha ich bin's nicht!"
+         And I should not see that the value of the <ordinal> element named "input_target_name" is "Hahaha ich bin's nicht!"
 
     Examples:
         | ordinal                                       |

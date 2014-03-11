@@ -12,7 +12,10 @@ def setup_master_browser():
         browser = 'firefox'
         remote_url = None
 
-    capabilities = world.remote_capabilities
+    try:
+        capabilities = world.remote_capabilities
+    except AttributeError:
+        capabilities = {}
     world.master_browser = setup_browser(browser, remote_url, **capabilities)
     world.browser = world.master_browser
 

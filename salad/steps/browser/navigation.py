@@ -2,8 +2,7 @@ from lettuce import step, world
 
 # Browse from page to page
 
-
-@step(r'(?:visit|access|open) the url "(.*)"')
+@step(r'(?:visit|access|open) the url "([^"]*)"')
 def go_to_the_url(step, url):
     world.response = world.browser.visit(url)
 

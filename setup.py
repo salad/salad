@@ -6,20 +6,20 @@ from salad import VERSION
 ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
 
-requirements = ["nose", "splinter>=0.4.9", "zope.testbrowser", "lettuce>=0.2.10.1"]
+requirements = ["nose==1.3.0", "splinter>=0.4.9", "lettuce>=0.2.19"]
 try: import argparse
 except ImportError: requirements.append('argparse')
 
 setup(
     name="salad",
     description="A nice mix of great BDD ingredients",
-    author="Steven Skoczen",
-    author_email="steven.skoczen@wk.com",
-    url="https://github.com/wieden-kennedy/salad",
+    author="Lieferheld QA",
+    author_email="qa@deliveryhero.com",
+    url="https://github.com/beanqueen/salad",
     version=VERSION,
-    download_url = ['https://github.com/skoczen/lettuce/tarball/fork', ],
+#    download_url = ['https://github.com/gabrielfalcao/lettuce/tarball/fork', ],
     install_requires=requirements,
-    dependency_links = ['https://github.com/skoczen/lettuce/tarball/fork#egg=lettuce-0.2.10.1', ],
+#    dependency_links = ['https://github.com/gabrielfalcao/lettuce/tarball/fork#egg=lettuce-0.2.19', ],
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

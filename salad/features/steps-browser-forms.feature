@@ -8,7 +8,9 @@ Feature: Ensuring that the forms steps work
           And I look around
          When I store a random <what> of length 20 as "string_with_length"
           And I fill in the 1st element named "fill_me_in" with the stored value of "string_with_length"
-         Then I should see that the value of the field named "fill_me_in" is the stored value of "string_with_length"
+          And I run the javascript "document.getElementsByName('fill_me_in')[0].value = 'blablabla' + document.getElementsByName('fill_me_in')[0].value + 'blablabla';"
+         Then I should see that the value of the field named "fill_me_in" contains the stored value of "string_with_length"
+          And I should not see that the value of the field named "fill_me_in" is the stored value of "string_with_length"
          When I store a random <what> as "string"
           And I fill in the 2nd element with the xpath "//div[@id='fill_in']/input" with the stored value of "string"
          Then I should see that the value of the 2nd field named "fill_me_in" is the stored value of "string"

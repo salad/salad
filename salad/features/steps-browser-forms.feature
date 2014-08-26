@@ -6,17 +6,32 @@ Feature: Ensuring that the forms steps work
     Scenario: Filling in a field with random content and recalling the content
         Given I visit the salad test url "browser/form.html"
           And I look around
+         # --- string with length
+         # --- test element contains string / element is string
          When I store a random <what> of length 20 as "string_with_length"
           And I fill in the 1st element named "fill_me_in" with the stored value of "string_with_length"
+          And I fill in the 2nd element named "fill_me_in" with the stored value of "string_with_length"
           And I run the javascript "document.getElementsByName('fill_me_in')[0].value = 'blablabla' + document.getElementsByName('fill_me_in')[0].value + 'blablabla';"
          Then I should see that the value of the field named "fill_me_in" contains the stored value of "string_with_length"
           And I should not see that the value of the field named "fill_me_in" is the stored value of "string_with_length"
+         # --- test element is lowercase string
+         When I run the javascript "document.getElementsByName('fill_me_in')[0].value = document.getElementsByName('fill_me_in')[1].value.toLowerCase();"
+         Then I should see that the value of the element named "fill_me_in" is the stored lowercase value of "string_with_length"
+          And I should see that the value of the element named "fill_me_in" contains the stored lowercase value of "string_with_length"
+         # --- test element contains lowercase string
+         When I run the javascript "document.getElementsByName('fill_me_in')[0].value = 'blablabla' + document.getElementsByName('fill_me_in')[1].value.toLowerCase() + 'blablabla';"
+         Then I should see that the value of the element named "fill_me_in" contains the stored lowercase value of "string_with_length"
+          And I should not see that the value of the element named "fill_me_in" is the stored lowercase value of "string_with_length"
+          And I fill in the 2nd element named "fill_me_in" with ""
+         # --- string without length or suffix
          When I store a random <what> as "string"
           And I fill in the 2nd element with the xpath "//div[@id='fill_in']/input" with the stored value of "string"
          Then I should see that the value of the 2nd field named "fill_me_in" is the stored value of "string"
+         # --- string with suffix
          When I store a random <what> with suffix " suffix" as "string_with_suffix"
           And I fill in the 3rd element named "fill_me_in" with the stored value of "string_with_suffix"
          Then I should see that the value of the 3rd field named "fill_me_in" is the stored value of "string_with_suffix"
+         # --- string with length and suffix
          When I store a random <what> of length 10 with suffix " restaurant" as "string_with_length_and_suffix"
           And I fill in the 4th element named "fill_me_in" with the stored value of "string_with_length_and_suffix"
          Then I should see that the value of the last field named "fill_me_in" is the stored value of "string_with_length_and_suffix"

@@ -131,17 +131,20 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (is|contains) the stored value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, name):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (is|contains) the stored( lowercase)? value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, lower, name):
             current = getattr(
                 _get_visible_element(finder_function, pick, find_pattern),
                 attribute)
+            stored = world.stored_values[name]
+            if lower:
+                stored = stored.lower()
             if type_of_match == 'is':
                 assert_equals_with_negate(
-                    world.stored_values[name], current, negate)
+                    stored, current, negate)
             else:
                 assert_with_negate(
-                    world.stored_values[name] in current, negate)
+                    stored in current, negate)
 
         return _this_step
 

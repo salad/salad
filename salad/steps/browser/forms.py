@@ -131,14 +131,16 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (is|contains) the stored( lowercase)? value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, lower, name):
+        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (is|contains) the stored( [lowercase|uppercase])? value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, upper_lower, name):
             current = getattr(
                 _get_visible_element(finder_function, pick, find_pattern),
                 attribute)
             stored = world.stored_values[name]
-            if lower:
+            if upper_lower and upper_lower == 'lowercase':
                 stored = stored.lower()
+            elif upper_lower and upper_lower == 'uppercase':
+                stored = stored.upper()
             if type_of_match == 'is':
                 assert_equals_with_negate(
                     stored, current, negate)
@@ -162,11 +164,11 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
     def _remember_generator(finder_string, finder_function):
-        @step(r'remember the (text|value|html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, what, pick, find_pattern, name):
+        @step(r'(?:store|remember) the( [lowercase|uppercase])? (text|value|html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, upper_lower, what, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             value = getattr(ele, what)
-            world.stored_values[name] = value
+            _store_with_case_option(name, value, upper_lower)
 
     globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
 
@@ -180,14 +182,14 @@ def hit_key(step, key_string):
         world.browser.find_by_css("body").type(key)
 
 
-@step(r'store a random (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"')
-def store_value(step, type_of_fill, length, suffix, name):
+@step(r'(?:store|remember) a random( [lowercase|uppercase])? (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"')
+def store_value(step, upper_lower, type_of_fill, length, suffix, name):
     if not length:
         length = 9
     if not suffix:
         suffix = ""
     random_value = _generate_content(type_of_fill, int(length)) + suffix
-    world.stored_values[name] = random_value
+    _store_with_case_option(name, random_value, upper_lower)
 
 
 def transform_key_string(key_string):
@@ -204,3 +206,13 @@ def _type_slowly(driver_ele, text):
     for c in text:
         driver_ele.value += c
         sleep(0.5)
+
+
+def _store_with_case_option(key, value, upper_lower):
+    if not upper_lower:
+        world.stored_values[key] = value
+        return
+    if upper_lower == 'lowercase':
+        world.stored_values[key] = value.lower()
+    elif upper_lower == 'uppercase':
+        world.stored_values[key] = value.upper()

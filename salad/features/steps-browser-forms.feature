@@ -3,7 +3,7 @@ Feature: Ensuring that the forms steps work
     As a developer
     I test against the form test files
 
-    Scenario: Filling in a field with random content and recalling the content
+    Scenario: 1. Filling in a field with random content and recalling the (uppercase/lowercase) content
         Given I visit the salad test url "browser/form.html"
           And I look around
          # --- string with length
@@ -43,21 +43,74 @@ Feature: Ensuring that the forms steps work
         | name   |
 
 
-    Scenario Outline: Remembering content of elements and recalling it
+    Scenario: 2. Filling in a field with random uppercase/lowercase content
         Given I visit the salad test url "browser/form.html"
           And I look around
-         When I remember the <what> of the element with the css selector "<finder>" as "<name>"
+         When I store a random <upper_lower> <what> as "my_random_thing"
+          And I fill in the 1st element named "fill_me_in" with the stored value of "my_random_thing"
+          And I run the javascript "$('#free_fill_space').text($('#fill_in_1').val())"
+
+    Examples:
+        | upper_lower | what                        |
+        | uppercase   | email of length 10          |
+        | uppercase   | email                       |
+        | uppercase   | email with suffix "SUFFIX"  |
+        | lowercase   | email of length 10          |
+        | lowercase   | email                       |
+        | lowercase   | email with suffix "SUFFIX"  |
+        | uppercase   | name of length 10           |
+        | uppercase   | name                        |
+        | uppercase   | name with suffix "SUFFIX"   |
+        | lowercase   | name of length 10           |
+        | lowercase   | name                        |
+        | lowercase   | name with suffix "SUFFIX"   |
+        | uppercase   | string of length 10         |
+        | uppercase   | string                      |
+        | uppercase   | string with suffix "SUFFIX" |
+        | lowercase   | string of length 10         |
+        | lowercase   | string                      |
+        | lowercase   | string with suffix "SUFFIX" |
+
+
+    Scenario Outline: 3. Remembering content of elements and recalling it
+        Given I visit the salad test url "browser/form.html"
+          And I look around
+         When I <wording> the <what> of the element with the css selector "<finder>" as "<name>"
          Then I should see that the <what> of the element with the css selector "<finder>" is the stored value of "<name>"
           And I should see that the <what> of the element with the css selector "<finder>" is "<value>"
 
     Examples:
-        | what  | name     | value                            | finder            |
-        | value | my_value | this is the value                | fieldset input    |
-        | text  | my_text  | This is the text!                | fieldset textarea |
-        | html  | my_html  | Element with value / html / text | fieldset legend   |
+        | what  | name     | value                            | finder            | wording  |
+        | value | my_value | This is the value                | fieldset input    | store    |
+        | text  | my_text  | This is the text: 123!           | fieldset textarea | store    |
+        | html  | my_html  | Element with value / html / text | fieldset legend   | store    |
+        | value | my_value | This is the value                | fieldset input    | remember |
+        | text  | my_text  | This is the text: 123!           | fieldset textarea | remember |
+        | html  | my_html  | Element with value / html / text | fieldset legend   | remember |
 
 
-    Scenario Outline: Seeing things in fields
+    Scenario Outline: 4. Remembering uppercase/lowercase content of elements and recalling it
+        Given I visit the salad test url "browser/form.html"
+          And I look around
+         When I store the <upper_lower> <what> of the element with the css selector "<finder>" as "<name>"
+          And I fill in the field named "fill_me_in" with the stored value of "<name>"
+         Then I should not see that the <what> of the element with the css selector "<finder>" is the stored value of "<name>"
+          And I should see that the <what> of the element with the css selector "<finder>" is "<value>"
+          And I should not see that the <what> of the element with the css selector "<finder>" is "<value_with_case>"
+          And I should see that the value of the element named "fill_me_in" is the stored value of "<name>"
+          And I should see that the value of the element named "fill_me_in" is "<value_with_case>"
+
+    Examples:
+        | what  | name     | value                            | finder            | upper_lower | value_with_case                  |
+        | value | my_value | This is the value                | fieldset input    | uppercase   | THIS IS THE VALUE                |
+        | text  | my_text  | This is the text: 123!           | fieldset textarea | uppercase   | THIS IS THE TEXT: 123!           |
+        | html  | my_html  | Element with value / html / text | fieldset legend   | uppercase   | ELEMENT WITH VALUE / HTML / TEXT |
+        | value | my_value | This is the value                | fieldset input    | lowercase   | this is the value                |
+        | text  | my_text  | This is the text: 123!           | fieldset textarea | lowercase   | this is the text: 123!           |
+        | html  | my_html  | Element with value / html / text | fieldset legend   | lowercase   | element with value / html / text |
+
+
+    Scenario Outline: 5. Seeing things in fields
         Given I visit the salad test url "browser/form.html"
          When I look around
          Then I should see that the <what> of the element with the css selector "<finder>" is "<value>"
@@ -65,12 +118,12 @@ Feature: Ensuring that the forms steps work
 
     Examples:
         | what  | finder            | value                            |
-        | value | fieldset input    | this is the value                |
-        | text  | fieldset textarea | This is the text!                |
+        | value | fieldset input    | This is the value                |
+        | text  | fieldset textarea | This is the text: 123!                |
         | html  | fieldset legend   | Element with value / html / text |
 
 
-    Scenario Outline: Filling in a field
+    Scenario Outline: 6. Filling in a field
         Given I visit the salad test url "browser/form.html"
          When I fill in the field <finder> with "my test text"
          Then I should see "Filled!" somewhere in the page
@@ -83,7 +136,7 @@ Feature: Ensuring that the forms steps work
         | with the id "input_target"                    |
         | with the css selector ".input_target_class"   |
 
-    Scenario Outline: Typing in a field works.
+    Scenario Outline: 7. Typing in a field works.
         Given I visit the salad test url "browser/form.html"
          When I type "my test text" into the field <finder>
          Then I should see "Filled!" somewhere in the page
@@ -95,7 +148,7 @@ Feature: Ensuring that the forms steps work
         | with the id "input_target"                    |
         | with the css selector ".input_target_class"   |
 
-    Scenario Outline: Slowly typing in a field works.
+    Scenario Outline: 8. Slowly typing in a field works.
         Given I visit the salad test url "browser/form.html"
          When I slowly type "my test text" into the field <finder>
          Then I should see "Filled!" somewhere in the page
@@ -107,7 +160,7 @@ Feature: Ensuring that the forms steps work
         | with the id "input_target"                    |
         | with the css selector ".input_target_class"   |
 
-   Scenario: Typing into the current field
+    Scenario: 9.Typing into the current field
         Given I visit the salad test url "browser/form.html"
          When I fill in the field <finder> with "my test text"
          Then I should see "Filled!" somewhere in the page
@@ -120,7 +173,7 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".input_target_class"   |
 
 # Textareas
-    Scenario Outline: Filling in a textarea works.
+    Scenario Outline: 10. Filling in a textarea works.
         Given I visit the salad test url "browser/form.html"
         When I fill in the textarea <finder> with "my test text"
         Then I should see "Filled!" somewhere in the page
@@ -131,7 +184,7 @@ Feature: Ensuring that the forms steps work
         | with the id "test_textarea"                    |
         | with the css selector ".test_textarea_class"   |
 
-    Scenario Outline: Typing in a textarea works.
+    Scenario Outline: 11. Typing in a textarea works.
         Given I visit the salad test url "browser/form.html"
         When I type "my test text" into the textarea <finder>
         Then I should see "Filled!" somewhere in the page
@@ -143,7 +196,7 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".test_textarea_class"   |
 
 # Attach
-    Scenario Outline: Attaching a file works.
+    Scenario Outline: 12. Attaching a file works.
         Given I am using firefox
           And I visit the salad test url "browser/form.html"
          When I attach "/tmp/temp_lettuce_test" onto the field <finder>
@@ -156,18 +209,18 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".test_file_class"   |
 
 # Radio
-    Scenario: Choosing a radio button works.
+    Scenario: 13. Choosing a radio button works.
         Given I visit the salad test url "browser/form.html"
         When I click the radio button with id "test_radio_1"
         Then I should see "Chosen!" somewhere in the page
 
-    Scenario: Choosing a radio button by label works.
+    Scenario: 14. Choosing a radio button by label works.
         Given I visit the salad test url "browser/form.html"
         When I click the label with css selector "label[for=test_radio_2]"
         Then I should see "Chosen!" somewhere in the page
 
 # Checkboxes
-    Scenario Outline: Checking works.
+    Scenario Outline: 15. Checking works.
         Given I visit the salad test url "browser/form.html"
         When I click the checkbox <finder>
         Then I should see "Checked!" somewhere in the page
@@ -178,7 +231,7 @@ Feature: Ensuring that the forms steps work
         | with the id "unchecked_box"                    |
         | with the css selector ".unchecked_box_class"   |
 
-    Scenario Outline: Unchecking works.
+    Scenario Outline: 16. Unchecking works.
         Given I visit the salad test url "browser/form.html"
         When I click the checkbox <finder>
         Then I should see "Checked!" somewhere in the page
@@ -190,7 +243,7 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".checked_box_class"   |
 
 # Select
-    Scenario Outline: Selecting works.
+    Scenario Outline: 17. Selecting works.
         Given I visit the salad test url "browser/form.html"
         When I select the option named "My test text" from the field <finder>
         Then I should see "Selected!" somewhere in the page
@@ -201,7 +254,7 @@ Feature: Ensuring that the forms steps work
         | with the id "test_select"                    |
         | with the css selector ".test_select_class"   |
 
-    Scenario Outline: Selecting works.
+    Scenario Outline: 18. Selecting works.
         Given I visit the salad test url "browser/form.html"
         When I select the option with the value "my test value" from the field <finder>
         Then I should see "Selected!" somewhere in the page
@@ -212,7 +265,7 @@ Feature: Ensuring that the forms steps work
         | with the id "test_select"                    |
         | with the css selector ".test_select_class"   |
 
-    Scenario Outline: Hitting keys generally works.
+    Scenario Outline: 19. Hitting keys generally works.
         Given I visit the salad test url "browser/hitkey.html"
         When I hit the <key> key
         Then I should see "<output>" somewhere in the page
@@ -242,7 +295,7 @@ Feature: Ensuring that the forms steps work
         | f12       | F12ed       |
 
 
-    Scenario: Focusing works
+    Scenario: 20. Focusing works
         Given I am using chrome
           And I visit the salad test url "browser/form.html"
          When I click on the field named "focus_me_name"
@@ -250,7 +303,7 @@ Feature: Ensuring that the forms steps work
           And I wait 2 seconds
          Then I should see "Focused!" somewhere in the page
 
-    Scenario: Blurring works
+    Scenario: 21. Blurring works
         Given I am using chrome
           And I visit the salad test url "browser/form.html"
          When I click on the field named "focus_me_name"

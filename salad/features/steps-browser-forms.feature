@@ -265,26 +265,15 @@ Feature: Ensuring that the forms steps work
         | with the id "test_select"                    |
         | with the css selector ".test_select_class"   |
 
+
     Scenario Outline: 19. Hitting keys generally works.
         Given I visit the salad test url "browser/hitkey.html"
-        When I hit the <key> key
-        Then I should see "<output>" somewhere in the page
+         When I look around
+          And I hit the <key> key
+         Then I should see "<output>" somewhere in the page within 3 seconds
 
     Examples:
         | key       | output      |
-        | enter     | Entered!    |
-        | return    | Entered!    |
-        | up        | Up Arrow!   |
-        | down      | Down Arrow! |
-        | left      | Left Arrow! |
-        | right     | Right Arrow!|
-        | escape    | Escaped!    |
-        | space     | Spaced Out! |
-        | control   | Controlled! |
-        | alt       | Altered!    |
-        | tab       | Tabbed!     |
-        | shift     | Shifted!    |
-        | backspace | Backspaced! |
         | home      | Homed!      |
         | end       | Ended!      |
         | insert    | Inserted!   |
@@ -293,9 +282,32 @@ Feature: Ensuring that the forms steps work
         | page down | Page Downed!|
         | f1        | F1ed!       |
         | f12       | F12ed       |
+        | backspace | Backspaced! |
+        | tab       | Tabbed!     |
+        | return    | Entered!    |
 
 
-    Scenario: 20. Focusing works
+    Scenario Outline: 20. Hitting keys generally works.
+        Given I visit the salad test url "browser/hitkey.html"
+         When I look around
+          And I hit the <key> key
+         Then I should see "<output>" somewhere in the page within 3 seconds
+
+    Examples:
+        | key       | output      |
+        | shift     | Shifted!    |
+        | enter     | Entered!    |
+        | up        | Up Arrow!   |
+        | down      | Down Arrow! |
+        | left      | Left Arrow! |
+        | right     | Right Arrow!|
+        | escape    | Escaped!    |
+        | space     | Spaced Out! |
+        | control   | Controlled! |
+        | alt       | Altered!    |
+
+
+    Scenario: 21. Focusing works
         Given I am using chrome
           And I visit the salad test url "browser/form.html"
          When I click on the field named "focus_me_name"
@@ -303,7 +315,7 @@ Feature: Ensuring that the forms steps work
           And I wait 2 seconds
          Then I should see "Focused!" somewhere in the page
 
-    Scenario: 21. Blurring works
+    Scenario: 22. Blurring works
         Given I am using chrome
           And I visit the salad test url "browser/form.html"
          When I click on the field named "focus_me_name"

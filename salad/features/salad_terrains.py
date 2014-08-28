@@ -57,4 +57,7 @@ def create_tempfile():
 
 @after.all
 def remove_tempfile(total):
-    remove("/tmp/temp_lettuce_test")
+    try:
+        remove("/tmp/temp_lettuce_test")
+    except OSError:
+        pass

@@ -13,9 +13,9 @@ except ImportError: requirements.append('argparse')
 setup(
     name="salad",
     description="A nice mix of great BDD ingredients",
-    author="Lieferheld QA",
-    author_email="qa@deliveryhero.com",
-    url="https://github.com/beanqueen/salad",
+    author="Jana Rekittke",
+    author_email="jana@rekittke.name ",
+    url="https://github.com/salad/salad",
     version=VERSION,
 #    download_url = ['https://github.com/gabrielfalcao/lettuce/tarball/fork', ],
     install_requires=requirements,

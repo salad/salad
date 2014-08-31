@@ -1,5 +1,7 @@
 Salad is a helpful mix of some great BDD packages like lettuce and splinter, seasoned with some common modules.  Its goal is to make writing acceptance tests downright fun.
 
+Salad was originally developed at [Wieden+Kennedy](http://wk.com), and was subsequently [open-sourced](https://github.com/wieden-kennedy/salad) under the BSD license.
+
 [![Build Status](https://secure.travis-ci.org/wieden-kennedy/salad.png?branch=master)](http://travis-ci.org/wieden-kennedy/salad)
 
 Installing
@@ -131,7 +133,7 @@ Steps
 
 * `browser` - Broken into submodules. Importing `browser` gets them all.
     * `alerts` - Handle alerts and prompts.
-    * `browers` - Switch between browsers.
+    * `browsers` - Switch between browsers.
     * `elements` - Verify that elements exist, have expected contents or attributes.
     * `finders` - No actual steps - just helper functions to find elements.
     * `forms` - Interact with form fields - type, focus, select, fill in, and the like.

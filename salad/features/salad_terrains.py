@@ -14,6 +14,9 @@ from salad.terrains.everything import *
 from salad.logger import logger
 
 
+LETTUCE_TEMP_FILE = '/tmp/temp_lettuce_test'
+
+
 @before.all
 def setup_subprocesses():
     world.subprocesses = []
@@ -51,13 +54,13 @@ def teardown_test_server(total):
 
 @before.all
 def create_tempfile():
-    world.tempfile = file('/tmp/temp_lettuce_test', 'a+')
+    world.tempfile = file(LETTUCE_TEMP_FILE, 'a+')
     world.tempfile.close()
 
 
 @after.all
 def remove_tempfile(total):
     try:
-        remove("/tmp/temp_lettuce_test")
+        remove(LETTUCE_TEMP_FILE)
     except OSError:
         pass

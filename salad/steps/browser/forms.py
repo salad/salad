@@ -218,3 +218,7 @@ def _store_with_case_option(key, value, upper_lower):
         world.stored_values[key] = value.lower()
     elif 'upper' in upper_lower:
         world.stored_values[key] = value.upper()
+    else:
+        msg = ("upper_lower must contains either 'upper' or 'lower', but "
+               "didn't: you used %s as input." % (upper_lower, ))
+        raise NotImplementedError(msg)

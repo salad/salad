@@ -7,7 +7,9 @@ from selenium.webdriver.remote.errorhandler import StaleElementReferenceExceptio
 from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          ELEMENT_THING_STRING,
                                          _get_visible_element)
-from salad.tests.util import assert_equals_with_negate, assert_with_negate
+from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
+                              assert_value, store_with_case_option,
+                              transform_for_upper_lower_comparison)
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
@@ -120,10 +122,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s is "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, value):
+        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) "([^"]*)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate(getattr(ele, attribute.replace(' ', '_')), value, negate)
+            assert_value(type_of_match, value, getattr(ele, attribute.replace(' ', '_')), negate)
 
         return _this_step
 
@@ -135,22 +137,14 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             current = getattr(
                 _get_visible_element(finder_function, pick, find_pattern),
                 attribute.replace(' ', '_'))
+
+            assert world.stored_values[name]
             stored = world.stored_values[name]
 
-            if upper_lower and 'lower' in upper_lower:
-                stored = stored.lower()
-            elif upper_lower and 'upper' in upper_lower:
-                stored = stored.upper()
-            elif upper_lower and 'independent' in upper_lower:
-                stored = stored.lower()
-                current = current.lower()
+            if upper_lower:
+                stored, current = transform_for_upper_lower_comparison(stored, current, upper_lower)
 
-            if type_of_match == 'is':
-                assert_equals_with_negate(
-                    stored, current, negate)
-            else:
-                assert_with_negate(
-                    stored in current, negate)
+            assert_value(type_of_match, stored, current, negate)
 
         return _this_step
 
@@ -172,7 +166,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         def _this_step(step, upper_lower, what, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             value = getattr(ele, what.replace(' ', '_'))
-            _store_with_case_option(name, value, upper_lower)
+            store_with_case_option(name, value, upper_lower)
 
     globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
 
@@ -193,7 +187,7 @@ def store_value(step, upper_lower, type_of_fill, length, suffix, name):
     if not suffix:
         suffix = ""
     random_value = _generate_content(type_of_fill, int(length)) + suffix
-    _store_with_case_option(name, random_value, upper_lower)
+    store_with_case_option(name, random_value, upper_lower)
 
 
 def transform_key_string(key_string):
@@ -210,17 +204,3 @@ def _type_slowly(driver_ele, text):
     for c in text:
         driver_ele.value += c
         sleep(0.5)
-
-
-def _store_with_case_option(key, value, upper_lower):
-    if not upper_lower:
-        world.stored_values[key] = value
-        return
-    if 'lower' in upper_lower:
-        world.stored_values[key] = value.lower()
-    elif 'upper' in upper_lower:
-        world.stored_values[key] = value.upper()
-    else:
-        msg = ("upper_lower must contains either 'upper' or 'lower', but "
-               "didn't: you used %s as input." % (upper_lower, ))
-        raise NotImplementedError(msg)

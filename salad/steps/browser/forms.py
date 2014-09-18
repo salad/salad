@@ -1,7 +1,6 @@
 from time import sleep
 from string import ascii_letters
 from random import choice, randint
-from selenium.webdriver.support.ui import Select
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
@@ -52,7 +51,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the%s %s %s' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, named_or_with_value, field_value, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            if (named_or_with_value == "named"):
+            if named_or_with_value == "named":
                 # this does not work properly, it will click the first match
                 # to field_value by default. it does not select the element we
                 # are actually looking for.
@@ -121,27 +120,30 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html) of the%s %s %s is "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s is "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, attribute, pick, find_pattern, value):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_equals_with_negate(getattr(ele, attribute), value, negate)
+            assert_equals_with_negate(getattr(ele, attribute.replace(' ', '_')), value, negate)
 
         return _this_step
 
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html) of the%s %s %s (is|contains) the stored( lowercase| uppercase)? value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) the stored( lowercase| uppercase| case independent)? value of "([^"]*)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, upper_lower, name):
             current = getattr(
                 _get_visible_element(finder_function, pick, find_pattern),
-                attribute)
+                attribute.replace(' ', '_'))
             stored = world.stored_values[name]
 
             if upper_lower and 'lower' in upper_lower:
                 stored = stored.lower()
             elif upper_lower and 'upper' in upper_lower:
                 stored = stored.upper()
+            elif upper_lower and 'independent' in upper_lower:
+                stored = stored.lower()
+                current = current.lower()
 
             if type_of_match == 'is':
                 assert_equals_with_negate(
@@ -166,10 +168,10 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
 
     def _remember_generator(finder_string, finder_function):
-        @step(r'(?:store|remember) the( lowercase| uppercase)? (text|value|html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:store|remember) the( lowercase| uppercase)? (text|value|html|outer html) of the%s %s %s as "([^"]+)"' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, upper_lower, what, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            value = getattr(ele, what)
+            value = getattr(ele, what.replace(' ', '_'))
             _store_with_case_option(name, value, upper_lower)
 
     globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)

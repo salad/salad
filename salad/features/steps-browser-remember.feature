@@ -112,17 +112,19 @@ Feature: Ensuring that the remember / recall steps work
         | outer html  | my_outer_html  | <legend>Element with value / html / text</legend> | fieldset legend   | lowercase   | <legend>element with value / html / text</legend> |
 
 
-    Scenario Outline: 5. Remembering content and seeing it in some element as lowercase / uppercase / case independent / original string
+    Scenario Outline: 5. Remembering a value and seeing it in some element as lowercase / uppercase / case independent / original string
         Given I visit the salad test url "browser/form.html"
          When I look around
          Then I should see the element with the css selector "fieldset input"
          When I fill in the element named "fill_me_in" with "Jana Banana"
           And I store the value of the element named "fill_me_in" as "my_input"
+          And I remember a random string as "not_my_input"
          # --- lowercase
           And I fill in the element named "fill_me_in" with "<lower>"
-         Then I should see that the value of the element named "fill_me_in" <type_of_match> the stored lowercase value of "my_input"
-          And I should see that the value of the element named "fill_me_in" <type_of_match> "jana banana"
-          And I should not see that the value of the element named "fill_me_in" <type_of_match> "captain rodriguez"
+         Then I should see that the value of the element named "fill_me_in" <type_of_match> the stored lowercase value of "my_input" within 2 seconds
+          And I should not see that the value of the element named "fill_me_in" <type_of_match> the stored lowercase value of "not_my_input" within 2 seconds
+          And I should see that the value of the element named "fill_me_in" <type_of_match> "jana banana" within 2 seconds
+          And I should not see that the value of the element named "fill_me_in" <type_of_match> "captain rodriguez" within 2 seconds
          # --- uppercase
          When I fill in the element named "fill_me_in" with "<upper>"
          Then I should see that the value of the element named "fill_me_in" <type_of_match> the stored uppercase value of "my_input"
@@ -140,3 +142,75 @@ Feature: Ensuring that the remember / recall steps work
         | type_of_match | original              | lower                 | upper                 | independent           |
         | is            | Jana Banana           | jana banana           | JANA BANANA           | jAnA BAnaNa           |
         | contains      | Lala Jana Banana laLa | Lala jana banana laLa | Lala JANA BANANA laLa | Lala jAnA BAnaNa laLa |
+
+
+    Scenario Outline: 6. Remembering a string and seeing it in some html / text / value as lowercase / uppercase / case independent / original string
+        Given I visit the salad test url "browser/form.html"
+         When I look around
+         Then I should see the element with the css selector "div[id='98kls43mk'] textarea"
+         When I fill in the element named "fill_me_in" with "Jana Banana"
+          And I store the value of the element named "fill_me_in" as "my_input"
+          And I remember a random string as "not_my_input"
+         # --- fill in the html of an element with the string we want to see
+          And I run the javascript "$('#98kls43mk textarea').html('<lower>')"
+         # --- lowercase
+         Then I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> the stored lowercase value of "my_input" within 2 seconds
+          And I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> "jana banana" within 2 seconds
+          And I should not see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> the stored lowercase value of "not_my_input" within 2 seconds
+          And I should not see that the <what> of the element named "fill_me_in" <type_of_match> "captain rodriguez" within 2 seconds
+         # --- uppercase
+         When I run the javascript "$('#98kls43mk textarea').html('<upper>')"
+         Then I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> the stored uppercase value of "my_input"
+          And I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> "JANA BANANA"
+         # --- case independent
+         When I run the javascript "$('#98kls43mk textarea').html('<independent>')"
+         Then I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> the stored case independent value of "my_input"
+          And I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> "jAnA BAnaNa"
+         # --- original value
+         When I run the javascript "$('#98kls43mk textarea').html('<original>')"
+         Then I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> the stored value of "my_input"
+          And I should see that the <what> of the element with the css selector "div[id='98kls43mk'] textarea" <type_of_match> "Jana Banana"
+
+    Examples:
+        | type_of_match | original              | lower                 | upper                 | independent           | what  |
+        | is            | Jana Banana           | jana banana           | JANA BANANA           | jAnA BAnaNa           | html  |
+        | contains      | Lala Jana Banana laLa | Lala jana banana laLa | Lala JANA BANANA laLa | Lala jAnA BAnaNa laLa | html  |
+        | is            | Jana Banana           | jana banana           | JANA BANANA           | jAnA BAnaNa           | value |
+        | contains      | Lala Jana Banana laLa | Lala jana banana laLa | Lala JANA BANANA laLa | Lala jAnA BAnaNa laLa | value |
+        | is            | Jana Banana           | jana banana           | JANA BANANA           | jAnA BAnaNa           | text  |
+        | contains      | Lala Jana Banana laLa | Lala jana banana laLa | Lala JANA BANANA laLa | Lala jAnA BAnaNa laLa | text  |
+
+
+    Scenario Outline: 7. Remembering a string and seeing it in some outer html as lowercase / uppercase / case independent / original string
+        Given I visit the salad test url "browser/form.html"
+         When I look around
+         Then I should see the element with the css selector "div[id='98kls43mk'] textarea"
+         When I run the javascript "$('#98kls43mk textarea').replaceWith('<original>')"
+          And I store the outer html of the element with the css selector "div[id='98kls43mk'] textarea" as "my_html"
+          And I store the text of the element with the css selector "div[id='98kls43mk'] textarea" as "my_input"
+          And I remember a random string as "not_my_input"
+         # --- lowercase
+          And I run the javascript "$('#98kls43mk textarea').html('<lower_input>')"
+         Then I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains the stored lowercase value of "my_input" within 2 seconds
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" is "<lower>"
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains "<lower_input>"
+         # --- also test negative case
+          And I should not see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" is the stored lowercase value of "not_my_input" within 2 seconds
+          And I should not see that the outer html of the element named "fill_me_in" is "captain rodriguez"
+         # --- uppercase
+         When I run the javascript "$('#98kls43mk textarea').html('<upper_input>')"
+         Then I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains the stored uppercase value of "my_input" within 2 seconds
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains "<upper_input>"
+         # --- case independent
+         When I run the javascript "$('#98kls43mk textarea').html('<mixed_input>')"
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains the stored case independent value of "my_input" within 2 seconds
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains "<mixed_input>"
+         # --- original value
+         When I run the javascript "$('#98kls43mk textarea').html('<orig_input>')"
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" is the stored value of "my_html" within 2 seconds
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains the stored value of "my_input" within 2 seconds
+          And I should see that the outer html of the element with the css selector "div[id='98kls43mk'] textarea" contains "<orig_input>"
+
+    Examples:
+        | lower_input | upper_input | mixed_input | orig_input  | original                         | lower                            |
+        | jana banana | JANA BANANA | jAnA BAnaNa | Jana Banana | <textarea>Jana Banana</textarea> | <textarea>jana banana</textarea> |

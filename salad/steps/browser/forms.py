@@ -9,7 +9,8 @@ from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          _get_visible_element)
 from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
                               assert_value, store_with_case_option,
-                              transform_for_upper_lower_comparison)
+                              transform_for_upper_lower_comparison,
+                              wait_for_completion)
 
 # What's happening here? We're generating steps for every possible permuation of the element finder
 
@@ -122,29 +123,31 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
 
     def _value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) "([^"]*)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, value):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            assert_value(type_of_match, value, getattr(ele, attribute.replace(' ', '_')), negate)
+        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) "([^"]*)"(?: within (\d+) seconds)?$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, value, wait_time):
+            def assert_element_attribute_is_or_contains_text(negate, attribute, pick, find_pattern, type_of_match, value):
+                ele = _get_visible_element(finder_function, pick, find_pattern)
+                assert_value(type_of_match, value, getattr(ele, attribute.replace(' ', '_')), negate)
+                return True
+            wait_for_completion(wait_time, assert_element_attribute_is_or_contains_text, negate, attribute, pick, find_pattern, type_of_match, value)
 
         return _this_step
 
     globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) the stored( lowercase| uppercase| case independent)? value of "([^"]*)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, upper_lower, name):
-            current = getattr(
-                _get_visible_element(finder_function, pick, find_pattern),
-                attribute.replace(' ', '_'))
-
-            assert world.stored_values[name]
-            stored = world.stored_values[name]
-
-            if upper_lower:
-                stored, current = transform_for_upper_lower_comparison(stored, current, upper_lower)
-
-            assert_value(type_of_match, stored, current, negate)
+        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) the stored( lowercase| uppercase| case independent)? value of "([^"]*)"(?: within (\d+) seconds)?$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, upper_lower, name, wait_time):
+            def assert_element_attribute_is_or_contains_stored_value(negate, attribute, pick, find_pattern, type_of_match, upper_lower, name):
+                current = getattr(
+                    _get_visible_element(finder_function, pick, find_pattern),
+                    attribute.replace(' ', '_'))
+                stored = world.stored_values[name]
+                if upper_lower:
+                    stored, current = transform_for_upper_lower_comparison(stored, current, upper_lower)
+                assert_value(type_of_match, stored, current, negate)
+                return True
+            wait_for_completion(wait_time, assert_element_attribute_is_or_contains_stored_value, negate,attribute, pick, find_pattern, type_of_match, upper_lower, name)
 
         return _this_step
 

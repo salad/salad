@@ -8,6 +8,7 @@ from splinter.exceptions import ElementDoesNotExist
 from salad.logger import logger
 from salad.waiter import SaladWaiter
 from salad.waiter import TimeoutException
+from salad.tests.util import wait_for_completion
 
 # Find and verify that elements exist, have the expected content
 # and attributes (text, classes, ids)

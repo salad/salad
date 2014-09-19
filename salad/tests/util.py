@@ -1,5 +1,12 @@
 from nose.tools import assert_equals, assert_not_equals
 from lettuce import step, world
+from salad.waiter import SaladWaiter
+
+
+def wait_for_completion(wait_time, method, *args):
+    wait_time = int(wait_time or 0)
+    waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
+    waiter.until(method, *args)
 
 
 def parsed_negator(negator):

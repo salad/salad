@@ -6,7 +6,16 @@
         <script type="text/javascript">
         $(function(){
             $(".alert_link").click(function(){
-                alert("My Test Alert");
+                alert("Alert! Do you like this alert?");
+                return false;
+            });
+            $(".confirm_link").click(function(){
+                var resp = confirm("Confirm! Do you like this alert?");
+                if (resp === true) {
+                    set_response("you liked it");
+                } else {
+                    set_response("you did not like it");
+                }
                 return false;
             });
             $(".prompt_link").click(function(){
@@ -19,11 +28,70 @@
                 return false;
             });
             $(".nothing_link").click(function(){return false;});
+
+            function createDialogHandler(dialogName, transform, additionalText) {
+                transform = transform || function (x) { return x; };
+                additionalText = additionalText || '';
+                dialog = window[dialogName];
+
+                return function () {
+                    var originalText = $('#fill_me_in').val();
+                    var modifiedText = additionalText + transform(originalText) + additionalText;
+
+                    dialog(modifiedText);
+                };
+            }
+
+            function toUpperCase(str) {
+                return str.toUpperCase();
+            }
+
+            function toLowerCase(str) {
+                return str.toLowerCase();
+            }
+
+            function toRandomCase(str) {
+                return Array.prototype.map.call(str, function (char) {
+                    return Math.random() > 0.5 ? char.toLowerCase() : char.toUpperCase();
+                }).join('');
+            }
+
+            function dont_change(str) { return str; }
+
+            $('.make_alert').click(createDialogHandler('alert'));
+            $('.make_alert_up').click(createDialogHandler('alert', toUpperCase));
+            $('.make_alert_down').click(createDialogHandler('alert', toLowerCase));
+            $('.make_alert_random').click(createDialogHandler('alert', toRandomCase));
+
+            $('.make_alert_ex').click(createDialogHandler('alert', dont_change, 'skadfldas'));
+            $('.make_alert_up_ex').click(createDialogHandler('alert', toUpperCase, 'skadfldas'));
+            $('.make_alert_down_ex').click(createDialogHandler('alert', toLowerCase, 'skadfldas'));
+            $('.make_alert_random_ex').click(createDialogHandler('alert', toRandomCase, 'skadfldas'));
+
+            $('.make_prompt').click(createDialogHandler('prompt'));
+            $('.make_prompt_up').click(createDialogHandler('prompt', toUpperCase));
+            $('.make_prompt_down').click(createDialogHandler('prompt', toLowerCase));
+            $('.make_prompt_random').click(createDialogHandler('prompt', toRandomCase));
+
+            $('.make_prompt_ex').click(createDialogHandler('prompt', dont_change, 'skadfldas'));
+            $('.make_prompt_up_ex').click(createDialogHandler('prompt', toUpperCase, 'skadfldas'));
+            $('.make_prompt_down_ex').click(createDialogHandler('prompt', toLowerCase, 'skadfldas'));
+            $('.make_prompt_random_ex').click(createDialogHandler('prompt', toRandomCase, 'skadfldas'));
+
+            $('.make_confirm').click(createDialogHandler('confirm'));
+            $('.make_confirm_up').click(createDialogHandler('confirm', toUpperCase));
+            $('.make_confirm_down').click(createDialogHandler('confirm', toLowerCase));
+            $('.make_confirm_random').click(createDialogHandler('confirm', toRandomCase));
+
+            $('.make_confirm_ex').click(createDialogHandler('confirm', dont_change, 'skadfldas'));
+            $('.make_confirm_up_ex').click(createDialogHandler('confirm', toUpperCase, 'skadfldas'));
+            $('.make_confirm_down_ex').click(createDialogHandler('confirm', toLowerCase, 'skadfldas'));
+            $('.make_confirm_random_ex').click(createDialogHandler('confirm', toRandomCase, 'skadfldas'));
+
         });
-         function set_response(text) {
+        function set_response(text) {
             $("#response_area").html(text);
         }
-        </script>
         </script>
         <style type="text/css">
             #drag_handler {  width: 50px; height: 50px; border: 1px solid #000; background: red;}
@@ -32,10 +100,49 @@
         </style>
     </head>
     <body>
+        <div>
         <div id="mouse_target" class="mouse_target_class" name="mouse_target_name">The target of the mouse</div>
-        <a class="alert_link" href="#alertlink" >Alert</a>
-        <a class="prompt_link" href="#promptlink" >Prompt me</a>
-        <a class="nothing_link" href="#" >Nothing</a>
-        <div id="response_area"></div>
+            <a style="padding-top:1cm;" class="alert_link" href="#alertlink" >Alert</a>
+            <a class="prompt_link" href="#promptlink" >Prompt</a>
+            <a class="confirm_link" href="#confirmlink" >Confirm</a>
+            <a class="nothing_link" href="#" >Nothing</a>
+        </div>
+        <div style="padding-top:1cm;">
+            <!-- alerts -->
+            <a id="make_custom_alert"         class="make_alert"        href="#" >Make custom alert</a>
+            <a id="make_custom_alert_upper"   class="make_alert_up"     href="#" >Make custom alert with upper string</a>
+            <a id="make_custom_alert_lower"   class="make_alert_down"   href="#" >Make custom alert with lower string</a>
+            <a id="make_custom_alert_random"  class="make_alert_random" href="#" >Make custom alert with random string</a>
+            <!-- alerts with extra text -->
+            <a id="make_custom_alert_ex"         class="make_alert_ex"        href="#" >Make custom alert with extra text</a>
+            <a id="make_custom_alert_ex_upper"   class="make_alert_up_ex"     href="#" >Make custom alert with upper string with extra text</a>
+            <a id="make_custom_alert_ex_lower"   class="make_alert_down_ex"   href="#" >Make custom alert with lower string with extra text</a>
+            <a id="make_custom_alert_ex_random"  class="make_alert_random_ex" href="#" >Make custom alert with random string with extra text</a>
+            <!-- prompts -->
+            <a id="make_custom_prompt"        class="make_prompt"        href="#" >Make custom prompt</a>
+            <a id="make_custom_prompt_upper"  class="make_prompt_up"     href="#" >Make custom prompt with upper string</a>
+            <a id="make_custom_prompt_lower"  class="make_prompt_down"   href="#" >Make custom prompt with lower string</a>
+            <a id="make_custom_prompt_random" class="make_prompt_random" href="#" >Make custom prompt with random string</a>
+            <!-- prompts with extra text -->
+            <a id="make_custom_prompt_ex"        class="make_prompt_ex"        href="#" >Make custom prompt with extra text</a>
+            <a id="make_custom_prompt_ex_upper"  class="make_prompt_up_ex"     href="#" >Make custom prompt with upper string with extra text</a>
+            <a id="make_custom_prompt_ex_lower"  class="make_prompt_down_ex"   href="#" >Make custom prompt with lower string with extra text</a>
+            <a id="make_custom_prompt_ex_random" class="make_prompt_random_ex" href="#" >Make custom prompt with random string with extra text</a>
+            <!-- confirms -->
+            <a id="make_custom_confirm"        class="make_confirm"        href="#" >Make custom confirm</a>
+            <a id="make_custom_confirm_upper"  class="make_confirm_up"     href="#" >Make custom confirm with upper string</a>
+            <a id="make_custom_confirm_lower"  class="make_confirm_down"   href="#" >Make custom confirm with lower string</a>
+            <a id="make_custom_confirm_random" class="make_confirm_random" href="#" >Make custom confirm with random string</a>
+            <!-- confirms with extra text -->
+            <a id="make_custom_confirm_ex"        class="make_confirm_ex"        href="#" >Make custom confirm with extra text</a>
+            <a id="make_custom_confirm_ex_upper"  class="make_confirm_up_ex"     href="#" >Make custom confirm with upper string with extra text</a>
+            <a id="make_custom_confirm_ex_lower"  class="make_confirm_down_ex"   href="#" >Make custom confirm with lower string with extra text</a>
+            <a id="make_custom_confirm_ex_random" class="make_confirm_random_ex" href="#" >Make custom confirm with random string with extra text</a>
+        </div>
+        <div style="padding-top:1cm;">
+            <!-- response area -->
+            <div id="response_area" style="border:solid red;"></div>
+            <textarea style="padding-top:1cm;" id="fill_me_in"></textarea>
+        </div>
     </body>
 </html>

@@ -11,5 +11,6 @@ Feature: Ensuring that javascript works in all supported browsers
 
     Examples:
     | browser   |
+    | chrome    |
     | firefox   |
     | phantomjs |

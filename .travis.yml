@@ -12,7 +12,7 @@ python:
 install:
   - "python setup.py install"
   # Install the Selenium Server
-  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar; fi'
+  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar -O selenium-server.jar; fi'
 
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/

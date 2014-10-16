@@ -36,12 +36,12 @@ Feature: Ensuring that the page steps work
     Scenario: Switching to an iframe works
         Given I visit the salad test url "browser/iframe.html"
          When I switch to the iframe "my_iframe"
-         Then I should see "iFrame Page" somewhere in the page.
-          And I should not see "Main Page" somewhere in the page.
+         Then I should see "iFrame Page" somewhere in the page
+          And I should not see "Main Page" somewhere in the page
 
     Scenario: Switching to an iframe, then back to the parent frame works
         Given I visit the salad test url "browser/iframe.html"
          When I switch to the iframe "my_iframe"
           And I switch back to the parent frame
-         Then I should see "Main Page" somewhere in the page.
-          And I should not see "iFrame Page" somewhere in the page.
+         Then I should see "Main Page" somewhere in the page
+          And I should not see "iFrame Page" somewhere in the page

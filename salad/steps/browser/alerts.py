@@ -100,7 +100,7 @@ def enter_stored_value_into_prompt(step, name):
 
 
 @step(r'(?:store|remember) the( lowercase| uppercase)? text of the (?:alert|prompt) as "([^"]+)"$')
-def bla(step, upper_lower, name):
+def store_text_of_element_with_case_option_as(step, upper_lower, name):
     if not hasattr(world, "prompt") or not world.prompt:
         world.prompt = _get_alert_or_none()
     store_with_case_option(name, world.prompt.text, upper_lower)

@@ -4,11 +4,11 @@ from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
 from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          ELEMENT_THING_STRING,
                                          _get_visible_element)
-from splinter.exceptions import ElementDoesNotExist
 from salad.logger import logger
 from salad.waiter import SaladWaiter
 from salad.waiter import TimeoutException
 from salad.tests.util import wait_for_completion
+from splinter.exceptions import ElementDoesNotExist
 
 # Find and verify that elements exist, have the expected content
 # and attributes (text, classes, ids)

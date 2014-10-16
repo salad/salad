@@ -3,7 +3,8 @@ from string import ascii_letters
 from random import choice, randint
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.remote.errorhandler import StaleElementReferenceException
+from selenium.webdriver.remote.errorhandler import \
+    StaleElementReferenceException
 from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          ELEMENT_THING_STRING,
                                          _get_visible_element)
@@ -12,7 +13,8 @@ from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
                               transform_for_upper_lower_comparison,
                               wait_for_completion)
 
-# What's happening here? We're generating steps for every possible permuation of the element finder
+# What's happening here? We're generating steps for every possible
+# permuation of the element finder
 
 world.stored_values = dict()
 
@@ -38,7 +40,8 @@ def _generate_random_string(length):
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     def _type_generator(finder_string, finder_function):
-        @step(r'(slowly )?type "([^"]*)" into the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(slowly )?type "([^"]*)" into the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, slowly, text, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             if slowly and slowly != "":
@@ -48,11 +51,15 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_type_%s" % (finder_function,)] = _type_generator(finder_string, finder_function)
+    globals()["form_type_%s" % (finder_function,)] = (
+        _type_generator(finder_string, finder_function))
 
     def _select_generator(finder_string, finder_function):
-        @step(r'select the option (named|with the value)? "([^"]*)" (?:from|in) the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, named_or_with_value, field_value, pick, find_pattern):
+        @step(r'select the option (named|with the value)? "([^"]*)" '
+              '(?:from|in) the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, named_or_with_value, field_value, pick,
+                       find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             if named_or_with_value == "named":
                 # this does not work properly, it will click the first match
@@ -66,10 +73,12 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_select_%s" % (finder_function,)] = _select_generator(finder_string, finder_function)
+    globals()["form_select_%s" % (finder_function,)] = (
+        _select_generator(finder_string, finder_function))
 
     def _fill_generator(finder_string, finder_function):
-        @step(r'fill in the%s %s %s with "([^"]*)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the%s %s %s with "([^"]*)"$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, text):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             try:
@@ -79,10 +88,12 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_fill_%s" % (finder_function,)] = _fill_generator(finder_string, finder_function)
+    globals()["form_fill_%s" % (finder_function,)] = (
+        _fill_generator(finder_string, finder_function))
 
     def _fill_with_stored_generator(finder_string, finder_function):
-        @step(r'fill in the%s %s %s with the stored value of "([^"]*)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'fill in the%s %s %s with the stored value of "([^"]*)"$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert(world.stored_values[name])
@@ -90,71 +101,102 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_fill_with_stored_%s" % (finder_function,)] = _fill_with_stored_generator(finder_string, finder_function)
+    globals()["form_fill_with_stored_%s" % (finder_function,)] = (
+        _fill_with_stored_generator(finder_string, finder_function))
 
     def _attach_generator(finder_string, finder_function):
-        @step(r'attach "([^"]*)" onto the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'attach "([^"]*)" onto the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             ele.value = file_name
 
         return _this_step
 
-    globals()["form_attach_%s" % (finder_function,)] = _attach_generator(finder_string, finder_function)
+    globals()["form_attach_%s" % (finder_function,)] = (
+        _attach_generator(finder_string, finder_function))
 
     def _focus_generator(finder_string, finder_function):
-        @step(r'focus on the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'focus on the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             ele.focus()
 
         return _this_step
 
-    globals()["form_focus_%s" % (finder_function,)] = _focus_generator(finder_string, finder_function)
+    globals()["form_focus_%s" % (finder_function,)] = (
+        _focus_generator(finder_string, finder_function))
 
     def _blur_generator(finder_string, finder_function):
-        @step(r'(?:blur|move) from the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:blur|move) from the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             ele.blur()
 
         return _this_step
 
-    globals()["form_blur_%s" % (finder_function,)] = _blur_generator(finder_string, finder_function)
+    globals()["form_blur_%s" % (finder_function,)] = (
+        _blur_generator(finder_string, finder_function))
 
     def _value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) "([^"]*)"(?: within (\d+) seconds)?$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, value, wait_time):
-            def assert_element_attribute_is_or_contains_text(negate, attribute, pick, find_pattern, type_of_match, value):
+        @step(r'should( not)? see that the (value|text|html|outer html) of '
+              'the%s %s %s (is|contains) "([^"]*)"'
+              '(?: within (\d+) seconds)?$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern,
+                       type_of_match, value, wait_time):
+            def assert_element_attribute_is_or_contains_text(
+                    negate, attribute, pick, find_pattern,
+                    type_of_match, value):
                 ele = _get_visible_element(finder_function, pick, find_pattern)
-                assert_value(type_of_match, value, getattr(ele, attribute.replace(' ', '_')), negate)
+                assert_value(type_of_match, value,
+                             getattr(ele, attribute.replace(' ', '_')), negate)
                 return True
-            wait_for_completion(wait_time, assert_element_attribute_is_or_contains_text, negate, attribute, pick, find_pattern, type_of_match, value)
+            wait_for_completion(
+                wait_time, assert_element_attribute_is_or_contains_text,
+                negate, attribute, pick, find_pattern, type_of_match, value)
 
         return _this_step
 
-    globals()["form_value_%s" % (finder_function,)] = _value_generator(finder_string, finder_function)
+    globals()["form_value_%s" % (finder_function,)] = (
+        _value_generator(finder_string, finder_function))
 
     def _see_stored_value_generator(finder_string, finder_function):
-        @step(r'should( not)? see that the (value|text|html|outer html) of the%s %s %s (is|contains) the stored( lowercase| uppercase| case independent)? value of "([^"]*)"(?: within (\d+) seconds)?$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, negate, attribute, pick, find_pattern, type_of_match, upper_lower, name, wait_time):
-            def assert_element_attribute_is_or_contains_stored_value(negate, attribute, pick, find_pattern, type_of_match, upper_lower, name):
+        @step(r'should( not)? see that the (value|text|html|outer html) of '
+              'the%s %s %s (is|contains) the stored( lowercase| uppercase| '
+              'case independent)? value of "([^"]*)"'
+              '(?: within (\d+) seconds)?$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _this_step(step, negate, attribute, pick, find_pattern,
+                       type_of_match, upper_lower, name, wait_time):
+            def assert_element_attribute_is_or_contains_stored_value(
+                    negate, attribute, pick, find_pattern, type_of_match,
+                    upper_lower, name):
                 current = getattr(
                     _get_visible_element(finder_function, pick, find_pattern),
                     attribute.replace(' ', '_'))
                 stored = world.stored_values[name]
                 if upper_lower:
-                    stored, current = transform_for_upper_lower_comparison(stored, current, upper_lower)
+                    stored, current = transform_for_upper_lower_comparison(
+                        stored, current, upper_lower)
                 assert_value(type_of_match, stored, current, negate)
                 return True
-            wait_for_completion(wait_time, assert_element_attribute_is_or_contains_stored_value, negate,attribute, pick, find_pattern, type_of_match, upper_lower, name)
+            wait_for_completion(
+                wait_time,
+                assert_element_attribute_is_or_contains_stored_value, negate,
+                attribute, pick, find_pattern, type_of_match, upper_lower,
+                name)
 
         return _this_step
 
-    globals()["form_stored_value_%s" % (finder_function,)] = _see_stored_value_generator(finder_string, finder_function)
+    globals()["form_stored_value_%s" % (finder_function,)] = (
+        _see_stored_value_generator(finder_string, finder_function))
 
     def _key_generator(finder_string, finder_function):
-        @step(r'hit the ([^"]*) key in the%s %s %s$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'hit the ([^"]*) key in the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, key_string, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             key = transform_key_string(key_string)
@@ -162,16 +204,20 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
         return _this_step
 
-    globals()["form_key_%s" % (finder_function,)] = _key_generator(finder_string, finder_function)
+    globals()["form_key_%s" % (finder_function,)] = (
+        _key_generator(finder_string, finder_function))
 
     def _remember_generator(finder_string, finder_function):
-        @step(r'(?:store|remember) the( lowercase| uppercase)? (text|value|html|outer html) of the%s %s %s as "([^"]+)"$' % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(r'(?:store|remember) the( lowercase| uppercase)? '
+              '(text|value|html|outer html) of the%s %s %s as "([^"]+)"$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, upper_lower, what, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             value = getattr(ele, what.replace(' ', '_'))
             store_with_case_option(name, value, upper_lower)
 
-    globals()["form_remember_%s" % (finder_function,)] = _remember_generator(finder_string, finder_function)
+    globals()["form_remember_%s" % (finder_function,)] = (
+        _remember_generator(finder_string, finder_function))
 
 
 @step(r'hit the ([^"]*) key')
@@ -183,7 +229,9 @@ def hit_key(step, key_string):
         world.browser.find_by_css("body").type(key)
 
 
-@step(r'(?:store|remember) a random( lowercase| uppercase)? (string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? as "([^"]*)"$')
+@step(r'(?:store|remember) a random( lowercase| uppercase)? '
+      '(string|email|name)(?: of length (\d+))?(?: with suffix "([^"]*)")? '
+      'as "([^"]*)"$')
 def store_value(step, upper_lower, type_of_fill, length, suffix, name):
     if not length:
         length = 9

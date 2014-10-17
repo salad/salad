@@ -1,18 +1,17 @@
 from lettuce import step, world
-from salad.tests.util import assert_equals_with_negate, assert_with_negate, parsed_negator
-from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS, ELEMENT_THING_STRING,
-    _get_visible_element)
-from splinter.exceptions import ElementDoesNotExist
+from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
+                              parsed_negator)
+from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
+                                         ELEMENT_THING_STRING,
+                                         _get_visible_element)
 from salad.logger import logger
 from salad.waiter import SaladWaiter
 from salad.waiter import TimeoutException
+from salad.tests.util import wait_for_completion
+from splinter.exceptions import ElementDoesNotExist
 
-# Find and verify that elements exist, have the expected content and attributes (text, classes, ids)
-
-def wait_for_completion(wait_time, method, *args):
-    wait_time = int(wait_time or 0)
-    waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
-    waiter.until(method, *args)
+# Find and verify that elements exist, have the expected content
+# and attributes (text, classes, ids)
 
 
 # the following three steps do not use the ExistenceStepsFactory
@@ -55,7 +54,8 @@ class ExistenceStepsFactory(object):
             self.make_step(finder_string, finder_function)
 
     def make_step(self, finder_string, finder_function):
-        self.step_pattern = self.pattern + '(?: within (\d+) seconds)?'
+        self.step_pattern = self.pattern + '(?: within (\d+) seconds)?$'
+
         @step(self.step_pattern % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _polling_assertion_step(step, negate, pick, find_pattern, *args):
             wait_time = int(args[-1] or 0)
@@ -63,15 +63,16 @@ class ExistenceStepsFactory(object):
 
             waiter = SaladWaiter(wait_time, ignored_exceptions=AssertionError)
             try:
-                waiter.until(self.check_element,
-                        finder_function, negate, pick, find_pattern, wait_time, *args)
+                waiter.until(self.check_element, finder_function,
+                             negate, pick, find_pattern, wait_time, *args)
             except TimeoutException as t:
                 # BEWARE: only way to get step regular expression
                 expression, func = step._get_match(True)
                 logger.error(t.message)
                 logger.error("Encountered error using definition '%s'" %
                              expression.re.pattern)
-                message = ("Element not found or assertion failed using pattern '%s' after %s seconds" %
+                message = ("Element not found or assertion failed using "
+                           "pattern '%s' after %s seconds" %
                            (find_pattern, wait_time))
                 raise AssertionError(message)
             except Exception as error:
@@ -83,7 +84,7 @@ class ExistenceStepsFactory(object):
                 raise
 
     def check_element(self, finder_function, negate, pick,
-                                find_pattern, wait_time, *args):
+                      find_pattern, wait_time, *args):
         try:
             element = _get_visible_element(finder_function, pick, find_pattern)
         except ElementDoesNotExist:
@@ -111,16 +112,19 @@ def contains_exactly_test(element, negate, *args):
     text = getattr(element, 'text', None)
     assert_equals_with_negate(content, text, negate)
 
+
 attribute_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
 def attribute_test(element, negate, *args):
     attribute = args[0]
-    assert_with_negate(element[attribute] != None, negate)
+    assert_with_negate(element[attribute] is not None, negate)
+
 
 attribute_value_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "([^"]*)" with(?: the)? value "([^"]*)"'
 def attribute_value_test(element, negate, *args):
     attribute = args[0]
     value = args[1]
     assert_equals_with_negate(element[attribute], value, negate)
+
 
 ExistenceStepsFactory(ELEMENT_FINDERS, visibility_pattern, visibility_test)
 ExistenceStepsFactory(ELEMENT_FINDERS, contains_pattern, contains_test)

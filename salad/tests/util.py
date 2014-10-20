@@ -63,7 +63,7 @@ def store_with_case_option(key, value, upper_lower):
 
 
 def transform_for_upper_lower_comparison(stored, current, upper_lower):
-    if upper_lower not in ['upper', 'lower', 'independent']:
+    if not any(x in 'upper_lower' for x in ['upper', 'lower', 'independent']):
         msg = ("upper_lower must contain any of 'upper', 'lower', 'independ"
                "ent', but you used '%s' as input." % (upper_lower, ))
         raise NotImplementedError(msg)

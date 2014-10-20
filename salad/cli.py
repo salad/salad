@@ -72,6 +72,9 @@ def main(args=sys.argv[1:]):
     else:
         world.remote_capabilities['idle-timeout'] = parsed_args.timeout
 
+    world.remote_capabilities['trustAllSSLCertificates'] = True
+    world.remote_capabilities['acceptSslCerts'] = True
+
     lettuce_main(args=leftovers)
 
 

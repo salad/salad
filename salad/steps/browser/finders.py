@@ -45,27 +45,3 @@ def _get_element(finder_function, pick, pattern):
 
     world.current_element = ele
     return ele
-
-
-def _convert_pattern_to_css(finder_function, first, last, find_pattern,
-                            tag=""):
-    pattern = ""
-    if finder_function == "find_by_name":
-        pattern += "%s[name='%s']" % (tag, find_pattern, )
-    elif finder_function == "find_by_id":
-        pattern += "#%s" % (find_pattern, )
-    elif finder_function == "find_by_css":
-        pattern += "%s" % (find_pattern, )
-    elif finder_function == "find_by_value":
-        # makes no sense, but is consistent
-        pattern += "%s[value='%s']" % (tag, find_pattern, )
-    else:
-        raise Exception("Unknown pattern.")
-
-    if first:
-        pattern += ":first"
-
-    if last:
-        pattern += ":last"
-
-    return pattern

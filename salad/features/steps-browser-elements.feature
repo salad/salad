@@ -74,6 +74,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_exist"                         |
         | with the css selector ".i_exist_class"        |
         | with the xpath "//div[@name='i_exist_name']"  |
+        | with the value "this is the value"            |
 
 
     Scenario Outline: 14. Non-existence of a non-existent element
@@ -87,6 +88,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_do_not_exist"                        |
         | with the css selector ".i_do_not_exist_class"       |
         | with the xpath "//div[@name='i_do_not_exist_name']" |
+        | with the value "not existing value"                 |
 
 
     Scenario: 15. Content of an element, different sentences
@@ -108,6 +110,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_contain"                            |
         | with the css selector ".i_contain_class"           |
         | with the xpath "//div[@class='i_contain_class']"   |
+        | with the value "x"                                 |
 
 
     Scenario Outline: 17. Non-content of a element
@@ -121,6 +124,8 @@ Feature: Ensuring that the elements steps work
         | with the id "i_contain"                   |
         | with the css selector ".i_contain_class"  |
         | with the xpath "//div[@id='i_contain']"   |
+        | with the value "x"                                 |
+
 
     Scenario Outline: 18. Exact content of an element
         Given I visit the salad test url "browser/elements.html"
@@ -159,6 +164,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_attr"                            |
         | with the css selector ".i_attr_class"           |
         | with the xpath "//div[@class='i_attr_class']"   |
+        | with the value "attr"                           |
 
 
     Scenario Outline: 21. Attribute not on a element
@@ -172,6 +178,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_attr"                            |
         | with the css selector ".i_attr_class"           |
         | with the xpath "//div[@class='i_attr_class']"   |
+        | with the value "attr"                           |
 
 
     Scenario Outline: 22. Attribute on an element with value
@@ -185,6 +192,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_attr"                            |
         | with the css selector ".i_attr_class"           |
         | with the xpath "//div[@class='i_attr_class']"   |
+        | with the value "attr"                           |
 
 
     Scenario Outline: 23. Attribute not on a element with value
@@ -198,6 +206,8 @@ Feature: Ensuring that the elements steps work
         | with the id "i_attr"                          |
         | with the css selector ".i_attr_class"         |
         | with the xpath "//div[@name='i_attr_name']"   |
+        | with the value "attr"                           |
+
 
     Scenario: 24. Visibility of elements
         Given I visit the salad test url "browser/invisible_elements.html"

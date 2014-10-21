@@ -113,7 +113,7 @@ def contains_exactly_test(element, negate, *args):
     assert_equals_with_negate(content, text, negate)
 
 
-attribute_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"$'
+attribute_pattern = r'should( not)? see that the%s %s %s has (?:an|the) attribute (?:of|named|called) "(\w*)"'
 def attribute_test(element, negate, *args):
     attribute = args[0]
     assert_with_negate(element[attribute] is not None, negate)

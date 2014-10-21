@@ -3,17 +3,17 @@ Feature: Ensuring that the javascript steps work
     As a developer
     I test against the javascript test files
 
-    Scenario: Run js works
+    Scenario: 1. Run js works
         Given I visit the salad test url "browser/js.html"
-        When I run the javascript "document.getElementById('js_block').innerHTML = 'js works!';"
-        Then I should see "js works!" somewhere in the page
+         When I run the javascript "document.getElementById('js_block').innerHTML = 'js works!';"
+         Then I should see "js works!" somewhere in the page
 
-    Scenario: Evaluate js works
+    Scenario: 2. Evaluate js works
         Given I visit the salad test url "browser/js.html"
-        When I look around
-        Then I should see that running the javascript "1+1" returns "2"
+         When I look around
+         Then I should see that running the javascript "1+1" returns "2"
 
-    Scenario: Evaluate js negation works
+    Scenario: 3. Evaluate js negation works
         Given I visit the salad test url "browser/js.html"
         When I look around
         Then I should not see that running the javascript "1+1" returns "4"

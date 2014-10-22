@@ -1,40 +1,22 @@
 from time import sleep
-from string import ascii_letters
-from random import choice, randint
+
 from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import \
     StaleElementReferenceException
+
 from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          ELEMENT_THING_STRING,
                                          _get_visible_element)
 from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
                               assert_value, store_with_case_option,
                               transform_for_upper_lower_comparison,
-                              wait_for_completion)
+                              wait_for_completion, generate_content)
 
 # What's happening here? We're generating steps for every possible
 # permuation of the element finder
 
 world.stored_values = dict()
-
-
-def _generate_content(type_of_fill, length):
-    if type_of_fill == 'email':
-        return _generate_random_string(length) + '@mailinator.com'
-    elif type_of_fill == 'string':
-        return _generate_random_string(length)
-    elif type_of_fill == 'name':
-        name = _generate_random_string(length)
-        if length <= 3:
-            return name
-        index = randint(1, len(name)-2)
-        return name[:index] + ' ' + name[index+1:]
-
-
-def _generate_random_string(length):
-    lst = [choice(ascii_letters) for n in xrange(length)]
-    return "".join(lst)
 
 
 for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
@@ -237,7 +219,7 @@ def store_value(step, upper_lower, type_of_fill, length, suffix, name):
         length = 9
     if not suffix:
         suffix = ""
-    random_value = _generate_content(type_of_fill, int(length)) + suffix
+    random_value = generate_content(type_of_fill, int(length)) + suffix
     store_with_case_option(name, random_value, upper_lower)
 
 

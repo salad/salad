@@ -1,5 +1,9 @@
-from lettuce import step, world
 from nose.tools import assert_equals, assert_not_equals
+from random import choice, randint
+from string import ascii_letters
+
+from lettuce import step, world
+
 from salad.waiter import SaladWaiter
 
 
@@ -76,3 +80,21 @@ def transform_for_upper_lower_comparison(stored, current, upper_lower):
         stored = stored.lower()
         current = current.lower()
     return (stored, current)
+
+
+def generate_content(type_of_fill, length):
+    if type_of_fill == 'email':
+        return generate_random_string(length) + '@mailinator.com'
+    elif type_of_fill == 'string':
+        return generate_random_string(length)
+    elif type_of_fill == 'name':
+        name = generate_random_string(length)
+        if length <= 3:
+            return name
+        index = randint(1, len(name)-2)
+        return name[:index] + ' ' + name[index+1:]
+
+
+def generate_random_string(length):
+    lst = [choice(ascii_letters) for n in xrange(length)]
+    return "".join(lst)

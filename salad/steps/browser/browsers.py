@@ -8,6 +8,8 @@ from salad.tests.util import generate_random_string
 
 @step(r'am using ([^"]*)$')
 def using_alternative_browser(step, browser_name):
+    """ switch the browser to the one specified in 'browser_name'
+    """
     driver = browser_name.lower().replace(' ', '')
     world.browsers.append(setup_browser(driver))
     world.browser = world.browsers[-1]
@@ -15,6 +17,22 @@ def using_alternative_browser(step, browser_name):
 
 @step(r'take a screenshot(?: named "([^"]+)")?( with timestamp)?')
 def take_screenshot(step, name, with_timestamp):
+    """ take a screenshot. if used without parameters, the screenshot
+        will be called
+        screenshot_<random_string>.png
+        if the parameter 'name' is set, the screenshot will be called
+        <name>.png
+        if the parameter 'timestamp' is set, the screenshot will be called
+        screenshot_<timestamp>.png
+        if 'name' and 'timestamp' are set, the screenshot will be called
+        <name>_<screenshot>.png
+
+        unless the function is used only with the parameter 'name', a
+        screenshot will not be overwritten
+
+        the screenshot will be saved in the folder /tmp/ assuming that all
+        unix based operating systems have such a folder
+    """
     ts = ''
 
     if with_timestamp:

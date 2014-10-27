@@ -29,10 +29,14 @@ class store_driver_and_version(argparse.Action):
         if len(driver_info) > 2:
             setattr(namespace, 'platform', driver_info[2].replace('_', ' '))
 
+
 def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(prog="Salad",
                                      description=("BDD browswer-automation "
                                                   "made tasty."))
+
+    parser.add_argument('-V', action='store_true', default=False,
+                        help="show program's version number and exit")
 
     parser.add_argument('--browser', default=DEFAULT_BROWSER,
                         action=store_driver_and_version, metavar='BROWSER',

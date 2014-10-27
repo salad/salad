@@ -1,4 +1,6 @@
-from lettuce import step
+from lettuce import step, world
+from selenium.webdriver.common.action_chains import ActionChains
+
 from salad.steps.browser.finders import (ELEMENT_FINDERS, LINK_FINDERS,
                                          ELEMENT_THING_STRING,
                                          LINK_THING_STRING,
@@ -27,12 +29,19 @@ from salad.steps.browser.finders import (ELEMENT_FINDERS, LINK_FINDERS,
     permutation of the actions and the finders below.
 """
 
-actions = {
+ACTIONS = {
     "click(?: on)?": "click",
     "(?: mouse over|mouse-over|mouseover)": "mouse_over",
     "(?: mouse out|mouse-out|mouseout)": "mouse_out",
     "(?: double click|double-click|doubleclick)": "double_click",
     "(?: right click|right-click|rightclick)": "right_click",
+}
+
+ACTION_ASSOCIATIONS = {
+    "mouse_over": "move_to_element",
+    "mouse_out": "move_by_offset",
+    "double_click": "double_click",
+    "right_click": "context_click"
 }
 
 
@@ -44,7 +53,17 @@ def step_generator(action_string, action_function, thing_string,
     def _this_step(step, pick, find_pattern):
         ele = _get_visible_element(finder_function, pick, find_pattern)
 
-        ele.__getattribute__(action_function)()
+        if action_function == 'click':
+            ele.click()
+            return
+
+        action_chain = ActionChains(world.browser.driver)
+        function = getattr(action_chain, ACTION_ASSOCIATIONS[action_function])
+        if action_function == 'mouse_out':
+            function(5000, 5000)
+        else:
+            function(ele)
+        action_chain.perform()
 
     return _this_step
 
@@ -62,12 +81,14 @@ def drag_and_drop_generator(thing_string, finder_string_from, finder_string_to,
         target = _get_visible_element(finder_function_to, target_pick,
                                       drag_target_pattern)
 
-        handler.drag_and_drop(target)
+        action_chain = ActionChains(world.browser.driver)
+        action_chain.drag_and_drop(handler, target)
+        action_chain.perform()
 
     return _this_step
 
 
-for action_string, action_function in actions.iteritems():
+for action_string, action_function in ACTIONS.iteritems():
     for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         globals()["element_%s_%s" % (action_function, finder_function)] = (
             step_generator(action_string, action_function,

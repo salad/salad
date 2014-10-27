@@ -26,12 +26,13 @@ def evaluate_the_javascript(step, negate, script, value, wait_time):
         except NotImplementedError:
             logger.info("Attempted to run javascript in a javascript-disabled"
                         "browser. Moving along.")
-        except:
-            ret_val = world.browser.evaluate_script(script)
-            msg = "%s != %s after %s seconds" % (ret_val, value, wait_time)
-            raise WrongJavascriptReturnValueException(msg)
 
         return True
 
-    wait_for_completion(wait_time, assert_javascript_returns_value, negate,
-                        script, value)
+    try:
+        wait_for_completion(wait_time, assert_javascript_returns_value,
+                            negate, script, value)
+    except:
+        ret_val = world.browser.evaluate_script(script)
+        msg = "%s != %s after %s seconds" % (ret_val, value, wait_time)
+        raise WrongJavascriptReturnValueException(msg)

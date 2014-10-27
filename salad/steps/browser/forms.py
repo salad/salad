@@ -1,6 +1,7 @@
 from time import sleep
 
 from lettuce import step, world
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import \
     StaleElementReferenceException
@@ -30,7 +31,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             if slowly and slowly != "":
                 _type_slowly(ele, text)
             else:
-                ele.value = text
+                ele.send_keys(text)
 
         return _this_step
 
@@ -84,10 +85,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern, text):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            try:
-                ele.value = text
-            except:
-                ele._control.value = text
+            _fill_in_text(ele, text)
 
         return _this_step
 
@@ -100,7 +98,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         def _this_step(step, pick, find_pattern, name):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             assert(world.stored_values[name])
-            ele.value = world.stored_values[name]
+            _fill_in_text(ele, world.stored_values[name])
 
         return _this_step
 
@@ -112,7 +110,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, file_name, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            ele.value = file_name
+            _fill_in_text(ele, file_name)
 
         return _this_step
 
@@ -166,9 +164,9 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             def assert_element_attribute_is_or_contains_text(
                     negate, attribute, pick, find_pattern,
                     type_of_match, value):
-                ele = _get_visible_element(finder_function, pick, find_pattern)
-                assert_value(type_of_match, value,
-                             getattr(ele, attribute.replace(' ', '_')), negate)
+                ele_value = _get_attribute_of_element(
+                    finder_function, pick, find_pattern, attribute)
+                assert_value(type_of_match, value, ele_value, negate)
                 return True
             wait_for_completion(
                 wait_time, assert_element_attribute_is_or_contains_text,
@@ -190,9 +188,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             def assert_element_attribute_is_or_contains_stored_value(
                     negate, attribute, pick, find_pattern, type_of_match,
                     upper_lower, name):
-                current = getattr(
-                    _get_visible_element(finder_function, pick, find_pattern),
-                    attribute.replace(' ', '_'))
+                current = _get_attribute_of_element(
+                    finder_function, pick, find_pattern, attribute)
                 stored = world.stored_values[name]
                 if upper_lower:
                     stored, current = transform_for_upper_lower_comparison(
@@ -216,7 +213,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         def _this_step(step, key_string, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
             key = transform_key_string(key_string)
-            ele.type(key)
+            ele.send_keys(key)
 
         return _this_step
 
@@ -228,9 +225,9 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
               '(text|value|html|outer html) of the%s %s %s as "([^"]+)"$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, upper_lower, what, pick, find_pattern, name):
-            ele = _get_visible_element(finder_function, pick, find_pattern)
-            value = getattr(ele, what.replace(' ', '_'))
-            store_with_case_option(name, value, upper_lower)
+            ele_value = _get_attribute_of_element(
+                finder_function, pick, find_pattern, what)
+            store_with_case_option(name, ele_value, upper_lower)
 
     globals()["form_remember_%s" % (finder_function,)] = (
         _remember_generator(finder_string, finder_function))
@@ -269,5 +266,23 @@ def transform_key_string(key_string):
 
 def _type_slowly(driver_ele, text):
     for c in text:
-        driver_ele.value += c
-        sleep(0.5)
+        driver_ele.send_keys(c)
+        sleep(0.3)
+
+
+def _fill_in_text(ele, text):
+    if ele.get_attribute('type') != 'file':
+        ele.clear()
+    ele.send_keys(text)
+
+
+def _get_attribute_of_element(finder_function, pick, find_pattern, attribute):
+    ele = _get_visible_element(finder_function, pick, find_pattern)
+    if attribute == 'text':
+        return ele.text
+    elif attribute == 'outer html':
+        return ele.get_attribute('outerHTML')
+    elif attribute == 'html':
+        return ele.get_attribute('innerHTML')
+    else:
+        return ele.get_attribute(attribute)

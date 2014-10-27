@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import time
 
 from lettuce import step, world
 from salad.terrains.browser import setup_browser
@@ -36,7 +35,7 @@ def take_screenshot(step, name, with_timestamp):
     ts = ''
 
     if with_timestamp:
-        ts = datetime.fromtimestamp(time()).strftime('%Y-%m-%d_%H:%M:%S')
+        ts = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
         ts = '_%s' % (ts, )
         if not name:
             name = 'screenshot'

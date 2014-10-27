@@ -4,6 +4,7 @@ from lettuce import step, world
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.errorhandler import \
     StaleElementReferenceException
+from selenium.webdriver.support.ui import Select
 
 from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
                                          ELEMENT_THING_STRING,
@@ -36,24 +37,44 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
     globals()["form_type_%s" % (finder_function,)] = (
         _type_generator(finder_string, finder_function))
 
-    def _select_generator(finder_string, finder_function):
-        @step(r'select the option (named|with the value)? "([^"]*)" '
-              '(?:from|in) the%s %s %s$' %
+    def _deselect_generator(finder_string, finder_function):
+        @step(r'deselect all options from the%s %s %s$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
-        def _this_step(step, named_or_with_value, field_value, pick,
-                       find_pattern):
+        def _deselect_function(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            if named_or_with_value == "named":
-                # this does not work properly, it will click the first match
-                # to field_value by default. it does not select the element we
-                # are actually looking for.
-                option = world.browser.find_option_by_text(field_value)
-            else:
-                option = ele.find_by_value(field_value)
+            select = Select(ele)
+            select.deselect_all()
 
-            option.click()
+        return _deselect_function
 
-        return _this_step
+    globals()["form_deselect_%s" % (finder_function,)] = (
+        _deselect_generator(finder_string, finder_function))
+
+    def _select_generator(finder_string, finder_function):
+        @step(r'(de)?select the option with the (index|value|text)'
+                '( that is the stored value of)? "([^"]+)" '
+                'from the%s %s %s$' %
+              (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        def _select_function(step, negate, by_what, stored, value, pick,
+                             find_pattern):
+            ele = _get_visible_element(finder_function, pick, find_pattern)
+            select = Select(ele)
+            # get value from storage if necessary
+            if stored:
+                value = world.stored_values[value]
+            # adjust variables for proper Select usage
+            if by_what == 'text':
+                by_what = 'visible_text'
+            if by_what == 'index':
+                value = int(value)
+            # select or deselect according to negate
+            attribute_mask = 'deselect_by_%s' if negate else 'select_by_%s'
+            # get the method
+            select_method = getattr(select, attribute_mask % (by_what, ))
+            # select the correct option
+            select_method(value)
+
+        return _select_function
 
     globals()["form_select_%s" % (finder_function,)] = (
         _select_generator(finder_string, finder_function))

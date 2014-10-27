@@ -12,7 +12,7 @@ ELEMENT_FINDERS = {
 }
 
 LINK_FINDERS = {
-    'to "([^"]*)"': "find_link_by_href",
+    'to(?: the url)? "([^"]*)"': "find_link_by_href",
     'to a url that contains "([^"]*)"': "find_link_by_partial_href",
     'with(?: the)? text "([^"]*)"': "find_link_by_text",
     'with text that contains "([^"]*)"': "find_link_by_partial_text",
@@ -36,7 +36,7 @@ def _get_element(finder_function, pick, pattern):
     index = pick_to_index(pick)
     ele = ele[index]
 
-    if not "WebDriverElement" in "%s" % type(ele):
+    if "WebDriverElement" not in "%s" % type(ele):
         if len(ele) > 1:
             logger.warn("More than one element found when looking with %s "
                         "for %s.  Using the first one. " %
@@ -45,26 +45,3 @@ def _get_element(finder_function, pick, pattern):
 
     world.current_element = ele
     return ele
-
-
-def _convert_pattern_to_css(finder_function, first, last, find_pattern, tag=""):
-    pattern = ""
-    if finder_function == "find_by_name":
-        pattern += "%s[name='%s']" % (tag, find_pattern, )
-    elif finder_function == "find_by_id":
-        pattern += "#%s" % (find_pattern, )
-    elif finder_function == "find_by_css":
-        pattern += "%s" % (find_pattern, )
-    elif finder_function == "find_by_value":
-        # makes no sense, but is consistent
-        pattern += "%s[value='%s']" % (tag, find_pattern, )
-    else:
-        raise Exception("Unknown pattern.")
-
-    if first:
-        pattern += ":first"
-
-    if last:
-        pattern += ":last"
-
-    return pattern

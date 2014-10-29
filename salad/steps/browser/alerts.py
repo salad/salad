@@ -8,8 +8,8 @@ from salad.tests.util import (assert_with_negate, store_with_case_option,
 
 def _get_alert_or_none():
     if 'phantomjs' == world.browser.driver.name:
-        logger.info("Attempted to run javascript in a javascript-disabled"
-                    "browser. Moving along.")
+        logger.info("Attempted to use alerts in a browser that does not "
+                    "support alerts. Moving along.")
         raise NotImplementedError("phantomjs does not support alerts")
 
     try:

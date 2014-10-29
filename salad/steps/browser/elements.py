@@ -25,7 +25,7 @@ from salad.waiter import TimeoutException
 # and attributes (text, classes, ids)
 
 
-# the following four steps do not use the ExistenceStepsFactory
+# the following steps do not use the ExistenceStepsFactory
 @step(r'should( not)? see "([^"]*)" (?:somewhere|anywhere) in (?:the|this) '
       'page(?: within (\d+) seconds)?$')
 def should_see_in_the_page(step, negate, text, wait_time):

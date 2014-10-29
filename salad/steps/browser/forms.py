@@ -74,7 +74,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
             # adjust variables for proper Select usage
             if by_what == 'text':
                 by_what = 'visible_text'
-            if by_what == 'index':
+            elif by_what == 'index':
                 value = int(value)
             # select or deselect according to negate
             attribute_mask = 'deselect_by_%s' if negate else 'select_by_%s'

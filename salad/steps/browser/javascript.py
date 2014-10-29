@@ -1,8 +1,8 @@
 from lettuce import step, world
 
+from salad.exceptions import WrongJavascriptReturnValue
 from salad.logger import logger
 from salad.tests.util import assert_equals_with_negate, wait_for_completion
-from salad.exceptions import WrongJavascriptReturnValue
 
 # Execute JS and verify results
 

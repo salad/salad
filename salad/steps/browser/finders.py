@@ -47,8 +47,7 @@ PATTERN_ASSOCIATION = {
 def _get_visible_element(finder_function, pick, pattern):
     element = _get_element(finder_function, pick, pattern)
     if not element:
-        exception = world.failure[0]
-        msg = world.failure[1]
+        exception, msg = world.failure
         raise exception(msg)
     if not element.is_displayed():
         raise ElementIsNotVisible("The element exist, but it is not visible. "
@@ -66,8 +65,8 @@ def _get_element(finder_function, pick, pattern):
             pattern = PATTERN_ASSOCIATION[lf] % (pattern, )
 
     finder_function = FINDER_ASSOCIATION[finder_function]
-    ele = world.browser.driver.__getattribute__(finder_function)(pattern)
-    if not ele:
+    element = world.browser.driver.__getattribute__(finder_function)(pattern)
+    if not element:
         msg = ("function: %s, pattern: %s, index: %s" %
                (finder_function, pattern, pick))
         world.failure = (ElementDoesNotExist, msg)
@@ -75,7 +74,7 @@ def _get_element(finder_function, pick, pattern):
 
     index = pick_to_index(pick)
     try:
-        ele = ele[index]
+        element = element[index]
     except IndexError:
         msg = ("There are elements that match your search, but the index is "
                "out of range.\nfunction: %s, pattern: %s, index: %s" %
@@ -83,5 +82,5 @@ def _get_element(finder_function, pick, pattern):
         world.failure = (ElementAtIndexDoesNotExist, msg)
         return None
 
-    world.current_element = ele
-    return ele
+    world.current_element = element
+    return element

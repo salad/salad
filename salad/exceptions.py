@@ -10,5 +10,5 @@ class ElementAtIndexDoesNotExist(Exception):
     pass
 
 
-class WrongJavascriptReturnValueException(Exception):
+class WrongJavascriptReturnValue(Exception):
     pass

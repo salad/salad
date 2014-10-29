@@ -2,7 +2,7 @@ from lettuce import step, world
 
 from salad.logger import logger
 from salad.tests.util import assert_equals_with_negate, wait_for_completion
-from salad.exceptions import WrongJavascriptReturnValueException
+from salad.exceptions import WrongJavascriptReturnValue
 
 # Execute JS and verify results
 
@@ -35,4 +35,4 @@ def evaluate_the_javascript(step, negate, script, value, wait_time):
     except:
         ret_val = world.browser.evaluate_script(script)
         msg = "%s != %s after %s seconds" % (ret_val, value, wait_time)
-        raise WrongJavascriptReturnValueException(msg)
+        raise WrongJavascriptReturnValue(msg)

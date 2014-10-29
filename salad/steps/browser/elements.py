@@ -40,8 +40,8 @@ def assert_element_exists_with_negate(negate, text, partial, function):
     return True
 
 
-@step(r'should( not)? see (?:the|a) link with the partial text "([^"]*)"'
-      '(?: within (\d+) seconds)?$')
+@step(r'should( not)? see (?:the|a) link with (?:the partial text|text '
+      'that contains) "([^"]*)"(?: within (\d+) seconds)?$')
 def should_see_a_link_with_partial_text(step, negate, text, wait_time):
     wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
                         text, "partial", "find_link_by_%stext")
@@ -54,7 +54,7 @@ def should_see_a_link_called(step, negate, text, wait_time):
                         text, None, "find_link_by_%stext")
 
 
-@step(r'should( not)? see (?:the|a) link to( the partial url)? "([^"]*)"'
+@step(r'should( not)? see (?:the|a) link to( the partial url| a url that contains)? "([^"]*)"'
       '(?: within (\d+) seconds)?$')
 def should_see_a_link_to(step, negate, partial, text, wait_time):
     wait_for_completion(wait_time, assert_element_exists_with_negate, negate,

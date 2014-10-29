@@ -27,26 +27,30 @@ Feature: Ensuring that the elements steps work
         Given I visit the salad test url "browser/elements.html"
          When I look around
          Then I should see a link to "http://example.com"
-         Then I should see a link to "http://example.com"
+          And I should see a link to "http://example.com"
           And I should see a link to the partial url "example.com"
+          And I should see a link to a url that contains "example.com"
 
     Scenario: 6. Waiting for links in the page by url
         Given I visit the salad test url "browser/elements.html"
          When I look around
          Then I should see a link to "http://example.com" within 5 seconds
           And I should see a link to the partial url "example.com" within 5 seconds
+          And I should see a link to a url that contains "example.com" within 5 seconds
 
     Scenario: 7. Not seeing links that should not be in the page by url
         Given I visit the salad test url "browser/elements.html"
          When I look around
          Then I should not see a link to "http://google.com"
           And I should not see a link to the partial url "google.com"
+          And I should not see a link to a url that contains "google.com"
 
     Scenario: 8. Wait to not see links that should not be in the page by url
         Given I visit the salad test url "browser/elements.html"
          When I look around
          Then I should not see a link to "http://google.com" within 3 seconds
           And I should not see a link to the partial url "google.com" within 3 seconds
+          And I should not see a link to a url that contains "google.com" within 3 seconds
 
     Scenario: 9. Seeing links in the page by link name / link text / partial link text
         Given I visit the salad test url "browser/elements.html"
@@ -54,6 +58,7 @@ Feature: Ensuring that the elements steps work
          Then I should see a link called "example"
           And I should see a link with the text "example"
           And I should see a link with the partial text "ample"
+          And I should see a link with text that contains "ample"
 
     Scenario: 10. Waiting to see links in the page by link name
         Given I visit the salad test url "browser/elements.html"
@@ -61,6 +66,7 @@ Feature: Ensuring that the elements steps work
          Then I should see a link called "example" within 5 seconds
           And I should see a link with the text "example" within 5 seconds
           And I should see a link with the partial text "ample" within 5 seconds
+          And I should see a link with text that contains "ample" within 5 seconds
 
     Scenario: 11. Not seeing links that should not be in the page by link name
         Given I visit the salad test url "browser/elements.html"
@@ -68,6 +74,7 @@ Feature: Ensuring that the elements steps work
          Then I should not see a link called "google"
           And I should not see a link with the text "google"
           And I should not see a link with the partial text "oogle"
+          And I should not see a link with text that contains "oogle"
 
     Scenario: 12. Wait to not see links that should not be in the page by link name
         Given I visit the salad test url "browser/elements.html"
@@ -75,6 +82,7 @@ Feature: Ensuring that the elements steps work
          Then I should not see a link called "google" within 3 seconds
           And I should not see a link with the text "google" within 3 seconds
           And I should not see a link with the partial text "oogle" within 3 seconds
+          And I should not see a link with text that contains "oogle" within 3 seconds
 
     Scenario Outline: 13. Existence of an element
         Given I visit the salad test url "browser/elements.html"

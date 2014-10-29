@@ -1,15 +1,25 @@
 from lettuce import step, world
-from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
-                              parsed_negator)
-from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
-                                         ELEMENT_THING_STRING,
-                                         _get_visible_element)
+
+from salad.exceptions import (
+    ElementDoesNotExist,
+    ElementIsNotVisible,
+    ElementAtIndexDoesNotExist
+)
 from salad.logger import logger
+from salad.steps.browser.finders import (
+    PICK_EXPRESSION,
+    ELEMENT_FINDERS,
+    ELEMENT_THING_STRING,
+    _get_visible_element
+)
+from salad.tests.util import (
+    assert_equals_with_negate,
+    assert_with_negate,
+    parsed_negator,
+    wait_for_completion
+)
 from salad.waiter import SaladWaiter
 from salad.waiter import TimeoutException
-from salad.tests.util import wait_for_completion
-from salad.exceptions import ElementDoesNotExist, ElementIsNotVisible, \
-    ElementAtIndexDoesNotExist
 
 # Find and verify that elements exist, have the expected content
 # and attributes (text, classes, ids)

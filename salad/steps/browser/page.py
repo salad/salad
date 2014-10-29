@@ -1,6 +1,9 @@
 from lettuce import step, world
-from salad.tests.util import assert_equals_with_negate, wait_for_completion, \
+from salad.tests.util import (
+    assert_equals_with_negate,
+    wait_for_completion,
     assert_with_negate
+)
 
 # Verify page-level attributes (title, size, html)
 

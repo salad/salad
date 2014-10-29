@@ -7,13 +7,21 @@ from selenium.webdriver.remote.errorhandler import \
     StaleElementReferenceException
 from selenium.webdriver.support.ui import Select
 
-from salad.steps.browser.finders import (PICK_EXPRESSION, ELEMENT_FINDERS,
-                                         ELEMENT_THING_STRING,
-                                         _get_visible_element)
-from salad.tests.util import (assert_equals_with_negate, assert_with_negate,
-                              assert_value, store_with_case_option,
-                              transform_for_upper_lower_comparison,
-                              wait_for_completion, generate_content)
+from salad.steps.browser.finders import (
+    PICK_EXPRESSION,
+    ELEMENT_FINDERS,
+    ELEMENT_THING_STRING,
+    _get_visible_element
+)
+from salad.tests.util import (
+    assert_equals_with_negate,
+    assert_with_negate,
+    assert_value,
+    store_with_case_option,
+    transform_for_upper_lower_comparison,
+    wait_for_completion,
+    generate_content
+)
 
 # What's happening here? We're generating steps for every possible
 # permuation of the element finder

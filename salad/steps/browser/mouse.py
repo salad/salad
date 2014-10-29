@@ -1,10 +1,14 @@
 from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
 
-from salad.steps.browser.finders import (ELEMENT_FINDERS, LINK_FINDERS,
-                                         ELEMENT_THING_STRING,
-                                         LINK_THING_STRING,
-                                         PICK_EXPRESSION, _get_visible_element)
+from salad.steps.browser.finders import (
+    ELEMENT_FINDERS,
+    LINK_FINDERS,
+    ELEMENT_THING_STRING,
+    LINK_THING_STRING,
+    PICK_EXPRESSION,
+    _get_visible_element
+)
 
 """
     Click on things, mouse over, move the mouse around.

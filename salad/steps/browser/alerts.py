@@ -1,9 +1,12 @@
 from lettuce import step, world
 
 from salad.logger import logger
-from salad.tests.util import (assert_with_negate, store_with_case_option,
-                              transform_for_upper_lower_comparison,
-                              wait_for_completion)
+from salad.tests.util import (
+    assert_with_negate,
+    store_with_case_option,
+    transform_for_upper_lower_comparison,
+    wait_for_completion
+)
 
 
 def _get_alert_or_none():

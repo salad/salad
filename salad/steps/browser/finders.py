@@ -2,8 +2,11 @@ from lettuce import world
 
 from salad.logger import logger
 from salad.steps.parsers import pick_to_index
-from salad.exceptions import ElementDoesNotExist, ElementIsNotVisible, \
+from salad.exceptions import (
+    ElementDoesNotExist,
+    ElementIsNotVisible,
     ElementAtIndexDoesNotExist
+)
 
 
 ELEMENT_FINDERS = {

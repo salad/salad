@@ -111,8 +111,7 @@ Feature: Ensuring that selecting the XX. element of something works
         | 2nd              |Filled 1!      |
 
     Scenario Outline: 11. Mouse over some ordinal element works
-        Given I am using Chrome
-          And I visit the salad test url "browser/mouse.html"
+        Given I visit the salad test url "browser/mouse.html"
          When I mouseover the <ordinal> element named "mouse_target_name"
          Then I should see "<expected_results>" somewhere in the page
 

@@ -8,44 +8,57 @@ from salad.logger import logger
 from salad.waiter import SaladWaiter
 from salad.waiter import TimeoutException
 from salad.tests.util import wait_for_completion
-from splinter.exceptions import ElementDoesNotExist
+from salad.exceptions import ElementDoesNotExist, ElementIsNotVisible, \
+    ElementAtIndexDoesNotExist
 
 # Find and verify that elements exist, have the expected content
 # and attributes (text, classes, ids)
 
 
-# the following three steps do not use the ExistenceStepsFactory
+# the following four steps do not use the ExistenceStepsFactory
 @step(r'should( not)? see "([^"]*)" (?:somewhere|anywhere) in (?:the|this) '
       'page(?: within (\d+) seconds)?$')
 def should_see_in_the_page(step, negate, text, wait_time):
     def assert_text_present_with_negates(negate, text):
-        assert_with_negate(world.browser.is_text_present(text), negate)
+        body = world.browser.driver.find_element_by_tag_name('body')
+        assert_with_negate(text in body.text, negate)
         return True
 
     wait_for_completion(wait_time, assert_text_present_with_negates, negate,
                         text)
 
 
+def assert_element_exists_with_negate(negate, text, partial, function):
+    infix = "partial_" if partial else ""
+    found = True
+    try:
+        _get_visible_element(function % (infix, ), None, text)
+    except (ElementDoesNotExist, ElementIsNotVisible,
+            ElementAtIndexDoesNotExist):
+        found = False
+    assert_with_negate(found, negate)
+    return True
+
+
+@step(r'should( not)? see (?:the|a) link with the partial text "([^"]*)"'
+      '(?: within (\d+) seconds)?$')
+def should_see_a_link_with_partial_text(step, negate, text, wait_time):
+    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
+                        text, "partial", "find_link_by_%stext")
+
+
 @step(r'should( not)? see (?:the|a) link (?:called|with the text) "([^"]*)"'
       '(?: within (\d+) seconds)?$')
 def should_see_a_link_called(step, negate, text, wait_time):
-    def assert_link_exists_negates(negate, text):
-        length = len(world.browser.find_link_by_text(text))
-        assert_with_negate(length > 0, negate)
-        return True
-
-    wait_for_completion(wait_time, assert_link_exists_negates, negate, text)
+    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
+                        text, None, "find_link_by_%stext")
 
 
-@step(r'should( not)? see (?:the|a) link to "([^"]*)"'
+@step(r'should( not)? see (?:the|a) link to( the partial url)? "([^"]*)"'
       '(?: within (\d+) seconds)?$')
-def should_see_a_link_to(step, negate, link, wait_time):
-    def assert_link_exists_negates(negate, text):
-        length = len(world.browser.find_link_by_href(text))
-        assert_with_negate(length > 0, negate)
-        return True
-
-    wait_for_completion(wait_time, assert_link_exists_negates, negate, link)
+def should_see_a_link_to(step, negate, partial, text, wait_time):
+    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
+                        text, partial, "find_by_%shref")
 
 
 class ExistenceStepsFactory(object):
@@ -93,7 +106,8 @@ class ExistenceStepsFactory(object):
                       find_pattern, wait_time, *args):
         try:
             element = _get_visible_element(finder_function, pick, find_pattern)
-        except ElementDoesNotExist:
+        except (ElementDoesNotExist, ElementIsNotVisible,
+                ElementAtIndexDoesNotExist):
             assert parsed_negator(negate)
             element = None
         self.test(element, negate, *args)
@@ -125,7 +139,7 @@ attribute_pattern = (r'should( not)? see that the%s %s %s has (?:an|the) '
                      'attribute (?:of|named|called) "(\w*)"')
 def attribute_test(element, negate, *args):
     attribute = args[0]
-    assert_with_negate(element[attribute] is not None, negate)
+    assert_with_negate(element.get_attribute(attribute) is not None, negate)
 
 
 attribute_value_pattern = (r'should( not)? see that the%s %s %s has '
@@ -134,7 +148,7 @@ attribute_value_pattern = (r'should( not)? see that the%s %s %s has '
 def attribute_value_test(element, negate, *args):
     attribute = args[0]
     value = args[1]
-    assert_equals_with_negate(element[attribute], value, negate)
+    assert_equals_with_negate(element.get_attribute(attribute), value, negate)
 
 
 ExistenceStepsFactory(ELEMENT_FINDERS, visibility_pattern, visibility_test)

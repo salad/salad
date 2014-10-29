@@ -120,11 +120,16 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         _attach_generator(finder_string, finder_function))
 
     def _focus_generator(finder_string, finder_function):
+        """
+           the selenium support for focus on and blur from is limited
+           and does not work properly.
+           so instead of focusing on, we will click on the element
+        """
         @step(r'focus on the%s %s %s$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            ele.focus()
+            ele.click()
 
         return _this_step
 
@@ -132,11 +137,19 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
         _focus_generator(finder_string, finder_function))
 
     def _blur_generator(finder_string, finder_function):
+        """
+           the selenium support for focus on and blur from is limited
+           and does not work properly.
+           so instead of blurring from the element, we will click on the body
+        """
         @step(r'(?:blur|move) from the%s %s %s$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _this_step(step, pick, find_pattern):
+            # make sure the element is visible anyway
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            ele.blur()
+            # then click on the body of the html document
+            ele = _get_visible_element('find_by_tag', None, "body")
+            ele.click()
 
         return _this_step
 

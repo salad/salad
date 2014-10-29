@@ -55,17 +55,17 @@ Feature: Ensuring that selecting the XX. element of something works
             | 3rd     | 3  |
 
 # Value Generator
-    Scenario Outline: 6. I should see that the value is ....
+    Scenario Outline: 6. I should see that the text is ...
         Given I visit the salad test url "browser/form.html"
          When I look around
-         Then I should see that the value of the <ordinal> element named "some_text_name" is "<output>"
+         Then I should see that the text of the <ordinal> element named "some_text_name" is "<output>"
 
     Examples:
-        | ordinal   | output         |
-        | first     | some text 1    |
-        | 1st       | some text 1    |
-        | 2nd       | some text 2    |
-        | last      | some text 2    |
+        | ordinal | output      |
+        | first   | some text 1 |
+        | 1st     | some text 1 |
+        | 2nd     | some text 2 |
+        | last    | some text 2 |
 
 # Fill Generator
     Scenario Outline: 7. Filling in a field works.
@@ -76,11 +76,11 @@ Feature: Ensuring that selecting the XX. element of something works
          And I should not see that the value of the <ordinal> element named "input_target_name" is "Hahaha ich bin's nicht!"
 
     Examples:
-        | ordinal                                       |
-        | first                                         |
-        | last                                          |
-        | 1st                                           |
-        | 2nd                                           |
+        | ordinal |
+        | first   |
+        | last    |
+        | 1st     |
+        | 2nd     |
 
 # Attach Generator
     Scenario Outline: 8. Attaching a file in <ordinal> fields works.

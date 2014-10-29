@@ -13,6 +13,7 @@ BROWSER_CHOICES = [browser.lower()
 BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
 
+
 class store_driver_and_version(argparse.Action):
     drivers = BROWSER_CHOICES
 

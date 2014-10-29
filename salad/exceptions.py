@@ -12,3 +12,7 @@ class ElementAtIndexDoesNotExist(Exception):
 
 class WrongJavascriptReturnValue(Exception):
     pass
+
+
+class TimeoutException(Exception):
+    pass

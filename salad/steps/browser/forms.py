@@ -53,8 +53,8 @@ for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
 
     def _select_generator(finder_string, finder_function):
         @step(r'(de)?select the option with the (index|value|text)'
-                '( that is the stored value of)? "([^"]+)" '
-                'from the%s %s %s$' %
+              '( that is the stored value of)? "([^"]+)" '
+              'from the%s %s %s$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
         def _select_function(step, negate, by_what, stored, value, pick,
                              find_pattern):

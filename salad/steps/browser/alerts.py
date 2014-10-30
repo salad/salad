@@ -1,10 +1,20 @@
 from lettuce import step, world
-from salad.tests.util import (assert_with_negate, store_with_case_option,
-                              transform_for_upper_lower_comparison,
-                              wait_for_completion)
+
+from salad.logger import logger
+from salad.tests.util import (
+    assert_with_negate,
+    store_with_case_option,
+    transform_for_upper_lower_comparison,
+    wait_for_completion
+)
 
 
 def _get_alert_or_none():
+    if 'phantomjs' == world.browser.driver.name:
+        logger.info("Attempted to use alerts in a browser that does not "
+                    "support alerts. Moving along.")
+        raise NotImplementedError("phantomjs does not support alerts")
+
     try:
         alert = world.browser.driver.switch_to_alert()
         # switch_to_alert() always returns an object, but if there is no

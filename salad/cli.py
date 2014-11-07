@@ -1,5 +1,4 @@
 import argparse
-import re
 import sys
 
 from lettuce.bin import main as lettuce_main
@@ -85,7 +84,7 @@ def main(args=sys.argv[1:]):
         scenarios = set()
         for part in parsed_args.scenarios.split(','):
             x = part.split('-')
-            scenarios.update(range(int(x[0]),int(x[-1])+1))
+            scenarios.update(range(int(x[0]), int(x[-1])+1))
         scenarios = [str(x) for x in sorted(scenarios)]
         leftovers.append('-s %s' % (','.join(scenarios)))
         del parsed_args.scenarios

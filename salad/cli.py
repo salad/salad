@@ -1,5 +1,6 @@
-import sys
 import argparse
+import re
+import sys
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world
@@ -12,6 +13,7 @@ BROWSER_CHOICES = [browser.lower()
                    if not browser.startswith('_')]
 BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
+
 
 class store_driver_and_version(argparse.Action):
     drivers = BROWSER_CHOICES
@@ -28,6 +30,7 @@ class store_driver_and_version(argparse.Action):
             setattr(namespace, 'version', driver_info[1])
         if len(driver_info) > 2:
             setattr(namespace, 'platform', driver_info[2].replace('_', ' '))
+
 
 def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(prog="Salad",
@@ -74,6 +77,25 @@ def main(args=sys.argv[1:]):
 
     world.remote_capabilities['trustAllSSLCertificates'] = True
     world.remote_capabilities['acceptSslCerts'] = True
+
+    scenarios = None
+    if leftovers and any('-s' in x for x in leftovers):
+        param, index = [(x, leftovers.index(x)) for x in leftovers
+                        if '-s' in x][0]
+        scenarios = param.replace('-s', '').split(',')
+
+    if scenarios:
+        new_param = set()
+        for item in scenarios:
+            if '-' not in item:
+                new_param.add(int(item))
+            else:
+                start, end = re.search(r'(\d+)-(\d+)', item).groups()
+                numbers = set(range(int(start), int(end)+1))
+                new_param = new_param.union(numbers)
+        new_param = [str(x) for x in new_param]
+        new_param = '-s%s' % (','.join(new_param), )
+        leftovers[index] = new_param
 
     lettuce_main(args=leftovers)
 

@@ -10,12 +10,13 @@ Feature: Test the general steps and take screenshot step
          Then I print out the stored value of "my_text"
 
 
-    Scenario: 2. This test should fail!
-        Given I visit the salad test url "browser/elements.html"
-         When I look around
-         Then I should fail because "This step does not make sense"
-
-
+  # I have to comment out this step for the travis build
+  #    Scenario: 2. This test should fail!
+  #        Given I visit the salad test url "browser/elements.html"
+  #         When I look around
+  #         Then I should fail because "This step does not make sense"
+  #
+  #
     Scenario: 3. Take a screenshot
         Given I visit the salad test url "browser/elements.html"
          When I look around

@@ -1,11 +1,11 @@
+# chrome does not work on travis at the moment
+# https://github.com/travis-ci/travis-ci/issues/938
 language: python
 env:
-  global:
-    - PATH=$PATH:/tmp/bin
   matrix:
     - BROWSER=firefox
-    - BROWSER=chrome
-    - REMOTE_ARG='--remote-url http://127.0.0.1:4444/wd/hub' BROWSER=firefox
+    #- BROWSER=chrome
+    #- REMOTE_ARG='--remote-url http://127.0.0.1:4444/wd/hub' BROWSER=firefox
 python:
   - "2.6"
   - "2.7"
@@ -16,15 +16,17 @@ install:
   - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar; fi'
   # Firefox is already installed
   # Install Google Chrome
-  - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb"
-  - "sudo apt-get install libgconf2-4"
-  - "sudo dpkg -i google-chrome*.deb"
-  - "sudo apt-get -f install" # reported dependency issue?
+  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  #- sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  #- sudo apt-get update
+  #- sudo apt-get install google-chrome-stable
+  #- wget http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip
   # Install the Google Chrome webdriver
-  - "mkdir /tmp/bin"
-  - "wget https://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip"
-  - "unzip chromedriver_linux32_23.0.1240.0.zip"
-  - "mv chromedriver /tmp/bin"
+  #- unzip chromedriver*.zip
+  #- sudo cp chromedriver /usr/local/bin/
+  #- sudo chmod 755 /usr/local/bin/chromedriver
+  #- sudo chown travis:travis /usr/local/bin/chromedriver
+  #- /usr/local/bin/chromedriver --version
 
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/

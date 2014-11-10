@@ -6,7 +6,7 @@ from salad import VERSION
 ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
 
-requirements = ["nose==1.3.0", "splinter>=0.4.9", "lettuce>=0.2.19"]
+requirements = ["nose>=1.3.0", "splinter>=0.4.9", "lettuce>=0.2.19"]
 try: import argparse
 except ImportError: requirements.append('argparse')
 
@@ -17,9 +17,7 @@ setup(
     author_email="qa@deliveryhero.com",
     url="https://github.com/beanqueen/salad",
     version=VERSION,
-#    download_url = ['https://github.com/gabrielfalcao/lettuce/tarball/fork', ],
     install_requires=requirements,
-#    dependency_links = ['https://github.com/gabrielfalcao/lettuce/tarball/fork#egg=lettuce-0.2.19', ],
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

@@ -4,7 +4,7 @@ Feature: Ensuring that selecting the XX. element of something works
     I test against the form test files
 
 # Key Generator
-    Scenario Outline: Hitting keys in fields works.
+    Scenario Outline: 1. Hitting keys in fields works.
         Given I visit the salad test url "browser/form.html"
           And I look around
          When I click on the <ordinal> element named "keyup_target_name"
@@ -18,7 +18,7 @@ Feature: Ensuring that selecting the XX. element of something works
         | 2nd     | second up |
 
 # Visibility
-    Scenario Outline: Visibility of elements
+    Scenario Outline: 2. Visibility of elements
         Given I visit the salad test url "browser/invisible_elements.html"
          When I look around
          Then I should not see the <ordinal> element with css selector ".invisible"
@@ -31,22 +31,22 @@ Feature: Ensuring that selecting the XX. element of something works
         | 2nd                                        |
 
 # Content and Attributes
-    Scenario Outline: Content of an element
+    Scenario Outline: 3. Content of an element
         Given I visit the salad test url "browser/elements.html"
-        When I look around
-        Then I should see that the 1st element with css selector ".i_contain_class" contains "has"
-         And I should not see that the last element with css selector ".i_contain_class" contains "has"
+         When I look around
+         Then I should see that the 1st element with css selector ".i_contain_class" contains "has"
+          And I should not see that the last element with css selector ".i_contain_class" contains "has"
 
 # Select Generator
-    Scenario: Selecting works with "with the value".
+    Scenario: 4. Selecting works with "with the value".
         Given I visit the salad test url "browser/form.html"
-        When I select the option with the value "option 3" from the field with id "nr_select_1"
-        Then I should see "Selected 3 in Selector 1!" somewhere in the page
+         When I select the option with the value "option 3" from the field with id "nr_select_1"
+         Then I should see "Selected 3 in Selector 1!" somewhere in the page
 
-    Scenario: Selecting works with "with the value" and ordinal.
+    Scenario: 5. Selecting works with "with the value" and ordinal.
         Given I visit the salad test url "browser/form.html"
-        When I select the option with the value "option 2" from the <ordinal> field named "nr_select_name"
-        Then I should see "Selected 2 in Selector <nr>!" somewhere in the page
+         When I select the option with the value "option 2" from the <ordinal> field named "nr_select_name"
+         Then I should see "Selected 2 in Selector <nr>!" somewhere in the page
 
         Examples:
             | ordinal | nr |
@@ -55,20 +55,20 @@ Feature: Ensuring that selecting the XX. element of something works
             | 3rd     | 3  |
 
 # Value Generator
-    Scenario Outline: i should see that the value is ....
+    Scenario Outline: 6. I should see that the text is ...
         Given I visit the salad test url "browser/form.html"
          When I look around
-         Then I should see that the value of the <ordinal> element named "some_text_name" is "<output>"
+         Then I should see that the text of the <ordinal> element named "some_text_name" is "<output>"
 
     Examples:
-        | ordinal   | output         |
-        | first     | some text 1    |
-        | 1st       | some text 1    |
-        | 2nd       | some text 2    |
-        | last      | some text 2    |
+        | ordinal | output      |
+        | first   | some text 1 |
+        | 1st     | some text 1 |
+        | 2nd     | some text 2 |
+        | last    | some text 2 |
 
 # Fill Generator
-    Scenario Outline: Filling in a field works.
+    Scenario Outline: 7. Filling in a field works.
         Given I visit the salad test url "browser/form.html"
         When I fill in the <ordinal> element with css selector ".input_target_class" with "my test text"
         Then I should see "Filled" somewhere in the page
@@ -76,17 +76,17 @@ Feature: Ensuring that selecting the XX. element of something works
          And I should not see that the value of the <ordinal> element named "input_target_name" is "Hahaha ich bin's nicht!"
 
     Examples:
-        | ordinal                                       |
-        | first                                         |
-        | last                                          |
-        | 1st                                           |
-        | 2nd                                           |
+        | ordinal |
+        | first   |
+        | last    |
+        | 1st     |
+        | 2nd     |
 
 # Attach Generator
-    Scenario Outline: Attaching a file in <ordinal> fields works.
+    Scenario Outline: 8. Attaching a file in <ordinal> fields works.
         Given I visit the salad test url "browser/form.html"
-        When I attach "/tmp/temp_lettuce_test" onto the <ordinal> field named "test_file_name"
-        Then I should see "Attached <nr>" somewhere in the page
+         When I attach "/tmp/temp_lettuce_test" onto the <ordinal> field named "test_file_name"
+         Then I should see "Attached <nr>" somewhere in the page
 
     Examples:
         | ordinal   | nr  |
@@ -94,12 +94,12 @@ Feature: Ensuring that selecting the XX. element of something works
         | last      | 2   |
 
 # Type Generator # (slowly) typing in a field
-    Scenario: Slowly typing in a field works.
+    Scenario: 9. Slowly typing in a field works.
         Given I visit the salad test url "browser/form.html"
          When I slowly type "my test text" into the field with the id "input_target"
          Then I should see "Filled" somewhere in the page
 
-    Scenario Outline: Slowly typing in a field works.
+    Scenario Outline: 10. Slowly typing in a field works.
         Given I visit the salad test url "browser/form.html"
          When I type "my test text" into the <ordinal> field named "input_target_name"
          Then I should see "<output>" somewhere in the page
@@ -110,11 +110,10 @@ Feature: Ensuring that selecting the XX. element of something works
         | first            |Filled!        |
         | 2nd              |Filled 1!      |
 
-    Scenario Outline: Mouse over some ordinal element works
-        Given I am using Chrome
-          And I visit the salad test url "browser/mouse.html"
-        When I mouseover the <ordinal> element named "mouse_target_name"
-        Then I should see "<expected_results>" somewhere in the page
+    Scenario Outline: 11. Mouse over some ordinal element works
+        Given I visit the salad test url "browser/mouse.html"
+         When I mouseover the <ordinal> element named "mouse_target_name"
+         Then I should see "<expected_results>" somewhere in the page
 
 # Mouse
     Examples:

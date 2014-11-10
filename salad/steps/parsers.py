@@ -8,5 +8,6 @@ def pick_to_index(pick_string):
     try:
         return int(pick.strip('st nd rd th')) - 1
     except ValueError:
-        raise ValueError("Could not convert '%s'" % pick +
-                " This supports: 'first', 'last', '1st', '2nd', '3rd', '4th', '5th',..")
+        raise ValueError("Could not convert your pick '%s'. This function "
+                         "supports: 'first', 'last', '1st', '2nd', '3rd', "
+                         "'4th', '5th',.." % (pick, ))

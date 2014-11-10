@@ -1,10 +1,20 @@
 from lettuce import step, world
-from salad.tests.util import (assert_with_negate, store_with_case_option,
-                              transform_for_upper_lower_comparison,
-                              wait_for_completion)
+
+from salad.logger import logger
+from salad.tests.util import (
+    assert_with_negate,
+    store_with_case_option,
+    transform_for_upper_lower_comparison,
+    wait_for_completion
+)
 
 
 def _get_alert_or_none():
+    if 'phantomjs' == world.browser.driver.name:
+        logger.info("Attempted to use alerts in a browser that does not "
+                    "support alerts. Moving along.")
+        raise NotImplementedError("phantomjs does not support alerts")
+
     try:
         alert = world.browser.driver.switch_to_alert()
         # switch_to_alert() always returns an object, but if there is no
@@ -15,7 +25,8 @@ def _get_alert_or_none():
     return alert
 
 
-@step(r'should( not)? see (?:a|an) (?:alert|prompt)(?: within (\d+) seconds)?$')
+@step(r'should( not)? see (?:a|an) (?:alert|prompt)'
+      '(?: within (\d+) seconds)?$')
 def should_see_alert(step, negate, wait_time):
     def assert_alert(negate):
         world.prompt = _get_alert_or_none()
@@ -26,7 +37,9 @@ def should_see_alert(step, negate, wait_time):
     wait_for_completion(wait_time, assert_alert, negate)
 
 
-@step(r'should( not)? see (?:a|an) (?:alert|prompt) (with the text|that says|with text that contains) "([^"]*)"(?: within (\d+) seconds)?$')
+@step(r'should( not)? see (?:a|an) (?:alert|prompt) '
+      '(with the text|that says|with text that contains) '
+      '"([^"]*)"(?: within (\d+) seconds)?$')
 def should_see_alert_with_text(step, negate, type_of_match, text, wait_time):
     def assert_alert_with_text(negate, type_of_match, text):
         world.prompt = _get_alert_or_none()
@@ -44,9 +57,13 @@ def should_see_alert_with_text(step, negate, type_of_match, text, wait_time):
                         type_of_match, text)
 
 
-@step(r'should( not)? see (?:a|an) (?:alert|prompt) text that (is|contains) the stored( lowercase| uppercase| case independent)? value of "([^"]*)"(?: within (\d+) seconds)?$')
-def should_see_alert_with_stored_value(step, negate, type_of_match, upper_lower, name, wait_time):
-    def assert_alert_with_stored_value(negate, type_of_match, upper_lower, name):
+@step(r'should( not)? see (?:a|an) (?:alert|prompt) text that (is|contains) '
+      'the stored( lowercase| uppercase| case independent)? '
+      'value of "([^"]*)"(?: within (\d+) seconds)?$')
+def should_see_alert_with_stored_value(step, negate, type_of_match,
+                                       upper_lower, name, wait_time):
+    def assert_alert_with_stored_value(negate, type_of_match, upper_lower,
+                                       name):
         world.prompt = _get_alert_or_none()
         assert world.stored_values[name]
         stored = world.stored_values[name]
@@ -99,7 +116,8 @@ def enter_stored_value_into_prompt(step, name):
     world.prompt.accept()
 
 
-@step(r'(?:store|remember) the( lowercase| uppercase)? text of the (?:alert|prompt) as "([^"]+)"$')
+@step(r'(?:store|remember) the( lowercase| uppercase)? text of the '
+      '(?:alert|prompt) as "([^"]+)"$')
 def store_text_of_element_with_case_option_as(step, upper_lower, name):
     if not hasattr(world, "prompt") or not world.prompt:
         world.prompt = _get_alert_or_none()

@@ -136,27 +136,36 @@ Feature: Ensuring that the forms steps work
         | with the css selector ".checked_box_class"   |
 
 # Select
-    Scenario Outline: 13. Selecting works.
-        Given I visit the salad test url "browser/form.html"
-         When I select the option named "My test text" from the field <finder>
-         Then I should see "Selected!" somewhere in the page
+    Scenario Outline: 13. Selecting works
+        Given I visit the salad test url "browser/select.html"
+         When I look around
+         Then I should see the element with the id "test_single"
+         When I select the option with the <finder> "<selector>" from the element with the id "test_single"
+         Then I should see that running the javascript "$('#<id>').is(':selected')" returns "True" within 3 seconds
 
     Examples:
-        | finder                                         |
-        | named "test_select_name"                     |
-        | with the id "test_select"                    |
-        | with the css selector ".test_select_class"   |
+        | finder | selector  | id  |
+        | value  | bar_value | bar |
+        | text   | Foo       | foo |
+        | index  | 2         | baz |
 
-    Scenario Outline: 14. Selecting works.
-        Given I visit the salad test url "browser/form.html"
-         When I select the option with the value "my test value" from the field <finder>
-         Then I should see "Selected!" somewhere in the page
+
+    Scenario Outline: 14. Deselecting all options works
+        Given I visit the salad test url "browser/select.html"
+         Then I should see that running the javascript "$('#anna').is(':selected')" returns "True" within 5 seconds
+          And I should see that running the javascript "$('#laura').is(':selected')" returns "True"
+          And I should see that running the javascript "$('#nina').is(':selected')" returns "True"
+         When I deselect all options from the element <finder> "<selector>"
+         Then I should see that running the javascript "$('#anna').is(':selected')" returns "False"
+          And I should see that running the javascript "$('#laura').is(':selected')" returns "False"
+          And I should see that running the javascript "$('#nina').is(':selected')" returns "False"
 
     Examples:
-        | finder                                         |
-        | named "test_select_name"                     |
-        | with the id "test_select"                    |
-        | with the css selector ".test_select_class"   |
+        | finder                | selector                               |
+        | with the id           | test_multiple                          |
+        | named                 | test_multiple                          |
+        | with the css selector | .test_multiple_class                    |
+        | with the xpath        | //select[@class='test_multiple_class'] |
 
 
     Scenario Outline: 15. Hitting keys generally works.
@@ -200,19 +209,19 @@ Feature: Ensuring that the forms steps work
         | alt       | Altered!    |
 
 
-    Scenario: 17. Focusing works
-        Given I am using chrome
-          And I visit the salad test url "browser/form.html"
-         When I click on the field named "focus_me_name"
-          And I click on the field named "focus_me_name"
-          And I wait 2 seconds
-         Then I should see "Focused!" somewhere in the page
+    Scenario: 17. Focusing and blurring works
+        Given I visit the salad test url "browser/form.html"
+         When I look around
+         Then I should see the element named "focus_me_name"
+          And I should not see "Focused!" anywhere in the page
+         When I focus on the element named "focus_me_name"
+         Then I should see "Focused!" somewhere in the page within 5 seconds
+          And I should see that running the javascript "document.activeElement.tagName" returns "INPUT"
+         When I <blur_wording> from the element named "input_target_name"
+         Then I should see "Blurred!" somewhere in the page within 5 seconds
+          And I should see that running the javascript "document.activeElement.tagName" returns "BODY"
 
-    Scenario: 18. Blurring works
-        Given I am using chrome
-          And I visit the salad test url "browser/form.html"
-         When I click on the field named "focus_me_name"
-          And I wait 1 seconds
-          And I click on the element named "input_target_name"
-          And I wait 2 seconds
-         Then I should see "Blurred!" somewhere in the page
+    Examples:
+        | blur_wording |
+        | blur         |
+        | move         |

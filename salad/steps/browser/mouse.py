@@ -80,13 +80,13 @@ def drag_and_drop_generator(thing_string, finder_string_from, finder_string_to,
           PICK_EXPRESSION, thing_string, finder_string_to))
     def _this_step(step, handler_pick, drag_handler_pattern, target_pick,
                    drag_target_pattern):
-        handler = _get_visible_element(finder_function_from, handler_pick,
-                                       drag_handler_pattern)
+        source = _get_visible_element(finder_function_from, handler_pick,
+                                      drag_handler_pattern)
         target = _get_visible_element(finder_function_to, target_pick,
                                       drag_target_pattern)
 
         action_chain = ActionChains(world.browser.driver)
-        action_chain.drag_and_drop(handler, target)
+        action_chain.drag_and_drop(source, target)
         action_chain.perform()
 
     return _this_step

@@ -4,8 +4,7 @@ language: python
 env:
   matrix:
     - BROWSER=firefox
-    #- BROWSER=chrome
-    #- REMOTE_ARG='--remote-url http://127.0.0.1:4444/wd/hub' BROWSER=firefox
+    - REMOTE_ARG='--remote-url=http://127.0.0.1:4444/wd/hub' BROWSER=firefox
 python:
   - "2.6"
   - "2.7"
@@ -13,20 +12,7 @@ python:
 install:
   - "python setup.py install"
   # Install the Selenium Server
-  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar; fi'
-  # Firefox is already installed
-  # Install Google Chrome
-  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  #- sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-  #- sudo apt-get update
-  #- sudo apt-get install google-chrome-stable
-  #- wget http://chromedriver.storage.googleapis.com/2.12/chromedriver_linux64.zip
-  # Install the Google Chrome webdriver
-  #- unzip chromedriver*.zip
-  #- sudo cp chromedriver /usr/local/bin/
-  #- sudo chmod 755 /usr/local/bin/chromedriver
-  #- sudo chown travis:travis /usr/local/bin/chromedriver
-  #- /usr/local/bin/chromedriver --version
+  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar -O selenium-server.jar; fi'
 
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
@@ -35,4 +21,5 @@ before_script:
   - 'if [ -n "$REMOTE_ARG" ]; then (java -jar selenium-server.jar > /dev/null &); fi'
   - 'if [ -n "$REMOTE_ARG" ]; then sleep 60; fi'
 script:
-  - "salad --browser $BROWSER $REMOTE_ARG salad/features --verbosity=2"
+  - 'if [[ ! -n "$REMOTE_ARG" ]]; then salad --browser=$BROWSER salad/not_remote_features/steps-browser-drag.feature --verbosity=2; fi'
+  - "salad --browser=$BROWSER $REMOTE_ARG salad/features/ --verbosity=2"

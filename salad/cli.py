@@ -1,5 +1,5 @@
-import sys
 import argparse
+import sys
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world
@@ -54,6 +54,9 @@ def main(args=sys.argv[1:]):
     parser.add_argument('--timeout',
                         help=("Set the saucelabs' idle-timeout for the job"))
 
+    parser.add_argument('--scenarios', '-s',
+                        help=("Limit to the specified scenarios"))
+
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
     world.remote_url = parsed_args.remote_url
@@ -79,6 +82,15 @@ def main(args=sys.argv[1:]):
 
     world.remote_capabilities['trustAllSSLCertificates'] = True
     world.remote_capabilities['acceptSslCerts'] = True
+
+    if parsed_args.scenarios:
+        scenarios = set()
+        for part in parsed_args.scenarios.split(','):
+            x = part.split('-')
+            scenarios.update(range(int(x[0]), int(x[-1])+1))
+        scenarios = [str(x) for x in sorted(scenarios)]
+        leftovers.append('-s %s' % (','.join(scenarios)))
+        del parsed_args.scenarios
 
     lettuce_main(args=leftovers)
 

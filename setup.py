@@ -6,7 +6,7 @@ from salad import VERSION
 ROOT_DIR = os.path.dirname(__file__)
 SOURCE_DIR = os.path.join(ROOT_DIR)
 
-requirements = ["nose>=1.3.0", "splinter>=0.4.9", "lettuce>=0.2.19"]
+requirements = ["nose", "splinter", "lettuce"]
 try: import argparse
 except ImportError: requirements.append('argparse')
 

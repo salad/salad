@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 from lettuce.bin import main as lettuce_main
@@ -82,6 +83,9 @@ def main(args=sys.argv[1:]):
 
     world.remote_capabilities['trustAllSSLCertificates'] = True
     world.remote_capabilities['acceptSslCerts'] = True
+    if os.environ.get('TRAVIS_JOB_NUMBER'):
+        world.remote_capabilities['tunnel-identifier'] = (
+            os.environ.get('TRAVIS_JOB_NUMBER'))
 
     if parsed_args.scenarios:
         scenarios = set()

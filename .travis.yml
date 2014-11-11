@@ -2,11 +2,17 @@
 # https://github.com/travis-ci/travis-ci/issues/938
 language: python
 env:
+  global:
+    - secure: AY1BfwgtYTJ76O9BorDgjhN9yvjc0I46LgESYR4/vcRnokrLWfNiO3feSIr4pT2yOfb/ogFSiQByiMSOFT5DkIaiw4mRUcmeHYBX4xwlmzArJpf+jwqApWcZ9/pGafvLUf1GB2mj7MeD6ONgeKqFvmbATpNhAA7toCrehwzikQI=
+    - secure: PGdiHpcoI7LDkrnvDGZHJCMyYcFz6g7kjBRYuF5ekeKFDb+5OXQjl4uqrtkWqRuGDUAio6IB4KsyLCoGDl1AreQUcKtZWxoUGyPuRrGArlTMUnc2a67vKNbneQduhc13BQVfSyudf6aNHJ3Sv7cJVdCfkDuz0H7CG2a6/aed954=
   matrix:
     - BROWSER=firefox
-    - REMOTE_ARG='--remote-url=http://127.0.0.1:4444/wd/hub' BROWSER=firefox
+    - REMOTE_ARG='--remote-url=' BROWSER=firefox
+    - REMOTE_ARG='--remote-url=http://salad:1688764a-d831-4681-af4e-76a464c7e473@ondemand.saucelabs.com:80/wd/hub' BROWSER=chrome
+  addons:
+      sauce_connect: true
 python:
-  - "2.6"
+  #- "2.6"
   - "2.7"
   #- "3.2" # Fails miserably in Python 3
 install:

@@ -1,11 +1,7 @@
-0.4.14-beanqueen-3
+0.5
 -----
 
 * added support for launching salad like this: salad test.feature -s 4,7,14-18,22,40-50
-
-0.4.14-beanqueen-2
------
-
 * added support for 'contains' to all steps where it made sense
 * added support for 'outer_html' in should-see-that steps
 * added support for 'within X seconds' to all steps where it made sense
@@ -17,12 +13,9 @@
 * some pep8, indentation, and general cleanup
 * some small bug fixes
 * started with scenario numbering
-
-0.4.14-beanqueen-1
------
-
 * Added new steps
 * Removed zope support
+
 
 0.4.14
 -----

@@ -96,5 +96,5 @@ def generate_content(type_of_fill, length):
 
 
 def generate_random_string(length):
-    lst = [choice(ascii_letters) for n in xrange(length)]
+    lst = [choice(ascii_letters) for n in range(length)]
     return "".join(lst)

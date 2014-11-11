@@ -22,5 +22,5 @@ def should_fail(step, because):
 def print_out(step, stored, text):
     if stored:
         text = world.stored_values[text]
-    print text
-    print "-------"
+    print(text)
+    print("-------")

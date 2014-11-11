@@ -8,7 +8,7 @@ from salad.steps.everything import *
 from salad.terrains.everything import *
 
 BROWSER_CHOICES = [browser.lower()
-                   for browser in DesiredCapabilities.__dict__.keys()
+                   for browser in list(DesiredCapabilities.__dict__.keys())
                    if not browser.startswith('_')]
 BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
@@ -87,7 +87,7 @@ def main(args=sys.argv[1:]):
         scenarios = set()
         for part in parsed_args.scenarios.split(','):
             x = part.split('-')
-            scenarios.update(range(int(x[0]), int(x[-1])+1))
+            scenarios.update(list(range(int(x[0]), int(x[-1])+1)))
         scenarios = [str(x) for x in sorted(scenarios)]
         leftovers.append('-s %s' % (','.join(scenarios)))
         del parsed_args.scenarios

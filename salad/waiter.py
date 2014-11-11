@@ -56,7 +56,7 @@ class SaladWaiter(object):
                 break
         raise TimeoutException("%s did not return expected return value "
                                "within %s seconds." %
-                               (method.func_name, self._timeout))
+                               (method.__name__, self._timeout))
 
     def until(self, method, *args):
         return self._until(False, method, *args)

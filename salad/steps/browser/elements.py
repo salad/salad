@@ -79,7 +79,7 @@ class ExistenceStepsFactory(object):
         self.make_steps()
 
     def make_steps(self):
-        for finder_string, finder_function in self.finders.iteritems():
+        for finder_string, finder_function in self.finders.items():
             self.make_step(finder_string, finder_function)
 
     def make_step(self, finder_string, finder_function):

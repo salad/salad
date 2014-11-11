@@ -29,7 +29,7 @@ from salad.tests.util import (
 world.stored_values = dict()
 
 
-for finder_string, finder_function in ELEMENT_FINDERS.iteritems():
+for finder_string, finder_function in ELEMENT_FINDERS.items():
 
     def _type_generator(finder_string, finder_function):
         @step(r'(slowly )?type "([^"]*)" into the%s %s %s$' %

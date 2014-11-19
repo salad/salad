@@ -153,9 +153,9 @@ for finder_string, finder_function in ELEMENT_FINDERS.items():
         def _this_step(step, pick, find_pattern):
             # make sure the element is visible anyway
             ele = _get_visible_element(finder_function, pick, find_pattern)
-            # then click on the body of the html document
-            ele = _get_visible_element('find_by_tag', None, "body")
-            ele.click()
+            # then use javascript to blur from the active element
+            world.browser.driver.execute_script(
+                "document.activeElement.blur();")
 
         return _this_step
 

@@ -227,7 +227,7 @@ Feature: Ensuring that the elements steps work
         | with the id "i_attr"                          |
         | with the css selector ".i_attr_class"         |
         | with the xpath "//div[@name='i_attr_name']"   |
-        | with the value "attr"                           |
+        | with the value "attr"                         |
 
 
     Scenario: 24. Visibility of elements
@@ -238,25 +238,36 @@ Feature: Ensuring that the elements steps work
           And I should not see the element with the id "loading_status"
 
 
-    Scenario Outline: 25. Element polling for disappearance
+    Scenario: 25. Element polling for disappearance
         Given I visit the salad test url "browser/element_waiter.html"
          When I look around
-         Then I should not see <thing> within 10 seconds
-
-    Examples:
-        | thing                                                                                   |
-        | that the element with id "disappear" has an attribute called "my_attr" with value "you" |
-        | that the element with id "disappear" contains exactly "appearances"                     |
-        | the element with id "disappear"                                                         |
+         Then I should see the element with the id "disappear_ele"
+          And I should not see the element with the id "appear_ele"
+          And I should not see the element with the id "disappear_ele" within 10 seconds
+          And I should see the element with the id "appear_ele" within 10 seconds
 
 
-    Scenario Outline: 26. Element polling for appearance
+    Scenario: 26. Element attribute / text polling for disappearance
         Given I visit the salad test url "browser/element_waiter.html"
          When I look around
-         Then I should see <thing> within 10 seconds
+         Then I should see <thing>
+          And I should not see <thing> within 10 seconds
 
     Examples:
-        | thing                                                                                |
-        | the element with id "appear"                                                         |
-        | that the element with id "appear" contains exactly "can be deceiving"                |
-        | that the element with id "appear" has an attribute called "myattr" with value "you" |
+        | thing                                                                                           |
+        | that the element with the id "disappear_attr" has an attribute called "myattr" with value "you" |
+        | that the element with the id "disappear_attr" contains exactly "appearances"                    |
+
+
+    Scenario Outline: 27. Element attribute / text polling for appearance
+        Given I visit the salad test url "browser/element_waiter.html"
+         When I look around
+         Then I should not see <thing>
+          And I should see the element with the id "appear_attr"
+          And I should see that the element with the id "appear_attr" has an attribute called "myattr"
+          And I should see <thing> within 10 seconds
+
+    Examples:
+        | thing                                                                                        |
+        | that the element with the id "appear_attr" contains exactly "can be deceiving"               |
+        | that the element with the id "appear_attr" has an attribute called "myattr" with value "you" |

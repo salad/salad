@@ -5,8 +5,10 @@ Feature: Ensuring that the javascript steps work
 
     Scenario: 1. Run js works
         Given I visit the salad test url "browser/js.html"
-         When I run the javascript "document.getElementById('js_block').innerHTML = 'js works!';"
-         Then I should see "js works!" somewhere in the page
+         When I look around
+         Then I should not see the element with the css selector "input"
+         When I run the javascript "document.getElementsByTagName('div')[0].appendChild(document.createElement('input'))"
+         Then I should see the element with the css selector "input"
 
     Scenario: 2. Evaluate js works
         Given I visit the salad test url "browser/js.html"

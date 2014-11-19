@@ -90,7 +90,6 @@ def main(args=sys.argv[1:]):
         leftovers.append('-s %s' % (','.join(scenarios)))
         del parsed_args.scenarios
 
-    print world.remote_capabilities
     lettuce_main(args=leftovers)
 
 

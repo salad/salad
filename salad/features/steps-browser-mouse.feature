@@ -142,10 +142,15 @@ Feature: Testing mouse actions
         | mouseout      | Moused out       |
 
 
-    Scenario: 10. Doubleclick works
+    Scenario Outline: 10. Doubleclick works
         Given I visit the salad test url "browser/mouse.html"
          When I look around
          Then I should see the element with the id "double_click"
-         When I click the element with id "double_click"
-          And I click the element with id "double_click"
-         Then I should see "Double-clicked" somewhere in the page
+         When I <action> the element with id "double_click"
+         Then I should see "<expected_result>" somewhere in the page
+
+    Examples:
+        | action       | expected_result |
+        | double click | Double-clicked  |
+        | double-click | Double-clicked  |
+        | doubleclick  | Double-clicked  |

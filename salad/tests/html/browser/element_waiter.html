@@ -1,26 +1,31 @@
 <html>
     <body>
-        <div id="disappear" myattr="you">appearances</div>
-        <div id="appear" myattr="None" style="display: none"></div>
+        <div id="disappear_ele">i will leave</div>
+        <div id="appear_ele" style="display: none;">i have arrived</div>
+
+        <div id="disappear_attr" myattr="you">appearances</div>
+        <div id="appear_attr" myattr="me">other text</div>
+
         <script type="text/javascript">
-            var disappear_element = document.getElementById('disappear');
-            function disappear_set_attr() { disappear_element.myattr = 'None'; }
-            function disappear_wipe_text() { disappear_element.innerHTML = ''; }
-            function disappear_disappear() { disappear_element.style.display = 'none'; }
 
-            var appear_element = document.getElementById('appear')
-            function appear_appear() { appear_element.style.display = 'block'; }
-            function appear_fill_in_text() { appear_element.innerHTML = 'can be deceiving'; }
-            // Selenium defect means use setAttribute instead of assignment
-            // see: https://code.google.com/p/selenium/issues/detail?id=5108
-            function appear_set_attr() { appear_element.setAttribute('myattr', 'you'); }
+            var disappear_other = document.getElementById('disappear_attr');
+            function disappear_set_attr() { disappear_other.myattr = 'me'; }
+            window.setTimeout(disappear_set_attr, 5000);
+            function disappear_wipe_text() { disappear_other.innerHTML = 'other text'; }
+            window.setTimeout(disappear_wipe_text, 5000);
 
-            window.setTimeout(disappear_set_attr, 200);
-            window.setTimeout(disappear_wipe_text, 1000);
-            window.setTimeout(disappear_disappear, 3000);
-            window.setTimeout(appear_appear, 5000);
-            window.setTimeout(appear_fill_in_text, 7000);
-            window.setTimeout(appear_set_attr, 8000);
+            var appear_other = document.getElementById('appear_attr');
+            function appear_fill_in_text() { appear_other.innerHTML = 'can be deceiving'; }
+            window.setTimeout(appear_fill_in_text, 5000);
+            function appear_set_attr() { appear_other.setAttribute('myattr', 'you'); }
+            window.setTimeout(appear_set_attr, 5000);
+
+            var appear_element = document.getElementById('appear_ele');
+            var disappear_element = document.getElementById('disappear_ele');
+            function disappear_func() { disappear_element.style.display = 'none'; }
+            function appear_func() { appear_element.style.display = 'block'; }
+            window.setTimeout(disappear_func, 5000);
+            window.setTimeout(appear_func, 5000);
         </script>
     </body>
 </html>

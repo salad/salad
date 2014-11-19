@@ -61,6 +61,13 @@ def step_generator(action_string, action_function, thing_string,
             ele.click()
             return
 
+        # chrome driver does not support double click in action chains
+        if (action_function == 'double_click' and
+            world.browser.driver.name == 'chrome'):
+            ele.click()
+            ele.click()
+            return
+
         action_chain = ActionChains(world.browser.driver)
         function = getattr(action_chain, ACTION_ASSOCIATIONS[action_function])
         if action_function == 'mouse_out':

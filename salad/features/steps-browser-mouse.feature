@@ -3,175 +3,111 @@ Feature: Testing mouse actions
     As a developer
     I test against the page test files
 
+    # WHAT ARE THE MOUSE EVENTS ?
+    # click, double-click // mouse over
+    # check with link and element finders
+    # right click and mouse out go to a different feature, because phantomjs does not support these actions
 
-    Scenario: 1. Do nothing
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "mouse_target"
-          And I wait 1 second
+    Scenario: 1. Check click actions against link finder and element finder (without right click)
+        Given I visit the salad test url "browser/mouse-actions.html"
+          And I click on the element with the id "clear"
+         Then I should see the <element> within 5 seconds
+         When I <click_action> the <element>
+         Then I should see that the element with the id "click_action" has the text "<expected_result>" within 5 seconds
+
+    Examples:
+        | click_action  | expected_result | element                                            |
+        # element by id
+        | click on      | clicked         | element with the id "click_target"                 |
+        | double click  | double clicked  | element with the id "click_target"                 |
+        | double-click  | double clicked  | element with the id "click_target"                 |
+        | doubleclick   | double clicked  | element with the id "click_target"                 |
+        # element by css
+        | click on      | clicked         | element with the css selector "#click_target"      |
+        | double click  | double clicked  | element with the css selector "#click_target"      |
+        | double-click  | double clicked  | element with the css selector "#click_target"      |
+        | doubleclick   | double clicked  | element with the css selector "#click_target"      |
+        # element by name
+        | click on      | clicked         | element named "click_target"                       |
+        | double click  | double clicked  | element named "click_target"                       |
+        | double-click  | double clicked  | element named "click_target"                       |
+        | doubleclick   | double clicked  | element named "click_target"                       |
+        # element by xpath
+        | click on      | clicked         | element with the xpath "//div[@id='click_target']" |
+        | double click  | double clicked  | element with the xpath "//div[@id='click_target']" |
+        | double-click  | double clicked  | element with the xpath "//div[@id='click_target']" |
+        | doubleclick   | double clicked  | element with the xpath "//div[@id='click_target']" |
+        # element by value
+        | click on      | clicked         | element with the value "some_value" |
+        | double click  | double clicked  | element with the value "some_value" |
+        | double-click  | double clicked  | element with the value "some_value" |
+        | doubleclick   | double clicked  | element with the value "some_value" |
+        # link with the text
+        | click on      | clicked         | link with the text "Click Link Target" |
+        | double click  | double clicked  | link with the text "Click Link Target" |
+        | double-click  | double clicked  | link with the text "Click Link Target" |
+        | doubleclick   | double clicked  | link with the text "Click Link Target" |
+        # link with text that contains
+        | click on      | clicked         | link with text that contains "Click Link" |
+        | double click  | double clicked  | link with text that contains "Click Link" |
+        | double-click  | double clicked  | link with text that contains "Click Link" |
+        | doubleclick   | double clicked  | link with text that contains "Click Link" |
+        # link to the url
+        | click on      | clicked         | link to "#clicktargetlink" |
+        | double click  | double clicked  | link to "#clicktargetlink" |
+        | double-click  | double clicked  | link to "#clicktargetlink" |
+        | doubleclick   | double clicked  | link to "#clicktargetlink" |
+        # link to a url that contains
+        | click on      | clicked         | link to a url that contains "#clicktargetlink" |
+        | double click  | double clicked  | link to a url that contains "#clicktargetlink" |
+        | double-click  | double clicked  | link to a url that contains "#clicktargetlink" |
+        | doubleclick   | double clicked  | link to a url that contains "#clicktargetlink" |
 
 
-    Scenario Outline: 2. Mouse events for links by css work.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the link with text that contains "Target Link" within 5 seconds
-          And I should see the link with the partial text "Target Link"
-          And I should see the link with the text "Mouse Target Link"
-         When I <action> the link with the text "Mouse Target Link"
+    Scenario: 2. Check mouse over against link finder and element finder
+        Given I visit the salad test url "browser/mouse-actions.html"
+          And I click on the element with the id "clear"
+         Then I should see the <element> within 5 seconds
+         # make sure the mouse is in place for the subsequent mouse action
+         When I click on the <element>
+          And I <mouse_action> the <element>
          Then I should see that the element with the id "mouse_action" has the text "<expected_result>" within 5 seconds
 
     Examples:
-        | action        | expected_result |
-        | click on      | Clicked         |
-        | mouse over    | Moused over     |
-        | mouse-over    | Moused over     |
-        | mouseover     | Moused over     |
-
-
-    Scenario: 3. Do nothing
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "mouse_target"
-          And I wait 1 second
-
-
-    Scenario Outline: 4. Mouse events by id works.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "mouse_target"
-         When I <action> the element with id "mouse_target"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 5. Mouse events by name works.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element named "mouse_target_name"
-         When I <action> the element named "mouse_target_name"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 6. Mouse events by css works.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the css selector ".mouse_target_class"
-         When I <action> the element with the css selector ".mouse_target_class"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 7. Doubleclick works
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "double_click"
-         When I <action> the element with id "double_click"
-         Then I should see "<expected_result>" somewhere in the page within 5 seconds
-
-    Examples:
-        | action       | expected_result |
-        | double click | Double-clicked  |
-        | double-click | Double-clicked  |
-        | doubleclick  | Double-clicked  |
-
-
-    Scenario Outline: 8. Mouse events by value work.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the value "mouse input target value"
-         When I <action> the element with the value "mouse input target value"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 9. Mouse events for links by id work.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the link to "#mousetargetlink"
-         When I <action> the link to "#mousetargetlink"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 10. Mouse events for links by name work.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the link to a url that contains "argetlink"
-          And I should see the link to the partial url "argetlink"
-         When I <action> the link to a url that contains "argetlink"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario Outline: 11. Mouse out works
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "mouse_target"
-         When I mouse over the element with id "mouse_target"
-          And I <action> the element with id "mouse_target"
-         Then I should see "<expected_results>" somewhere in the page within 5 seconds
-
-    Examples:
-        | action        | expected_results |
-        | mouse out     | Moused out       |
-        | mouse-out     | Moused out       |
-        | mouseout      | Moused out       |
-
-
-    Scenario Outline: 12. Mouse events for links by css work.
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the link with the text "Mouse Target Link"
-         When I <action> the link with the text "Mouse Target Link"
-         Then I should see "<expected_results>" somewhere in the page
-
-    Examples:
-        | action        | expected_results |
-        | click on      | Clicked          |
-        | mouse over    | Moused over      |
-        | mouse-over    | Moused over      |
-        | mouseover     | Moused over      |
-
-
-    Scenario: 13. Do nothing
-        Given I visit the salad test url "browser/mouse.html"
-         When I look around
-         Then I should see the element with the id "mouse_target"
-          And I wait 1 second
+        | mouse_action  | expected_result | element                                            |
+        # element by id
+        | mouse over | moused over        | element with the id "mouse_target"                 |
+        | mouse-over | moused over        | element with the id "mouse_target"                 |
+        | mouseover  | moused over        | element with the id "mouse_target"                 |
+        # element by css
+        | mouse over | moused over        | element with the css selector "#mouse_target"      |
+        | mouse-over | moused over        | element with the css selector "#mouse_target"      |
+        | mouseover  | moused over        | element with the css selector "#mouse_target"      |
+        # element by name
+        | mouse over | moused over        | element named "mouse_target"                       |
+        | mouse-over | moused over        | element named "mouse_target"                       |
+        | mouseover  | moused over        | element named "mouse_target"                       |
+        # element by xpath
+        | mouse over | moused over        | element with the xpath "//div[@id='mouse_target']" |
+        | mouse-over | moused over        | element with the xpath "//div[@id='mouse_target']" |
+        | mouseover  | moused over        | element with the xpath "//div[@id='mouse_target']" |
+        # element by value
+        | mouse over | moused over        | element with the value "mouse_value"                |
+        | mouse-over | moused over        | element with the value "mouse_value"                |
+        | mouseover  | moused over        | element with the value "mouse_value"                |
+        # link with the text
+        | mouse over | moused over        | link with the text "Mouse Link Target"             |
+        | mouse-over | moused over        | link with the text "Mouse Link Target"             |
+        | mouseover  | moused over        | link with the text "Mouse Link Target"             |
+        # link with text that contains
+        | mouse over | moused over        | link with text that contains "Mouse Link"          |
+        | mouse-over | moused over        | link with text that contains "Mouse Link"          |
+        | mouseover  | moused over        | link with text that contains "Mouse Link"          |
+        # link to the url
+        | mouse over | moused over        | link to "#mousetargetlink"                         |
+        | mouse-over | moused over        | link to "#mousetargetlink"                         |
+        | mouseover  | moused over        | link to "#mousetargetlink"                         |
+        # link to a url that contains
+        | mouse over | moused over        | link to a url that contains "#mousetargetlink"     |
+        | mouse-over | moused over        | link to a url that contains "#mousetargetlink"     |
+        | mouseover  | moused over        | link to a url that contains "#mousetargetlink"     |

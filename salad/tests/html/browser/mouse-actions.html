@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>Mouse test title</title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+        $(function(){
+            $("#mouse_target, #mouse_target_link").mouseover(function() {
+                $("#mouse_action").html("moused over")
+            });
+            $("#mouse_target, #mouse_target_link").mouseout(function() {
+                $("#mouse_action").html("moused out")
+            });
+            $("#click_target, #click_target_link").click(function(e) {
+                console.log(e.which);
+                 $("#click_action").html("clicked");
+            });
+            $("#clear").click(function(e) {
+                 $("#click_action").html("");
+                 $("#mouse_action").html("");
+            });
+            var last_double_click_click = false;
+            $("#click_target, #click_target_link").click(function(){
+                var now = new Date().getTime();
+                if (last_double_click_click && now < last_double_click_click + 1000) {
+                    $("#click_action").html("double clicked");
+                }
+                last_double_click_click = now;
+            });
+        });
+        function right_click_action() {
+            console.log("right clicked");
+            $("#click_action").html("right clicked");
+            return false;
+        }
+        </script>
+    </head>
+    <body>
+        <hr />
+        <!-- mouse target -->
+        <div id="mouse_target" name="mouse_target" value="mouse_value">Mouse Div Target</div>
+        <br />
+        <a id="mouse_target_link" name="mouse_target_link" href="#mousetargetlink">Mouse Link Target</a>
+        <hr />
+        <!-- click target -->
+        <div id="click_target" name="click_target" value="some_value" oncontextmenu="javascript: right_click_action(); return false;">Click Div Target</div>
+        <br />
+        <a id="click_target_link" name="click_target_link" href="#clicktargetlink" oncontextmenu="javascript: right_click_action(); return false;">Click Link Target</a>
+        <hr />
+        <!-- mouse action results area -->
+        <div id="mouse_action" style="font-weight: bold;"></div>
+        <hr />
+        <!-- click action results area -->
+        <div id="click_action" style="font-weight: bold;"></div>
+        <hr />
+        <div id="clear">Clear All Text</div>
+    </body>
+</html>

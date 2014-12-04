@@ -1,6 +1,4 @@
-from lettuce import step, world
-from selenium.webdriver.common.action_chains import ActionChains
-
+from salad.logger import logger
 from salad.steps.browser.finders import (
     ELEMENT_FINDERS,
     LINK_FINDERS,
@@ -9,6 +7,11 @@ from salad.steps.browser.finders import (
     PICK_EXPRESSION,
     _get_visible_element
 )
+from salad.tests.util import is_phantomjs
+
+from lettuce import step, world
+from selenium.webdriver.common.action_chains import ActionChains
+
 
 """
     Click on things, mouse over, move the mouse around.
@@ -34,11 +37,11 @@ from salad.steps.browser.finders import (
 """
 
 ACTIONS = {
-    "click(?: on)?": "click",
-    "(?: mouse over|mouse-over|mouseover)": "mouse_over",
-    "(?: mouse out|mouse-out|mouseout)": "mouse_out",
-    "(?: double click|double-click|doubleclick)": "double_click",
-    "(?: right click|right-click|rightclick)": "right_click",
+    "(double click|double-click|doubleclick)": "double_click",
+    "(right click|right-click|rightclick)": "right_click",
+    "(mouse over|mouse-over|mouseover)": "mouse_over",
+    "(mouse out|mouse-out|mouseout)": "mouse_out",
+    "[^et] (click|click on)": "click",
 }
 
 ACTION_ASSOCIATIONS = {
@@ -51,17 +54,24 @@ ACTION_ASSOCIATIONS = {
 
 def step_generator(action_string, action_function, thing_string,
                    finder_string, finder_function):
-
     @step(r'%s (?:a|the)%s %s %s$' %
           (action_string, PICK_EXPRESSION, thing_string, finder_string))
-    def _this_step(step, pick, find_pattern):
+    def _this_step(step, action, pick, find_pattern):
         ele = _get_visible_element(finder_function, pick, find_pattern)
 
+        # simple clicking takes the easy way out :)
         if action_function == 'click':
             ele.click()
             return
 
-        # chrome driver does not support double click in action chains
+        # phantomjs driver does not support right click
+        if (is_phantomjs() and
+            action_function in ['right_click', 'mouse_out']):
+            msg = "phantomjs does not support %s" % (action_function, )
+            logger.info(msg)
+            raise NotImplementedError(msg)
+
+        # chrome driver does not support double click, so we fake it
         if (action_function == 'double_click' and
             world.browser.driver.name == 'chrome'):
             ele.click()

@@ -8,7 +8,7 @@ Feature: Ensuring that the javascript steps work
          When I look around
          Then I should not see the element with the css selector "input"
          When I run the javascript "document.getElementsByTagName('div')[0].appendChild(document.createElement('input'))"
-         Then I should see the element with the css selector "input"
+         Then I should see the element with the css selector "input" within 5 seconds
 
     Scenario: 2. Evaluate js works
         Given I visit the salad test url "browser/js.html"

@@ -1,8 +1,6 @@
-# chrome does not work on travis at the moment
-# https://github.com/travis-ci/travis-ci/issues/938
+
 # setup saucelabs with sauce connect:
 # https://docs.saucelabs.com/ci-integrations/travis-ci/#configure-travis-ci-to-start-sauce-connect
-# will work only for pull requests from salad repo branches, not from forks
 language: python
 env:
   global:
@@ -17,26 +15,28 @@ env:
 python:
 - '2.7'
 install:
-  # print out our variables to make sure they are correct
+# print out our variables to make sure they are correct
 - echo $SAUCE_USERNAME
 - echo $SAUCE_ACCESS_KEY | cut -c1-9
 - echo $BROWSER
 - echo $REMOTE_ARG
 - echo $PLATFORM
-  # install the project's requirements
+# install the project's requirements
 - python setup.py install
-  # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
+# Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
-  # Start sauce connect tunnel
+# Start sauce connect tunnel. Please be aware that travis + sauce connect + saucelabs
+# will work only for pull requests from salad repo branches, not from forks
 - if [ -n "$REMOTE_ARG" ]; then ./sauce_connect_setup.sh; fi
 script:
 # run both folders if firefox is not remote
 - if [[ ! -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER salad/not_remote_features/; fi
 - if [[ ! -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER salad/features/; fi
-# run only "features" folder if firefox is remote. also run mouse feature -s1 seperately
+# run only "features" if firefox is remote
 - if [[ -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER $REMOTE_ARG salad/features/; fi
-- if [[ -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER $REMOTE_ARG salad/features/steps-browser-mouse.feature -s1; fi
-# run both folders if chrome is used
-- if [[ $BROWSER == "chrome" ]]; then salad --browser=$BROWSER $REMOTE_ARG --platform="$PLATFORM" salad/features/; fi
+# run both folders if chrome is used. always remote. always using MAC as platform
 - if [[ $BROWSER == "chrome" ]]; then salad --browser=$BROWSER $REMOTE_ARG --platform="$PLATFORM" salad/not_remote_features/; fi
+- if [[ $BROWSER == "chrome" ]]; then salad --browser=$BROWSER $REMOTE_ARG --platform="$PLATFORM" salad/features/; fi
+# not local chrome, because chrome does not work on travis at the moment:
+# https://github.com/travis-ci/travis-ci/issues/938

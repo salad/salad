@@ -100,5 +100,10 @@ def generate_random_string(length):
     return "".join(lst)
 
 
-def is_phantomjs():
-    return 'phantomjs' == world.browser.driver.name
+def is_unsupported(browser, function_name):
+    is_browser = (browser == world.browser.driver.name)
+    unsupported = {
+        'chrome': ['double_click'],
+        'phantomjs': ['right_click', 'mouse_out', 'alerts'],
+    }
+    return (is_browser and function_name in unsupported[browser])

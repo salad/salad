@@ -7,7 +7,7 @@ from salad.steps.browser.finders import (
     PICK_EXPRESSION,
     _get_visible_element
 )
-from salad.tests.util import is_phantomjs
+from salad.tests.util import is_unsupported
 
 from lettuce import step, world
 from selenium.webdriver.common.action_chains import ActionChains
@@ -64,16 +64,14 @@ def step_generator(action_string, action_function, thing_string,
             ele.click()
             return
 
-        # phantomjs driver does not support right click
-        if (is_phantomjs() and
-            action_function in ['right_click', 'mouse_out']):
+        # phantomjs driver does not support right click and mouse out
+        if is_unsupported('phantomjs', action_function):
             msg = "phantomjs does not support %s" % (action_function, )
             logger.info(msg)
             raise NotImplementedError(msg)
 
         # chrome driver does not support double click, so we fake it
-        if (action_function == 'double_click' and
-            world.browser.driver.name == 'chrome'):
+        if is_unsupported('chrome', action_function):
             ele.click()
             ele.click()
             return

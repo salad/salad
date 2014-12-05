@@ -1,6 +1,6 @@
 from salad.logger import logger
 from salad.tests.util import (
-    is_phantomjs,
+    is_unsupported,
     assert_with_negate,
     store_with_case_option,
     transform_for_upper_lower_comparison,
@@ -11,7 +11,7 @@ from lettuce import step, world
 
 
 def _get_alert_or_none():
-    if is_phantomjs():
+    if is_unsupported('phantomjs', 'alerts'):
         msg = "phantomjs does not support alerts"
         logger.info(msg)
         raise NotImplementedError(msg)

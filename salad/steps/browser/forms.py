@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from time import sleep
 
 from lettuce import step, world
@@ -24,7 +26,8 @@ from salad.tests.util import (
 )
 
 # What's happening here? We're generating steps for every possible
-# permuation of the element finder
+# permuation of the element finder. it does not make sense to add LINK,
+# because links are never input fields
 
 world.stored_values = dict()
 
@@ -147,6 +150,7 @@ for finder_string, finder_function in ELEMENT_FINDERS.items():
            the selenium support for focus on and blur from is limited
            and does not work properly.
            so instead of blurring from the element, we will click on the body
+           and also use javascript to blur. "doppelt hält besser"
         """
         @step(r'(?:blur|move) from the%s %s %s$' %
               (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))

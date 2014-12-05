@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from lettuce import step, world
 
 from salad.exceptions import WrongJavascriptReturnValue

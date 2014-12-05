@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from lettuce import world
 
 from salad.logger import logger

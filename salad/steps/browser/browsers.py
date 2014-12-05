@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 from datetime import datetime
 
 from lettuce import step, world
+
 from salad.terrains.browser import setup_browser
 from salad.tests.util import generate_random_string
 

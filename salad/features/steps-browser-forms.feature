@@ -186,7 +186,7 @@ Feature: Ensuring that the forms steps work
         | f12       | F12ed       |
         | backspace | Backspaced! |
         | tab       | Tabbed!     |
-        | return    | Entered!    |
+        | enter     | Entered!    |
 
 
     Scenario Outline: 16. Hitting keys generally works.

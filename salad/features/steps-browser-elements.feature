@@ -40,7 +40,7 @@ Feature: Ensuring that the elements steps work
     Scenario: 6. Waiting for links in the page by url and partial url
         Given I visit the salad test url "browser/elements.html"
          When I look around
-         Then I should see a link to "http://example.com" within 5 seconds
+         Then I should see a link to "http://example.com" within 10 seconds
           And I should see a link to the url "http://example.com" within 5 seconds
           And I should see a link to the partial url "example.com" within 5 seconds
           And I should see a link to a url that contains "example.com" within 5 seconds
@@ -304,7 +304,7 @@ Feature: Ensuring that the elements steps work
         | link with text that contains "ample"                     |
 
 
-    Scenario Outline: 21. Test for "attribute value pattern"
+    Scenario Outline: 19. Test for "attribute value pattern"
         Given I visit the salad test url "browser/elements.html"
          When I look around
          # not timed
@@ -340,7 +340,7 @@ Feature: Ensuring that the elements steps work
         | element with the id "i_attr"                          |
         | element with the css selector ".i_attr_class"         |
         | element with the xpath "//div[@class='i_attr_class']" |
-        | element with the value "attr"                         |
+        | element with the value "x"                            |
         | link to "http://example.com"                          |
         | link to the url "http://example.com"                  |
         | link to the partial url "example.com"                 |
@@ -352,7 +352,7 @@ Feature: Ensuring that the elements steps work
         | link with text that contains "ample"                  |
 
 
-    Scenario: 22. Visibility of elements
+    Scenario: 20. Visibility of elements
         Given I visit the salad test url "browser/invisible_elements.html"
           And I should see the element with the id "loading_status"
          When I look around
@@ -360,7 +360,7 @@ Feature: Ensuring that the elements steps work
           And I should not see the element with the id "loading_status"
 
 
-    Scenario: 23. Element polling for disappearance
+    Scenario: 21. Element polling for disappearance
         Given I visit the salad test url "browser/element_waiter.html"
          When I look around
          Then I should see the element with the id "disappear_ele"
@@ -369,7 +369,7 @@ Feature: Ensuring that the elements steps work
           And I should see the element with the id "appear_ele" within 10 seconds
 
 
-    Scenario: 24. Element attribute / text polling for disappearance
+    Scenario: 22. Element attribute / text polling for disappearance
         Given I visit the salad test url "browser/element_waiter.html"
          When I look around
          Then I should see <thing>
@@ -381,7 +381,7 @@ Feature: Ensuring that the elements steps work
         | that the element with the id "disappear_attr" contains exactly "appearances"                    |
 
 
-    Scenario Outline: 25. Element attribute / text polling for appearance
+    Scenario Outline: 23. Element attribute / text polling for appearance
         Given I visit the salad test url "browser/element_waiter.html"
          When I look around
          Then I should not see <thing>

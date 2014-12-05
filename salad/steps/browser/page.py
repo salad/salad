@@ -1,4 +1,7 @@
+# -*- coding: utf-8 -*-
+
 from lettuce import step, world
+
 from salad.tests.util import (
     assert_equals_with_negate,
     wait_for_completion,
@@ -47,6 +50,7 @@ def should_have_html(step, negate, partial, html, wait_time):
     wait_for_completion(wait_time, assert_page_html_is, negate, partial, html)
 
 
+# TODO use proper iframe handling here
 @step(r'switch(?: back) to the parent frame$')
 def back_to_the_parent_frame(step):
     world.browser.driver.switch_to_frame(None)

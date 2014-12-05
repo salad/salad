@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+
+from lettuce import step, world
+from selenium.webdriver.common.action_chains import ActionChains
+
 from salad.logger import logger
 from salad.steps.browser.finders import (
     ELEMENT_FINDERS,
@@ -8,9 +13,6 @@ from salad.steps.browser.finders import (
     _get_visible_element
 )
 from salad.tests.util import is_unsupported
-
-from lettuce import step, world
-from selenium.webdriver.common.action_chains import ActionChains
 
 
 """

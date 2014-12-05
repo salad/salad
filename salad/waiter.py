@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import time
 
 from salad.exceptions import TimeoutException
@@ -40,7 +42,7 @@ class SaladWaiter(object):
         It is then called until proper return value appears according to negate
         OR until timeout happens"""
         end_time = time.time() + self._timeout
-        while(True):
+        while True:
             try:
                 value = method(*args)
                 if not negate:
@@ -52,7 +54,7 @@ class SaladWaiter(object):
             except self._ignored_exceptions:
                 pass
             time.sleep(self._poll)
-            if(time.time() > end_time):
+            if time.time() > end_time:
                 break
         raise TimeoutException("%s did not return expected return value "
                                "within %s seconds." %

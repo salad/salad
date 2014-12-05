@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from lettuce import step, world
+
 from salad.logger import logger
 from salad.tests.util import (
     is_unsupported,
@@ -6,8 +10,6 @@ from salad.tests.util import (
     transform_for_upper_lower_comparison,
     wait_for_completion
 )
-
-from lettuce import step, world
 
 
 def _get_alert_or_none():

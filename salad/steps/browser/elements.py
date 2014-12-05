@@ -10,6 +10,8 @@ from salad.steps.browser.finders import (
     PICK_EXPRESSION,
     ELEMENT_FINDERS,
     ELEMENT_THING_STRING,
+    LINK_FINDERS,
+    LINK_THING_STRING,
     _get_visible_element
 )
 from salad.tests.util import (
@@ -25,7 +27,7 @@ from salad.waiter import TimeoutException
 # and attributes (text, classes, ids)
 
 
-# the following steps do not use the ExistenceStepsFactory
+# the following step does not use the ExistenceStepsFactory
 @step(r'should( not)? see "([^"]*)" (?:somewhere|anywhere) in (?:the|this) '
       'page(?: within (\d+) seconds)?$')
 def should_see_in_the_page(step, negate, text, wait_time):
@@ -38,42 +40,10 @@ def should_see_in_the_page(step, negate, text, wait_time):
                         text)
 
 
-def assert_element_exists_with_negate(negate, text, partial, function):
-    infix = "partial_" if partial else ""
-    found = True
-    try:
-        _get_visible_element(function % (infix, ), None, text)
-    except (ElementDoesNotExist, ElementIsNotVisible,
-            ElementAtIndexDoesNotExist):
-        found = False
-    assert_with_negate(found, negate)
-    return True
-
-
-@step(r'should( not)? see (?:the|a) link with (?:the partial text|text '
-      'that contains) "([^"]*)"(?: within (\d+) seconds)?$')
-def should_see_a_link_with_partial_text(step, negate, text, wait_time):
-    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
-                        text, "partial", "find_link_by_%stext")
-
-
-@step(r'should( not)? see (?:the|a) link (?:called|with the text) "([^"]*)"'
-      '(?: within (\d+) seconds)?$')
-def should_see_a_link_called(step, negate, text, wait_time):
-    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
-                        text, None, "find_link_by_%stext")
-
-
-@step(r'should( not)? see (?:the|a) link to( the partial url| a url that contains)? "([^"]*)"'
-      '(?: within (\d+) seconds)?$')
-def should_see_a_link_to(step, negate, partial, text, wait_time):
-    wait_for_completion(wait_time, assert_element_exists_with_negate, negate,
-                        text, partial, "find_by_%shref")
-
-
 class ExistenceStepsFactory(object):
-    def __init__(self, finders, step_pattern, test_function):
+    def __init__(self, finders, thing_string, step_pattern, test_function):
         self.finders = finders
+        self.thing_string = thing_string
         self.pattern = step_pattern
         self.test = test_function
         self.make_steps()
@@ -85,7 +55,7 @@ class ExistenceStepsFactory(object):
     def make_step(self, finder_string, finder_function):
         self.step_pattern = self.pattern + '(?: within (\d+) seconds)?$'
 
-        @step(self.step_pattern % (PICK_EXPRESSION, ELEMENT_THING_STRING, finder_string))
+        @step(self.step_pattern % (PICK_EXPRESSION, self.thing_string, finder_string))
         def _polling_assertion_step(step, negate, pick, find_pattern, *args):
             wait_time = int(args[-1] or 0)
             args = args[:-1]  # Chop off the wait_time arg
@@ -160,9 +130,15 @@ def attribute_value_test(element, negate, *args):
     value = args[1]
     assert_equals_with_negate(element.get_attribute(attribute), value, negate)
 
-
-ExistenceStepsFactory(ELEMENT_FINDERS, visibility_pattern, visibility_test)
-ExistenceStepsFactory(ELEMENT_FINDERS, contains_pattern, contains_test)
-ExistenceStepsFactory(ELEMENT_FINDERS, contains_exactly_pattern, contains_exactly_test)
-ExistenceStepsFactory(ELEMENT_FINDERS, attribute_pattern, attribute_test)
-ExistenceStepsFactory(ELEMENT_FINDERS, attribute_value_pattern, attribute_value_test)
+# generate the steps for the ELEMENT FINDERS
+ExistenceStepsFactory(ELEMENT_FINDERS, ELEMENT_THING_STRING, visibility_pattern, visibility_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, ELEMENT_THING_STRING, contains_pattern, contains_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, ELEMENT_THING_STRING, contains_exactly_pattern, contains_exactly_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, ELEMENT_THING_STRING, attribute_pattern, attribute_test)
+ExistenceStepsFactory(ELEMENT_FINDERS, ELEMENT_THING_STRING, attribute_value_pattern, attribute_value_test)
+# generate the steps for the LINK FINDERS
+ExistenceStepsFactory(LINK_FINDERS, LINK_THING_STRING, visibility_pattern, visibility_test)
+ExistenceStepsFactory(LINK_FINDERS, LINK_THING_STRING, contains_pattern, contains_test)
+ExistenceStepsFactory(LINK_FINDERS, LINK_THING_STRING, contains_exactly_pattern, contains_exactly_test)
+ExistenceStepsFactory(LINK_FINDERS, LINK_THING_STRING, attribute_pattern, attribute_test)
+ExistenceStepsFactory(LINK_FINDERS, LINK_THING_STRING, attribute_value_pattern, attribute_value_test)

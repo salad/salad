@@ -20,7 +20,10 @@ ELEMENT_FINDERS = {
 LINK_FINDERS = {
     'to(?: the url)? "([^"]*)"': "find_link_by_href",
     'to a url that contains "([^"]*)"': "find_link_by_partial_href",
+    'to the partial url "([^"]*)"': "find_link_by_partial_href",
     'with(?: the)? text "([^"]*)"': "find_link_by_text",
+    'called "([^"]*)"': "find_link_by_text",
+    'with the partial text "([^"]*)"': "find_link_by_partial_text",
     'with text that contains "([^"]*)"': "find_link_by_partial_text",
 }
 

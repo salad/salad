@@ -81,7 +81,7 @@ def step_generator(action_string, action_function, thing_string,
         action_chain = ActionChains(world.browser.driver)
         function = getattr(action_chain, ACTION_ASSOCIATIONS[action_function])
         if action_function == 'mouse_out':
-            function(500, 500)
+            function(250, 250)
         else:
             function(ele)
         action_chain.perform()

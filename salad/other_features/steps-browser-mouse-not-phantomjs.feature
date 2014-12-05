@@ -7,7 +7,7 @@ Feature: Testing mouse actions
     # right click mouse out
     # check with link and element finders
 
-    Scenario: 1. Check right click against link finder and element finder
+    Scenario: 1. Check right click against element finder
         Given I visit the salad test url "browser/mouse-actions.html"
           And I click on the element with the id "clear"
          Then I should see the <element> within 5 seconds
@@ -20,12 +20,10 @@ Feature: Testing mouse actions
         | right click   | right clicked   | element with the id "click_target"                 |
         | right-click   | right clicked   | element with the id "click_target"                 |
         | rightclick    | right clicked   | element with the id "click_target"                 |
-
         # element by css
         | right click   | right clicked   | element with the css selector "#click_target"      |
         | right-click   | right clicked   | element with the css selector "#click_target"      |
         | rightclick    | right clicked   | element with the css selector "#click_target"      |
-
         # element by name
         | right click   | right clicked   | element named "click_target"                       |
         | right-click   | right clicked   | element named "click_target"                       |
@@ -38,6 +36,18 @@ Feature: Testing mouse actions
         | right click   | right clicked   | element with the value "some_value" |
         | right-click   | right clicked   | element with the value "some_value" |
         | rightclick    | right clicked   | element with the value "some_value" |
+
+
+    Scenario: 2. Check right click against link finder
+        Given I visit the salad test url "browser/mouse-actions.html"
+          And I click on the element with the id "clear"
+         Then I should see the <element> within 5 seconds
+         When I <click_action> the <element>
+         Then I should see that the element with the id "click_action" has the text "<expected_result>" within 5 seconds
+
+    Examples:
+        | click_action  | expected_result | element                                            |
+
         # link with the text
         | right click   | right clicked   | link with the text "Click Link Target" |
         | right-click   | right clicked   | link with the text "Click Link Target" |
@@ -56,7 +66,7 @@ Feature: Testing mouse actions
         | rightclick    | right clicked   | link to a url that contains "#clicktargetlink" |
 
 
-    Scenario: 2. Check mouse out against link finder and element finder
+    Scenario: 3. Check mouse out against element finder
         Given I visit the salad test url "browser/mouse-actions.html"
           And I click on the element with the id "clear"
          Then I should see the <element> within 5 seconds
@@ -87,6 +97,19 @@ Feature: Testing mouse actions
         | mouse out  | moused out         | element with the value "mouse_value"                |
         | mouse-out  | moused out         | element with the value "mouse_value"                |
         | mouseout   | moused out         | element with the value "mouse_value"                |
+
+
+    Scenario: 4. Check mouse out against link finder
+        Given I visit the salad test url "browser/mouse-actions.html"
+          And I click on the element with the id "clear"
+         Then I should see the <element> within 5 seconds
+         # make sure the mouse is in place for the subsequent mouse action
+         When I click on the <element>
+          And I <mouse_action> the <element>
+         Then I should see that the element with the id "mouse_action" has the text "<expected_result>" within 5 seconds
+
+    Examples:
+        | mouse_action  | expected_result | element                                            |
         # link with the text
         | mouse out  | moused out         | link with the text "Mouse Link Target"             |
         | mouse-out  | moused out         | link with the text "Mouse Link Target"             |

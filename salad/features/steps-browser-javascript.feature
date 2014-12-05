@@ -6,9 +6,11 @@ Feature: Ensuring that the javascript steps work
     Scenario: 1. Run js works
         Given I visit the salad test url "browser/js.html"
          When I look around
-         Then I should not see the element with the css selector "input"
-         When I run the javascript "document.getElementsByTagName('div')[0].appendChild(document.createElement('input'))"
-         Then I should see the element with the css selector "input" within 5 seconds
+         Then I should see the element with the id "link"
+         When I click on the element with the id "link"
+         Then I should see that the url contains "elements.html" within 3 seconds
+         When I run the javascript "window.history.back()"
+         Then I should see that the url contains "js.html" within 3 seconds
 
     Scenario: 2. Evaluate js works
         Given I visit the salad test url "browser/js.html"

@@ -7,12 +7,23 @@ env:
   - secure: NYFGMEkVVvBx8NLGcWnAkieJ11vxT4EVqN/9iQ95IF2XiswtkmUnFFRGyH1KbwaftzbXsg6S1gc79WxR2/EGBJuIHtFVsb8A7r6vedkX3dhcyjITa41uSP5EWANYdl6nsf4/u5oINXoGf/InI6jwqBpRhNV+ruq08937ZBZACek=
   - secure: TU9KI3phk22RCMMCPrSYQ7W3KY56MKJXLs0+ajYXunvP93OKOMG6XUVkkoHjMH4cm9tSe4kH64PhET8GWxJbZw8U5+5F7GEiA490Dn4D2FpwxZI+W7v2M5g1hQeSQjXnWPVhmDvkDaUvkdt97k+qJe5wdsVFdiTB9vg3JLXLOyg=
   matrix:
-  - BROWSER=firefox
-  - BROWSER=phantomjs
-  - REMOTE_ARG="--remote-url=http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" BROWSER=firefox
-  # due to this issue https://code.google.com/p/chromedriver/issues/detail?id=467
+  # local firefox can run all tests
+  - BROWSER=firefox FEATURES=salad/features
+  - BROWSER=firefox FEATURES=salad/other_features
+  # phantomjs does not support alerts and some mouse actions
+  - BROWSER=phantomjs FEATURES=salad/features
+  - BROWSER=phantomjs FEATURES=salad/other_features/steps-browser-drag.feature
+  - BROWSER=phantomjs FEATURES=salad/other_features/steps-browser-mouse.feature
+  # remote firefox does not support drag and drop
+  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/features" PLATFORM="linux"
+  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-mouse-not-phantomjs.feature" PLATFORM="linux"
+  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-mouse.feature" PLATFORM="linux"
+  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-alerts.feature" PLATFORM="linux"
+  # no local chrome! due to this issue https://code.google.com/p/chromedriver/issues/detail?id=467
   # remote chrome on linux cannot handle send_keys(), so we use max osx
-  - REMOTE_ARG="--remote-url=http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" BROWSER=chrome PLATFORM="OS X 10.6"
+  # remote chrome can run all tests
+  - BROWSER="chrome" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/features" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features" PLATFORM="OS X 10.6"
 python:
 - '2.7'
 install:
@@ -22,6 +33,7 @@ install:
 - echo $BROWSER
 - echo $REMOTE_ARG
 - echo $PLATFORM
+- echo $FEATURES
 # install the project's requirements
 - python setup.py install
 # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
@@ -31,17 +43,5 @@ install:
 # will work only for pull requests from salad repo branches, not from forks
 - if [ -n "$REMOTE_ARG" ]; then ./sauce_connect_setup.sh; fi
 script:
-# run both folders if firefox is not remote
-- if [[ ! -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER salad/other_features/; fi
-- if [[ ! -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER salad/features/; fi
-# run "features" and alerts and mouse if firefox is remote
-- if [[ -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER $REMOTE_ARG salad/features/; fi
-- if [[ -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER $REMOTE_ARG salad/other_features/steps-browser-mouse-not-phantomjs.feature; fi
-- if [[ -n "$REMOTE_ARG" && $BROWSER == "firefox" ]]; then salad --browser=$BROWSER $REMOTE_ARG salad/other_features/steps-browser-alerts.feature; fi
-# run both folders if chrome is used. always remote. always using MAC as platform
-- if [[ $BROWSER == "chrome" ]]; then salad --browser=$BROWSER $REMOTE_ARG --platform="$PLATFORM" salad/other_features/; fi
-- if [[ $BROWSER == "chrome" ]]; then salad --browser=$BROWSER $REMOTE_ARG --platform="$PLATFORM" salad/features/; fi
-# do not run local chrome, because chrome does not work on travis at the moment: https://github.com/travis-ci/travis-ci/issues/938
-# run "features" and drag and drop if phantomjs is used. phantomjs does not support alerts, right click, mouse out
-- if [[ ! -n "$REMOTE_ARG" && $BROWSER == "phantomjs" ]]; then salad --browser=$BROWSER salad/other_features/steps-browser-drag.feature; fi
-- if [[ ! -n "$REMOTE_ARG" && $BROWSER == "phantomjs" ]]; then salad --browser=$BROWSER salad/features/; fi
+  - if [[ -n "$REMOTE_ARG" ]]; then salad --browser=$BROWSER --remote-url=$REMOTE_ARG --platform="$PLATFORM" $FEATURES; fi
+  - if [[ -z "$REMOTE_ARG" ]]; then salad --browser=$BROWSER $FEATURES; fi

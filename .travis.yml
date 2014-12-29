@@ -2,30 +2,75 @@
 # setup saucelabs with sauce connect:
 # https://docs.saucelabs.com/ci-integrations/travis-ci/#configure-travis-ci-to-start-sauce-connect
 language: python
+python:
+- '2.7'
 env:
   global:
   - secure: NYFGMEkVVvBx8NLGcWnAkieJ11vxT4EVqN/9iQ95IF2XiswtkmUnFFRGyH1KbwaftzbXsg6S1gc79WxR2/EGBJuIHtFVsb8A7r6vedkX3dhcyjITa41uSP5EWANYdl6nsf4/u5oINXoGf/InI6jwqBpRhNV+ruq08937ZBZACek=
   - secure: TU9KI3phk22RCMMCPrSYQ7W3KY56MKJXLs0+ajYXunvP93OKOMG6XUVkkoHjMH4cm9tSe4kH64PhET8GWxJbZw8U5+5F7GEiA490Dn4D2FpwxZI+W7v2M5g1hQeSQjXnWPVhmDvkDaUvkdt97k+qJe5wdsVFdiTB9vg3JLXLOyg=
   matrix:
-  # local firefox can run all tests
-  - BROWSER=firefox FEATURES=salad/features
-  - BROWSER=firefox FEATURES=salad/other_features
-  # phantomjs does not support alerts and some mouse actions
-  - BROWSER=phantomjs FEATURES=salad/features
-  - BROWSER=phantomjs FEATURES=salad/other_features/steps-browser-drag.feature
-  - BROWSER=phantomjs FEATURES=salad/other_features/steps-browser-mouse.feature
-  # remote firefox does not support drag and drop
-  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/features" PLATFORM="linux"
-  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-mouse-not-phantomjs.feature" PLATFORM="linux"
-  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-mouse.feature" PLATFORM="linux"
-  - BROWSER="firefox" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features/steps-browser-alerts.feature" PLATFORM="linux"
-  # no local chrome! due to this issue https://code.google.com/p/chromedriver/issues/detail?id=467
-  # remote chrome on linux cannot handle send_keys(), so we use max osx
-  # remote chrome can run all tests
-  - BROWSER="chrome" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/features" PLATFORM="OS X 10.6"
-  - BROWSER="chrome" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" FEATURES="salad/other_features" PLATFORM="OS X 10.6"
-python:
-- '2.7'
+  # REMOTE FIREFOX can run all tests except drag.feature
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-alerts.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-mouse-not-phantomjs.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-mouse.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  # ---
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-blur.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-browsers.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-elements.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-forms.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-general.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-javascript.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-navigation.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-ordinals.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-page.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-remember.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="linux"
+  # local FIREFOX can run all tests
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-drag.feature"
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-alerts.feature"
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-mouse-not-phantomjs.feature"
+  - BROWSER="firefox" FEATURE="salad/other_features/steps-browser-mouse.feature"
+  # ---
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-blur.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-browsers.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-elements.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-forms.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-general.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-javascript.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-navigation.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-ordinals.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-page.feature"
+  - BROWSER="firefox" FEATURE="salad/features/steps-browser-remember.feature"
+  # REMOTE CHROME can run all tests, but on MAC OS X (not on linux, due to this issue https://code.google.com/p/chromedriver/issues/detail?id=467)
+  - BROWSER="chrome" FEATURE="salad/other_features/steps-browser-drag.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/other_features/steps-browser-alerts.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/other_features/steps-browser-mouse-not-phantomjs.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/other_features/steps-browser-mouse.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  # ---
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-blur.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-browsers.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-elements.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-forms.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-general.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-javascript.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-navigation.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-ordinals.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-page.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  - BROWSER="chrome" FEATURE="salad/features/steps-browser-remember.feature" REMOTE_ARG="http://${SAUCE_USERNAME}:${SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub" PLATFORM="OS X 10.6"
+  # no local chrome! there are problems with chrome on travis.
+  # local PHANTOMJS can run all tests except alerts.feature and some mouse actions (mouse-not-phantomjs.feature)
+  - BROWSER="phantomjs" FEATURE="salad/other_features/steps-browser-drag.feature"
+  - BROWSER="phantomjs" FEATURE="salad/other_features/steps-browser-mouse.feature"
+  # ---
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-blur.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-browsers.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-elements.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-forms.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-general.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-javascript.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-navigation.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-ordinals.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-page.feature"
+  - BROWSER="phantomjs" FEATURE="salad/features/steps-browser-remember.feature"
 install:
 # print out our variables to make sure they are correct
 - echo $SAUCE_USERNAME
@@ -43,5 +88,5 @@ install:
 # will work only for pull requests from salad repo branches, not from forks
 - if [ -n "$REMOTE_ARG" ]; then ./sauce_connect_setup.sh; fi
 script:
-  - if [[ -n "$REMOTE_ARG" ]]; then salad --browser=$BROWSER --remote-url=$REMOTE_ARG --platform="$PLATFORM" $FEATURES; fi
-  - if [[ -z "$REMOTE_ARG" ]]; then salad --browser=$BROWSER $FEATURES; fi
+  - if [[ -n "$REMOTE_ARG" ]]; then salad --browser="$BROWSER" --remote-url="$REMOTE_ARG" --platform="$PLATFORM" $FEATURE; fi
+  - if [[ -z "$REMOTE_ARG" ]]; then salad --browser="$BROWSER" $FEATURE; fi

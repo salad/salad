@@ -32,7 +32,7 @@ Usage
 Salad is mostly lettuce.
 ------------------------
 
-Salad is mostly [lettuce](http://lettuce.it/).  So, you should use their [great documentation](http://lettuce.it/contents.html) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](http://splinter.cobrateam.info/), and their [docs](http://splinter.cobrateam.info/docs/) are great as well.
+Salad is mostly [lettuce](http://lettuce.it/).  So, you should use their [great documentation](http://lettuce.it/contents.html) with gusto.  If you're interacting with the browser, you're doing it through the awesome [splinter](https://github.com/cobrateam/splinter), and their [docs](http://splinter.readthedocs.org/) are great as well.
 
 Salad 101
 =========

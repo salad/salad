@@ -23,13 +23,6 @@ Feature: Ensuring that the page steps work
         When I look around
         Then I should not see that the url is "google.com"
 
-    Scenario: Page body works
-        # FF does weird things to the header.
-        Given I am using chrome
-          And visit the salad test url "browser/basic.html"
-        When I look around
-        Then I should see that the page html is "<html><head><title>My Test Title</title></head><body></body></html>"
-
     Scenario: Page body negation works
         Given I visit the salad test url "browser/basic.html"
         When I look around

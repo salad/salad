@@ -1,1 +1,20 @@
-<html><head><title>My Test Title</title></head><body></body></html>
+<html>
+    <head>
+        <script>
+            setTimeout(function(){
+                document.title = "Some other title";
+            }, 3000);
+            function changeUrl() {
+                setTimeout(function() {
+                    window.history.pushState("", "", "/other-url");
+                }, 3000);
+            }
+        </script>
+        <title>My Test Title</title>
+    </head>
+    <body>
+        <div>
+            <input type="button" onclick="changeUrl()" value="change url" />
+        </div>
+    </body>
+</html>

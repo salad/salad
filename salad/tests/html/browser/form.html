@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Mouse test title</title>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
@@ -132,7 +134,7 @@
     <body>
         <form>
             <div id="fill_in">
-              <input name="fill_me_in" />
+              <input id="fill_in_1" name="fill_me_in" />
               <input name="fill_me_in" />
               <input name="fill_me_in" />
               <input name="fill_me_in" />
@@ -212,9 +214,13 @@
             <hr/>
             <fieldset>
                 <legend>Element with value / html / text</legend>
-                <input type="text" value="this is the value" />
-                <textarea>This is the text!</textarea>
+                <input type="text" value="This is the value" />
+                <div id="98kls43mk">
+                    <TEXTAREA>This is the text: 123!</TEXTAREA>
+                </div>
             </fieldset>
+            <div id="free_fill_space">
+            </div>
         </form>
     </body>
 </html>

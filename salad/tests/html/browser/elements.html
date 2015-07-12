@@ -1,18 +1,20 @@
 <html>
     <head>
         <title>Elements test title</title>
-        
     </head>
     <body>
         Text that exists.
 
-        <a href="http://example.com">example</a>
+        <a my_attr="me!" href="http://example.com">example</a>
 
         <div name="i_exist_name" class="i_exist_class" id="i_exist">&nbsp;</div>
 
-        <div name="i_contain_name"  class="i_contain_class" id="i_contain"><b>I</b> has.</div>
+        <div my_attr="me!" name="i_contain_name"  class="i_contain_class" id="i_contain"><b>I</b> has.</div>
         <div name="i_contain_name2" class="i_contain_class" id="i_contain2"><b>I</b> have.</div>
 
-        <div name="i_attr_name" class="i_attr_class" id="i_attr" my_attr="me!">&nbsp;</div>
+        <div value="attr" name="i_attr_name" class="i_attr_class" id="i_attr" my_attr="me!">&nbsp;</div>
+        <div id="i_have_a_value" value="x" my_attr="me!" >this div has value_text
+            <input value='this is the value'></input>
+        </div>
     </body>
 </html>

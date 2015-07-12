@@ -1,5 +1,6 @@
-import sys
 import argparse
+import os
+import sys
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world
@@ -8,36 +9,33 @@ from salad.steps.everything import *
 from salad.terrains.everything import *
 
 BROWSER_CHOICES = [browser.lower()
-                   for browser in DesiredCapabilities.__dict__.keys()
+                   for browser in list(DesiredCapabilities.__dict__.keys())
                    if not browser.startswith('_')]
 BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
+DEFAULT_PLATFORM = 'Linux'
+PLATFORM_CHOICES = ['Linux', 'OS X 10.6', 'Windows XP', 'Windows 7',
+                    'Windows 8', 'Windows 8.1']
 
-class store_driver_and_version(argparse.Action):
-    drivers = BROWSER_CHOICES
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        driver_info = values.split('-')
-        if driver_info[0] not in self.drivers:
-            args = {'driver': driver_info[0],
-                    'choices': ', '.join(map(repr, self.drivers))}
-            message = 'invalid choice: %(driver)r (choose from %(choices)s)'
-            raise argparse.ArgumentError(self, message % args)
-        setattr(namespace, self.dest, driver_info[0])
-        if len(driver_info) > 1:
-            setattr(namespace, 'version', driver_info[1])
-        if len(driver_info) > 2:
-            setattr(namespace, 'platform', driver_info[2].replace('_', ' '))
 
 def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(prog="Salad",
                                      description=("BDD browswer-automation "
                                                   "made tasty."))
 
+    parser.add_argument('-V', action='store_true', default=False,
+                        help="show program's version number and exit")
+
     parser.add_argument('--browser', default=DEFAULT_BROWSER,
-                        action=store_driver_and_version, metavar='BROWSER',
+                        metavar='BROWSER',
                         help=('Browser to use. Options: %s Default is %s.' %
                               (BROWSER_CHOICES, DEFAULT_BROWSER)))
+
+    parser.add_argument('--browserversion', help=('Browser version to use.'))
+
+    parser.add_argument('--platform', default=DEFAULT_PLATFORM,
+                        help=('Platform to use. Options: %s Default is %s.' %
+                              (PLATFORM_CHOICES, DEFAULT_PLATFORM)))
 
     parser.add_argument('--remote-url',
                         help='Selenium server url for remote browsers')
@@ -49,17 +47,21 @@ def main(args=sys.argv[1:]):
     parser.add_argument('--timeout',
                         help=("Set the saucelabs' idle-timeout for the job"))
 
+    parser.add_argument('--scenarios', '-s',
+                        help=("Limit to the specified scenarios"))
+
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
     world.remote_url = parsed_args.remote_url
+
+    # prepare the remote capabilities
     world.remote_capabilities = {}
+    world.remote_capabilities['version'] = parsed_args.browserversion
+    world.remote_capabilities['platform'] = parsed_args.platform
+    world.remote_capabilities['trustAllSSLCertificates'] = True
+    world.remote_capabilities['acceptSslCerts'] = True
 
-    if 'version' in parsed_args:
-        world.remote_capabilities['version'] = parsed_args.version
-
-    if 'platform' in parsed_args:
-        world.remote_capabilities['platform'] = parsed_args.platform
-
+    # name
     name = _get_current_timestamp() + " -  "
     if not parsed_args.name:
         name += "unnamed job"
@@ -67,10 +69,26 @@ def main(args=sys.argv[1:]):
         name += parsed_args.name
     world.remote_capabilities['name'] = name
 
-    if not parsed_args.timeout:
-        world.remote_capabilities['idle-timeout'] = 120
-    else:
+    # timeout
+    if parsed_args.timeout:
         world.remote_capabilities['idle-timeout'] = parsed_args.timeout
+    else:
+        world.remote_capabilities['idle-timeout'] = 120
+
+    # travis job number
+    if os.environ.get('TRAVIS_JOB_NUMBER'):
+        world.remote_capabilities['tunnel-identifier'] = (
+            os.environ.get('TRAVIS_JOB_NUMBER'))
+
+    # scenarios
+    if parsed_args.scenarios:
+        scenarios = set()
+        for part in parsed_args.scenarios.split(','):
+            x = part.split('-')
+            scenarios.update(list(range(int(x[0]), int(x[-1])+1)))
+        scenarios = [str(x) for x in sorted(scenarios)]
+        leftovers.append('-s %s' % (','.join(scenarios)))
+        del parsed_args.scenarios
 
     lettuce_main(args=leftovers)
 

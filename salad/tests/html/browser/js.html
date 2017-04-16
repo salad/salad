@@ -2,10 +2,16 @@
     <head>
         <title>Javascript title</title>
         <script>
-            setTimeout(function(){document.getElementById("js_block").innerHTML = "Tes"+"t"},800);
+            setTimeout(function(){
+                document.getElementById("js_block").innerHTML = "Tes"+"t";
+            }, 800);
+            setTimeout(function(){
+                document.getElementById("js2_block").style.visibility = 'visible';
+            }, 3000);
         </script>
     </head>
     <body>
         <div id="js_block"></div>
+        <div id="js2_block" style="visibility: hidden;">some text</div>
     </body>
 </html>

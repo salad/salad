@@ -1,4 +1,19 @@
-0.4.14-beanqueen
+0.4.14-beanqueen-2
+-----
+
+* added support for 'contains' to all steps where it made sense
+* added support for 'outer_html' in should-see-that steps
+* added support for 'within X seconds' to all steps where it made sense
+* added some general util steps (general.py, browser.py) (+ tests)
+* added tests for all new steps
+* added tests for until now untested steps
+* added $ at the end of regexes which from now on disallows wrong usage of steps
+* removed duplicated steps from alerts.py
+* some pep8, indentation, and general cleanup
+* some small bug fixes
+* started with scenario numbering
+
+0.4.14-beanqueen-1
 -----
 
 * Added new steps

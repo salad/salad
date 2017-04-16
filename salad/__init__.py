@@ -1,1 +1,1 @@
-VERSION = "0.4.14-beanqueen-1"
+VERSION = "0.4.14-beanqueen-2"

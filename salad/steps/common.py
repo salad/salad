@@ -1,6 +1,6 @@
 import time
 
-from lettuce import step
+from lettuce import step, world
 
 
 @step(r'look around')
@@ -15,4 +15,18 @@ def wait(step, seconds):
 
 @step(r'should fail because "([^"]*)"')
 def should_fail(step, because):
-    assert because == True
+    raise Exception(because)
+
+
+@step(r'launch the debugger')
+def launch_debugger(step):
+    import ipdb
+    ipdb.set_trace()
+
+
+@step(r'print out( the stored value of)? "([^"]+)"')
+def print_out(step, stored, text):
+    if stored:
+        text = world.stored_values[text]
+    print text
+    print "-------"

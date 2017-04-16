@@ -1,30 +1,24 @@
+# chrome does not work on travis at the moment
+# https://github.com/travis-ci/travis-ci/issues/938
 language: python
 env:
   global:
-    - PATH=$PATH:/tmp/bin
+    - secure: AY1BfwgtYTJ76O9BorDgjhN9yvjc0I46LgESYR4/vcRnokrLWfNiO3feSIr4pT2yOfb/ogFSiQByiMSOFT5DkIaiw4mRUcmeHYBX4xwlmzArJpf+jwqApWcZ9/pGafvLUf1GB2mj7MeD6ONgeKqFvmbATpNhAA7toCrehwzikQI=
+    - secure: PGdiHpcoI7LDkrnvDGZHJCMyYcFz6g7kjBRYuF5ekeKFDb+5OXQjl4uqrtkWqRuGDUAio6IB4KsyLCoGDl1AreQUcKtZWxoUGyPuRrGArlTMUnc2a67vKNbneQduhc13BQVfSyudf6aNHJ3Sv7cJVdCfkDuz0H7CG2a6/aed954=
   matrix:
     - BROWSER=firefox
-    - BROWSER=chrome
-    - REMOTE_ARG='--remote-url http://127.0.0.1:4444/wd/hub' BROWSER=firefox
+    - REMOTE_ARG='--remote-url=' BROWSER=firefox
+    - REMOTE_ARG='--remote-url=http://salad:1688764a-d831-4681-af4e-76a464c7e473@ondemand.saucelabs.com:80/wd/hub' BROWSER=chrome
+  addons:
+      sauce_connect: true
 python:
-  - "2.6"
+  #- "2.6"
   - "2.7"
   #- "3.2" # Fails miserably in Python 3
 install:
   - "python setup.py install"
   # Install the Selenium Server
-  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium.googlecode.com/files/selenium-server-standalone-2.26.0.jar -O selenium-server.jar; fi'
-  # Firefox is already installed
-  # Install Google Chrome
-  - "wget https://dl.google.com/linux/direct/google-chrome-stable_current_i386.deb"
-  - "sudo apt-get install libgconf2-4"
-  - "sudo dpkg -i google-chrome*.deb"
-  - "sudo apt-get -f install" # reported dependency issue?
-  # Install the Google Chrome webdriver
-  - "mkdir /tmp/bin"
-  - "wget https://chromedriver.googlecode.com/files/chromedriver_linux32_23.0.1240.0.zip"
-  - "unzip chromedriver_linux32_23.0.1240.0.zip"
-  - "mv chromedriver /tmp/bin"
+  - 'if [ -n "$REMOTE_ARG" ]; then wget http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar -O selenium-server.jar; fi'
 
 before_script:
   # Setup headless X per http://about.travis-ci.org/docs/user/gui-and-headless-browsers/
@@ -33,4 +27,5 @@ before_script:
   - 'if [ -n "$REMOTE_ARG" ]; then (java -jar selenium-server.jar > /dev/null &); fi'
   - 'if [ -n "$REMOTE_ARG" ]; then sleep 60; fi'
 script:
-  - "salad --browser $BROWSER $REMOTE_ARG salad/features --verbosity=2"
+  - 'if [[ ! -n "$REMOTE_ARG" ]]; then salad --browser=$BROWSER salad/not_remote_features/steps-browser-drag.feature --verbosity=2; fi'
+  - "salad --browser=$BROWSER $REMOTE_ARG salad/features/ --verbosity=2"

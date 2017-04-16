@@ -1,5 +1,5 @@
-import sys
 import argparse
+import sys
 
 from lettuce.bin import main as lettuce_main
 from lettuce import world
@@ -8,10 +8,11 @@ from salad.steps.everything import *
 from salad.terrains.everything import *
 
 BROWSER_CHOICES = [browser.lower()
-                   for browser in DesiredCapabilities.__dict__.keys()
+                   for browser in list(DesiredCapabilities.__dict__.keys())
                    if not browser.startswith('_')]
 BROWSER_CHOICES.sort()
 DEFAULT_BROWSER = 'firefox'
+
 
 class store_driver_and_version(argparse.Action):
     drivers = BROWSER_CHOICES
@@ -29,10 +30,14 @@ class store_driver_and_version(argparse.Action):
         if len(driver_info) > 2:
             setattr(namespace, 'platform', driver_info[2].replace('_', ' '))
 
+
 def main(args=sys.argv[1:]):
     parser = argparse.ArgumentParser(prog="Salad",
                                      description=("BDD browswer-automation "
                                                   "made tasty."))
+
+    parser.add_argument('-V', action='store_true', default=False,
+                        help="show program's version number and exit")
 
     parser.add_argument('--browser', default=DEFAULT_BROWSER,
                         action=store_driver_and_version, metavar='BROWSER',
@@ -48,6 +53,9 @@ def main(args=sys.argv[1:]):
 
     parser.add_argument('--timeout',
                         help=("Set the saucelabs' idle-timeout for the job"))
+
+    parser.add_argument('--scenarios', '-s',
+                        help=("Limit to the specified scenarios"))
 
     (parsed_args, leftovers) = parser.parse_known_args()
     world.drivers = [parsed_args.browser]
@@ -71,6 +79,18 @@ def main(args=sys.argv[1:]):
         world.remote_capabilities['idle-timeout'] = 120
     else:
         world.remote_capabilities['idle-timeout'] = parsed_args.timeout
+
+    world.remote_capabilities['trustAllSSLCertificates'] = True
+    world.remote_capabilities['acceptSslCerts'] = True
+
+    if parsed_args.scenarios:
+        scenarios = set()
+        for part in parsed_args.scenarios.split(','):
+            x = part.split('-')
+            scenarios.update(list(range(int(x[0]), int(x[-1])+1)))
+        scenarios = [str(x) for x in sorted(scenarios)]
+        leftovers.append('-s %s' % (','.join(scenarios)))
+        del parsed_args.scenarios
 
     lettuce_main(args=leftovers)
 

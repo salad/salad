@@ -8,7 +8,7 @@ def setup_master_browser():
     try:
         browser = world.drivers[0]
         remote_url = world.remote_url
-    except AttributeError, IndexError:
+    except (AttributeError, IndexError):
         browser = 'firefox'
         remote_url = None
 
